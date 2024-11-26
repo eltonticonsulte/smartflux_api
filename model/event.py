@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from pydantic import BaseModel
 from enum import Enum
-
+from typing import List
 
 class RuleName(Enum):
     ENTER = "Enter"
@@ -18,3 +18,6 @@ class EventReciver(BaseModel):
     object_id: str
     rule_id: int
     rule_name: RuleName
+
+class PullEventReciver(BaseModel):
+    data: List[EventReciver]
