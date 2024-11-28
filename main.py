@@ -2,6 +2,8 @@
 import logging
 import os
 from fastapi import FastAPI
+
+from src.controller import userController, visitorController
 from utils import LoggerConfig
 
 __version__ = "0.0.0"
@@ -18,7 +20,14 @@ from core import settings
 
 
 app = FastAPI(title=settings.TITLE, version=__version__)
-app.include_router(api_router, prefix="/api")
+
+# user_controller = userController.UserController()
+# app.include_router(user_controller.router, prefix="/api")
+
+visitor_controller = visitorController.VisitorController()
+app.include_router(visitor_controller.router, prefix="/api")
+
+# app.include_router(api_router, prefix="/api")
 log.info(f"smartflux_api version: {__version__}")
 
 
