@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pydantic import BaseModel
+from typing import Optional
 from typing import List
 
 
@@ -18,5 +19,5 @@ class PullEventReciver(BaseModel):
 
 class UserReciver(BaseModel):
     username: str
-    description: str
+    description: Optional[str]
     password: str

@@ -18,12 +18,9 @@ class UserController:
         # self.router.add_api_route("/all", self.get_users, methods=["GET"])
         # self.router.add_api_route("/{user_id}", self.get_user_by_id, methods=["GET"])
         self.router.add_api_route("/create", self.create_user, methods=["POST"])
+        self.router.add_api_route("/login", self.get_login, methods=["POST"])
         # self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
         # self.router.add_api_route("/{user_id}", self.delete_user, methods=["DELETE"])
-
-    async def get_users(self):
-        print("get_users")
-        self.user_repository.get_all_user()
 
     async def create_user(self, user: UserReciver):
         try:
@@ -32,11 +29,9 @@ class UserController:
             self.log.critical(error.messge)
             raise HTTPException(422, detail=error.messge)
 
-    async def get_user_by_id(self, name: str):
-        pass
-
-    async def update_user(self, name: str):
-        pass
-
-    async def delete_user(self, name: str):
-        pass
+    async def get_login(self, user: UserReciver):
+        try:
+            self.user_repository.get_login(user)
+        except ExceptionUserNameExists as error:
+            self.log.critical(error.messge)
+            raise HTTPException(422, detail=error.messge)

@@ -33,5 +33,9 @@ class userRepository:
         except IntegrityError:
             raise ExceptionUserNameExists(user.username)
 
+    def get_login(self, user: UserReciver) -> User:
+        self.log.debug(f"get_login {user}")
+        return self.data_base.get_login(user)
+
     def genetate_token(self):
         return str(uuid4())
