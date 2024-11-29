@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
+from fastapi import HTTPException
 import logging
-from ..repository import userRepository
+from ..repository import userRepository, ExceptionUserNameExists
 from ..validator import userValidator
 from ..entity import UserReciver
 
@@ -25,7 +26,11 @@ class UserController:
         self.user_repository.get_all_user()
 
     async def create_user(self, user: UserReciver):
-        self.user_repository.create_user(user)
+        try:
+            self.user_repository.create_user(user)
+        except ExceptionUserNameExists as error:
+            self.log.critical(error.messge)
+            raise HTTPException(422, detail=error.messge)
 
     async def get_user_by_id(self, name: str):
         pass

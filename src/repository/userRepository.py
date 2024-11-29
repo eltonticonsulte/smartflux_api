@@ -3,6 +3,16 @@ import logging
 from uuid import uuid4
 from ..entity import UserReciver
 from ..database import DataBase, User, Device, Zone, EventCounter
+from ..database import IntegrityError
+
+
+class ExceptionUserNameExists(Exception):
+    def __init__(self, username: str):
+        self.messge = f"User name '{username}' already exists"
+        super().__init__(self.messge)
+
+    def __str__(self):
+        return self.messge
 
 
 class userRepository:
@@ -18,7 +28,10 @@ class userRepository:
             token_api=self.genetate_token(),
             password_hash=user.password,
         )
-        self.data_base.create_device(db_user)
+        try:
+            self.data_base.create_device(db_user)
+        except IntegrityError:
+            raise ExceptionUserNameExists(user.username)
 
     def genetate_token(self):
         return str(uuid4())
