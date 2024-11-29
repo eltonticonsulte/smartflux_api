@@ -1,28 +1,31 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
+import logging
 from ..repository import userRepository
 from ..validator import userValidator
+from ..entity import UserReciver
 
 
 class UserController:
     def __init__(self):
+        self.log = logging.getLogger(__name__)
         self.router = APIRouter(prefix="/user", tags=["Users"])
         self.setup_routes()
         self.user_repository = userRepository()
 
     def setup_routes(self):
-        self.router.add_api_route("/all", self.get_users, methods=["GET"])
-        self.router.add_api_route("/{user_id}", self.get_user_by_id, methods=["GET"])
+        # self.router.add_api_route("/all", self.get_users, methods=["GET"])
+        # self.router.add_api_route("/{user_id}", self.get_user_by_id, methods=["GET"])
         self.router.add_api_route("/create", self.create_user, methods=["POST"])
-        self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
-        self.router.add_api_route("/{user_id}", self.delete_user, methods=["DELETE"])
+        # self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
+        # self.router.add_api_route("/{user_id}", self.delete_user, methods=["DELETE"])
 
     async def get_users(self):
         print("get_users")
         self.user_repository.get_all_user()
 
-    async def create_user(self, name: str):
-        print("create_user", name)
+    async def create_user(self, user: UserReciver):
+        self.user_repository.create_user(user)
 
     async def get_user_by_id(self, name: str):
         pass

@@ -5,7 +5,7 @@ from typing import List
 
 class EventReciver(BaseModel):
     event_id: int
-    process_id: int
+    channel_id: int
     token_api: str
     event_time: str
     count_in: int
@@ -14,3 +14,9 @@ class EventReciver(BaseModel):
 
 class PullEventReciver(BaseModel):
     data: List[EventReciver]
+
+
+class UserReciver(BaseModel):
+    username: str
+    description: str
+    password: str

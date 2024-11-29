@@ -7,7 +7,7 @@ from src.controller import userController, visitorController
 from utils import LoggerConfig
 
 __version__ = "0.0.0"
-os.environ["VERSION"] = __version__
+os.environ["__VERSION__"] = __version__
 
 LoggerConfig()
 
@@ -21,8 +21,8 @@ from core import settings
 
 app = FastAPI(title=settings.TITLE, version=__version__)
 
-# user_controller = userController.UserController()
-# app.include_router(user_controller.router, prefix="/api")
+user_controller = userController.UserController()
+app.include_router(user_controller.router, prefix="/api")
 
 visitor_controller = visitorController.VisitorController()
 app.include_router(visitor_controller.router, prefix="/api")
