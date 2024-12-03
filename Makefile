@@ -23,3 +23,5 @@ deploy_aws:
 
 logs:
 	docker logs ia -f
+conect_db:
+	docker exec -it smartflux_db psql -U postgres

@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from core.config import settings
+from core.config import get_settings
