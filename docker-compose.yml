@@ -1,0 +1,21 @@
+---
+version: '3'
+services:
+    service_smartflux_api:
+        image: smartflux_api
+        build: .
+        container_name: smartflux_api
+        hostname: smartflux_api
+        ports:
+            - 8501:8000
+        volumes:
+            - ./log:/app/log
+        networks:
+            - smartflux_network
+        environment:
+            LOG_LEVEL: DEBUG
+            ID_LOCAL: Elton
+
+networks:
+    smartflux_network:
+        external: true

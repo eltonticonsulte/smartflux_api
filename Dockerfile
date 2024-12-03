@@ -1,24 +1,14 @@
-FROM python
+FROM python:3.10-slim
 
 ENV PYTHONUNBUFFERED=True
 
-WORKDIR /home/app/
-RUN mkdir /home/app/log
+WORKDIR /app
+RUN mkdir /app
 
-RUN mkdir /home/app/anomaly
-RUN mkdir /home/app/prod
-RUN mkdir /home/app/release
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
 
-COPY api ./api
-COPY core core
-COPY services services
-COPY main.py ./
-COPY .cz.toml ./.cz.toml
-COPY utils ./utils
-COPY config_log.py /home/app/
-
-RUN mkdir /home/app/img
-RUN mkdir /home/app/backup
-RUN chmod -R 777 /home/app
+RUN chmod -R 777 /app
 EXPOSE 8002
+HEALTHCHECK CMD curl --fail http://localhost:8002/_stcore/health
 CMD ["gunicorn", "main:app", "-b", "0.0.0.0:8002","-k", "uvicorn.workers.UvicornWorker", "-w", "1", "--timeout" ,"0"]

@@ -1,0 +1,40 @@
+
+
++------------------+
+| users            |
++------------------+
+| id (PK)          |
+| name             |
+| descrition       |
+| password_hash    |
+| token_api        |
+| is_active        |
++------------------+
+
++------------------+
+| zones            |
++------------------+
+| id (PK)          |
+| name             |
+| users_id (FK)    |
++------------------+
+
++------------------+
+| eventCounter     |
++------------------+
+| id (PK)          |
+| event_time       |
+| channel_id (FK)  |
+| count_in         |
+| count_out        |
++------------------+
+
++------------------+
+| device          |
++------------------+
+| id (PK)          |
+| channel_id       |
+| name             |
+| id_zona (FK)     |
+| metadate         |
++------------------+
