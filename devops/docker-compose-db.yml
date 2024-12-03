@@ -1,0 +1,19 @@
+---
+version: '3'
+
+services:
+    db:
+        image: postgres
+        container_name: smartflux_db
+        volumes:
+            - ./pgdata:/var/lib/postgresql/data
+        environment:
+            POSTGRES_PASSWORD: admin
+        networks:
+            - smartflux_network
+        ports:
+            - 5432:5432
+
+networks:
+    smartflux_network:
+        external: true

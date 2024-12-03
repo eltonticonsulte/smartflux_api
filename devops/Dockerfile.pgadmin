@@ -1,0 +1,17 @@
+FROM dpage/pgadmin4:8.12.0
+
+USER root
+
+# Create required directories and set permissions
+RUN mkdir -p /var/lib/pgadmin/sessions && \
+    mkdir -p /var/lib/pgadmin/storage && \
+    chown -R pgadmin:root /var/lib/pgadmin && \
+    chmod -R 777 /var/lib/pgadmin
+
+
+# Switch back to pgadmin user
+USER pgadmin
+
+# Set environment variables for email configuration
+ENV PGADMIN_CONFIG_CHECK_EMAIL_DELIVERABILITY=False
+ENV PGADMIN_CONFIG_ALLOW_SPECIAL_EMAIL_DOMAINS='[]'

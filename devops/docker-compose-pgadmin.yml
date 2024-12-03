@@ -1,0 +1,22 @@
+---
+version: '3'
+services:
+    dev_pgadmin:
+        image: dpage/pgadmin4:8.12.0
+        container_name: pgadmin
+        build:
+            context: ./
+            dockerfile: Dockerfile.pgadmin
+        environment:
+            PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+            PGADMIN_DEFAULT_PASSWORD: admin
+        ports:
+            - 15432:80
+        volumes:
+            - ./pgadmin_data:/var/lib/pgadmin
+            - ./config_local.py:/pgadmin4/config_local.py
+        networks:
+            - smartflux_network
+networks:
+    smartflux_network:
+        external: true
