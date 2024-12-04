@@ -2,7 +2,7 @@
 import logging
 from uuid import uuid4
 from ..entity import UserReciver
-from ..database import DataBase, User, Device, Zone, EventCounter
+from ..database import DataBase, Filial, Camera, Zone, EventCountTemp
 from ..database import IntegrityError
 
 
@@ -22,7 +22,7 @@ class userRepository:
 
     def create_user(self, user: UserReciver):
         self.log.debug(f"create_user {user}")
-        db_user = User(
+        db_user = Filial(
             name=user.username,
             description=user.description,
             token_api=self.genetate_token(),
@@ -33,7 +33,7 @@ class userRepository:
         except IntegrityError:
             raise ExceptionUserNameExists(user.username)
 
-    def get_login(self, user: UserReciver) -> User:
+    def get_login(self, user: UserReciver) -> Filial:
         self.log.debug(f"get_login {user}")
         return self.data_base.get_login(user)
 

@@ -7,14 +7,14 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func, case
 from .connect import DBConnectionHandler
-from .schema import User, Device, Zone, EventCounter
+from .schema import Filial, Camera, Zone, EventCountTemp
 
 
 class DataBase:
     def __init__(self) -> None:
         self.log = getLogger(__name__)
 
-    def create_device(self, user: User) -> int:
+    def create_device(self, user: Filial) -> int:
         with DBConnectionHandler() as db:
             try:
                 db.__session.add(user)
