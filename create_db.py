@@ -6,6 +6,6 @@ from core.config import get_settings
 print(get_settings().dict())
 if __name__ == "__main__":
     with DBConnectionHandler() as eng:
-        User.metadata.create_all(eng.get_engine())
-        eng.session.commit()
-        print("Database created")
+        with eng.transaction():
+            User.metadata.create_all(eng.get_engine())
+            print("Database created")
