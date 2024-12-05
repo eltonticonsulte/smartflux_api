@@ -23,10 +23,8 @@ class Settings(BaseSettings):
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
         )
-    model_config ={
-        "env_file": ".env",
-        "case_sensitive": True
-    }
+
+    model_config = {"env_file": ".env", "case_sensitive": True}
 
 
 @lru_cache()
