@@ -12,6 +12,8 @@ from sqlalchemy import (
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import UUID
+import uuid
 
 Base = declarative_base()
 
@@ -35,7 +37,9 @@ class Filial(Base):
     name = Column(String, nullable=False)
     cnpj = Column(String(18), nullable=False)
     password_hash = Column(String, nullable=False)
-    token_api = Column(String, nullable=False, unique=True)
+    token_api = Column(
+        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+    )
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
     empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=False)
@@ -58,7 +62,9 @@ class Camera(Base):
     __tablename__ = "cameras"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    channel_id = Column(Integer, nullable=False, unique=True)
+    channel_id = Column(
+        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+    )
     name = Column(String, nullable=False)
     zona_id = Column(Integer, ForeignKey("zones.id"), nullable=False)
     metadate = Column(JSON, nullable=True)  # Using JSON for flexible metadata

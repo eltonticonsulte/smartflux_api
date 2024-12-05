@@ -16,15 +16,15 @@ class DBConnectionHandler:
             pool_timeout=30,
             pool_recycle=3600,
         )
-        self.__session: Optional[Session] = None
+        self.session: Optional[Session] = None
 
     def get_engine(self) -> Engine:
         return self.__engine
 
     def __enter__(self):
         session_make = sessionmaker(bind=self.__engine)
-        self.__session = session_make()
-        return self
+        self.session = session_make()
+        return self.session
 
     def __exit__(
         self,
@@ -32,28 +32,28 @@ class DBConnectionHandler:
         exc_val: Optional[BaseException],
         exc_tb: Any,
     ) -> None:
-        if self.__session:
+        if self.session:
             if exc_type is not None:
                 # An exception occurred, rollback the transaction
                 try:
-                    self.__session.rollback()
+                    self.session.rollback()
                 except SQLAlchemyError:
                     pass
             try:
-                self.__session.close()
+                self.session.close()
             except SQLAlchemyError:
                 pass
             finally:
-                self.__session = None
+                self.session = None
 
     @contextmanager
     def transaction(self):
         """Context manager for transaction handling."""
         try:
             yield self
-            if self.__session:
-                self.__session.commit()
+            if self.session:
+                self.session.commit()
         except Exception as error:
-            if self.__session:
-                self.__session.rollback()
+            if self.session:
+                self.session.rollback()
             raise error
