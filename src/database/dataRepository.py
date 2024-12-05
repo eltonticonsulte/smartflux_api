@@ -85,7 +85,7 @@ class DataRepository(Repository[T]):
                 raise error
 
 
-class RepositoryOtimazeInsert:
+class DataRepositoryOtimazeInsert:
     def add(self, events: List[T]) -> int:
         with DBConnectionHandler() as db:
             try:
