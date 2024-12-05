@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import os
 from pydantic_settings import BaseSettings
 from functools import lru_cache
 
@@ -17,8 +16,6 @@ class Settings(BaseSettings):
 
     @property
     def DATABASE_URL(self) -> str:
-        if os.getenv("TESTING"):
-            return "sqlite:///:memory:"
         return (
             f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
             f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"

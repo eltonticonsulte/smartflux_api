@@ -18,8 +18,9 @@ class DBConnectionHandler:
         )
         self.session: Optional[Session] = None
 
-    def get_engine(self) -> Engine:
-        return self.__engine
+    @staticmethod
+    def get_engine(url: str) -> Engine:
+        return create_engine(url)
 
     def __enter__(self):
         session_make = sessionmaker(bind=self.__engine)
