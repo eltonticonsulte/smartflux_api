@@ -9,6 +9,7 @@ from sqlalchemy import (
     ForeignKey,
     Index,
 )
+from sqlalchemy.types import Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
@@ -16,6 +17,12 @@ from sqlalchemy.dialects.postgresql import UUID
 import uuid
 
 Base = declarative_base()
+
+
+class UserRole(Enum):
+    ADMIN = "admin"
+    EMPRESA = "empresa"
+    FILIAL = "filial"
 
 
 class Empresa(Base):
@@ -29,6 +36,7 @@ class Empresa(Base):
     data_criacao = Column(DateTime, default=func.now())
 
     filiais = relationship("Filial", backref="empresa", cascade="all, delete-orphan")
+    usuarios = relationship("Usuario", backref="empresa", cascade="all, delete-orphan")
 
 
 class Filial(Base):
@@ -46,6 +54,24 @@ class Filial(Base):
 
     # Relationships
     zones = relationship("Zone", backref="filial", cascade="all, delete-orphan")
+    usuarios = relationship("Usuario", backref="filial", cascade="all, delete-orphan")
+
+
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=False, unique=True)
+    password_hash = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)
+    role = Column(UserRole, nullable=False, default=UserRole.FILIAL)
+
+    empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=True)
+    filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=True)
+
+    data_criacao = Column(DateTime, default=func.now())
+    ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Zone(Base):
@@ -68,8 +94,6 @@ class Camera(Base):
     name = Column(String, nullable=False)
     zona_id = Column(Integer, ForeignKey("zones.id"), nullable=False)
     metadate = Column(JSON, nullable=True)  # Using JSON for flexible metadata
-
-    # Relationships
 
     eventos = relationship(
         "EventCountTemp", backref="camera", cascade="all, delete-orphan"

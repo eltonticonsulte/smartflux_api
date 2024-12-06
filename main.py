@@ -3,7 +3,7 @@ import logging
 import os
 from fastapi import FastAPI
 
-from src.controller import EmpresaController, AdminController
+from src.controller import EmpresaController, AuthController
 from src.controller import VisitorController
 from utils import LoggerConfig
 
@@ -22,7 +22,7 @@ from core import get_settings
 
 app = FastAPI(title=get_settings().PROJECT_NAME, version=__version__)
 
-admin_controller = AdminController()
+admin_controller = AuthController()
 app.include_router(admin_controller.router, prefix="/api")
 
 empresa_controller = EmpresaController()

@@ -12,10 +12,10 @@ from ..entity import UserReciver
 from ..services import AuthServices, auth2_scheme
 
 
-class AdminController:
+class AuthController:
     def __init__(self):
         self.log = logging.getLogger(__name__)
-        self.router = APIRouter(prefix="/admin", tags=["Admin"])
+        self.router = APIRouter(prefix="/auth", tags=["Auth"])
         self.setup_routes()
         self.user_repository = userRepository()
         self.auth = AuthServices()
@@ -23,6 +23,7 @@ class AdminController:
     def setup_routes(self):
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
         self.router.add_api_route("/protected", self.protected_route, methods=["GET"])
+        # self.router.add_api_route("/logget", self.get_current_user, methods=["GET"])
 
     def create_access_token(self, data: dict):
         to_encode = data.copy()
