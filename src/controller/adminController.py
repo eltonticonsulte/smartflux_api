@@ -1,10 +1,18 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
-from fastapi import HTTPException
+from fastapi import HTTPException, status, Depends
 import logging
+from fastapi_sessions.backends.implementations import InMemoryBackend
+from jose import JWTError, jwt
+from datetime import datetime, timedelta
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from ..repository import userRepository, ExceptionUserNameExists
-from ..validator import userValidator
 from ..entity import UserReciver
+
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/admin/login")
+SECRET_KEY = "ydfsgdfgdggfdsfg"  # Change this in production
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 class AdminController:
@@ -16,14 +24,40 @@ class AdminController:
 
     def setup_routes(self):
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
+        self.router.add_api_route("/protected", self.protected_route, methods=["GET"])
 
-    async def get_login(self, user: UserReciver):
+    def create_access_token(self, data: dict):
+        to_encode = data.copy()
+        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
 
-        if user.username != "admin":
+        to_encode.update({"exp": expire})
+        return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+
+    async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
+
+        if from_data.username != "admin":
             self.log.critical("Usuario ou senhna invalida")
             raise HTTPException(422, detail="Usuario ou senhna invalida")
-        if user.password != "admin123":
+        if from_data.password != "admin123":
             self.log.critical("Usuario ou senhna invalida")
             raise HTTPException(422, detail="Usuario ou senhna invalida")
+        token = self.create_access_token(data={"sub": from_data.username})
+        return {"access_token": token, "token_type": "bearer"}
 
-        return f"tokoen admin"
+    async def get_current_user(self, token: str = Depends(oauth2_scheme)):
+        credentials_exception = HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid credentials",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+        try:
+            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            username: str = payload.get("sub")
+            if username is None:
+                raise credentials_exception
+        except JWTError:
+            raise credentials_exception
+        return username
+
+    async def protected_route(self, current_user: str = Depends(get_current_user)):
+        return {"message": "Authenticated", "user": current_user}

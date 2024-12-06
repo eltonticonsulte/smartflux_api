@@ -2,7 +2,7 @@
 import logging
 from uuid import uuid4
 from ..entity import UserReciver
-from ..database import DataBase, Filial, Camera, Zone, EventCountTemp
+from ..database import DataRepository, Filial, Camera, Zone, EventCountTemp
 from ..database import IntegrityError
 
 
@@ -18,7 +18,7 @@ class ExceptionUserNameExists(Exception):
 class userRepository:
     def __init__(self):
         self.log = logging.getLogger(__name__)
-        self.data_base = DataBase()
+        self.data_base = DataRepository()
 
     def create_user(self, user: UserReciver):
         self.log.debug(f"create_user {user}")

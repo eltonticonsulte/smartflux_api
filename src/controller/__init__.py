@@ -1,3 +1,4 @@
 # -*- coding: utf-8 -*-
-from .userController import UserController
+from .adminController import AdminController
+from .empresaController import EmpresaController
 from .visitorController import VisitorController
