@@ -22,11 +22,11 @@ from core import get_settings
 
 app = FastAPI(title=get_settings().PROJECT_NAME, version=__version__)
 
-empresa_controller = EmpresaController()
-app.include_router(empresa_controller.router, prefix="/api")
-
 admin_controller = AdminController()
 app.include_router(admin_controller.router, prefix="/api")
+
+empresa_controller = EmpresaController()
+app.include_router(empresa_controller.router, prefix="/api")
 
 visitor_controller = VisitorController()
 app.include_router(visitor_controller.router, prefix="/api")
