@@ -2,17 +2,14 @@
 from fastapi import APIRouter
 from fastapi import HTTPException, status, Depends
 import logging
+from core import get_settings
 from fastapi_sessions.backends.implementations import InMemoryBackend
 from jose import JWTError, jwt
 from datetime import datetime, timedelta
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from ..repository import userRepository, ExceptionUserNameExists
 from ..entity import UserReciver
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="api/admin/login")
-SECRET_KEY = "ydfsgdfgdggfdsfg"  # Change this in production
-ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 30
+from ..services import AuthServices, auth2_scheme
 
 
 class AdminController:
@@ -21,6 +18,7 @@ class AdminController:
         self.router = APIRouter(prefix="/admin", tags=["Admin"])
         self.setup_routes()
         self.user_repository = userRepository()
+        self.auth = AuthServices()
 
     def setup_routes(self):
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
@@ -28,10 +26,14 @@ class AdminController:
 
     def create_access_token(self, data: dict):
         to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        expire = datetime.utcnow() + timedelta(
+            minutes=get_settings().ACCESS_TOKEN_EXPIRE_MINUTES
+        )
 
         to_encode.update({"exp": expire})
-        return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+        return jwt.encode(
+            to_encode, get_settings().SECRET_KEY, algorithm=get_settings().ALGORITHM
+        )
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
 
@@ -44,14 +46,16 @@ class AdminController:
         token = self.create_access_token(data={"sub": from_data.username})
         return {"access_token": token, "token_type": "bearer"}
 
-    async def get_current_user(self, token: str = Depends(oauth2_scheme)):
+    async def get_current_user(self, token: str = Depends(auth2_scheme)):
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid credentials",
             headers={"WWW-Authenticate": "Bearer"},
         )
         try:
-            payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+            payload = jwt.decode(
+                token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
+            )
             username: str = payload.get("sub")
             if username is None:
                 raise credentials_exception
