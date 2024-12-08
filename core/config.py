@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     POSTGRES_SERVER: str = ""
     POSTGRES_PORT: str = ""
     POSTGRES_DB: str = ""
-    SECRET_KEY: str = "fddfacvdafersdffasa"  # Change this in production
+    SECRET_KEY: str = "fddfacvdafersdffasddfaa"  # Change this in production
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 

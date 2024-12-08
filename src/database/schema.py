@@ -9,20 +9,38 @@ from sqlalchemy import (
     ForeignKey,
     Index,
 )
-from sqlalchemy.types import Enum
+from sqlalchemy import Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
+from enum import Enum as pyEnum
 
 Base = declarative_base()
 
 
-class UserRole(Enum):
+class UserRole(pyEnum):
     ADMIN = "admin"
     EMPRESA = "empresa"
     FILIAL = "filial"
+
+
+class Usuario(Base):
+    __tablename__ = "usuarios"
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    username = Column(String, nullable=False, unique=True)
+    email = Column(String, nullable=False, unique=True)
+    password_hash = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)
+    role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)
+
+    empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=True)
+    filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=True)
+
+    data_criacao = Column(DateTime, default=func.now())
+    ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Empresa(Base):
@@ -55,23 +73,6 @@ class Filial(Base):
     # Relationships
     zones = relationship("Zone", backref="filial", cascade="all, delete-orphan")
     usuarios = relationship("Usuario", backref="filial", cascade="all, delete-orphan")
-
-
-class Usuario(Base):
-    __tablename__ = "usuarios"
-
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    username = Column(String, nullable=False, unique=True)
-    email = Column(String, nullable=False, unique=True)
-    password_hash = Column(String, nullable=False)
-    is_active = Column(Boolean, default=True)
-    role = Column(UserRole, nullable=False, default=UserRole.FILIAL)
-
-    empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=True)
-    filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=True)
-
-    data_criacao = Column(DateTime, default=func.now())
-    ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
 
 class Zone(Base):

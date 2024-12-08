@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
-from fastapi import APIRouter
-from fastapi import HTTPException
 import logging
+from fastapi import APIRouter
+from fastapi import HTTPException, status, Depends
 from ..repository import userRepository, ExceptionUserNameExists
 from ..validator import userValidator
 from ..entity import UserReciver
+from ..services import AuthServices
 
 
 class EmpresaController:
@@ -23,7 +24,11 @@ class EmpresaController:
         # self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
         # self.router.add_api_route("/{empresa_id}", self.delete_empresa, methods=["DELETE"])
 
-    async def create(self, user: UserReciver):
+    async def create(
+        self,
+        user: UserReciver,
+        current_user: str = Depends(AuthServices.get_current_user),
+    ):
         try:
             self.user_repository.create_user(user)
         except ExceptionUserNameExists as error:
@@ -43,7 +48,7 @@ class EmpresaController:
             self.log.critical(error.messge)
             raise HTTPException(404, detail=error.messge)
 
-    async def get_all(self):
+    async def get_all(self, current_user: str = Depends(AuthServices.get_current_user)):
         try:
             return self.user_repository.get_all()
         except Exception as error:

@@ -18,11 +18,11 @@ class AuthController:
         self.router = APIRouter(prefix="/auth", tags=["Auth"])
         self.setup_routes()
         self.user_repository = userRepository()
-        self.auth = AuthServices()
 
     def setup_routes(self):
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
-        self.router.add_api_route("/protected", self.protected_route, methods=["GET"])
+        self.router.add_api_route("/create-user", self.create_user, methods=["POST"])
+
         # self.router.add_api_route("/logget", self.get_current_user, methods=["GET"])
 
     def create_access_token(self, data: dict):
@@ -37,6 +37,7 @@ class AuthController:
         )
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
+        # self.user_repository.get_login(user, password)
 
         if from_data.username != "admin":
             self.log.critical("Usuario ou senhna invalida")
@@ -47,22 +48,8 @@ class AuthController:
         token = self.create_access_token(data={"sub": from_data.username})
         return {"access_token": token, "token_type": "bearer"}
 
-    async def get_current_user(self, token: str = Depends(auth2_scheme)):
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-        try:
-            payload = jwt.decode(
-                token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
-            )
-            username: str = payload.get("sub")
-            if username is None:
-                raise credentials_exception
-        except JWTError:
-            raise credentials_exception
-        return username
-
-    async def protected_route(self, current_user: str = Depends(get_current_user)):
+    async def create_user(
+        self, current_user: str = Depends(AuthServices.get_current_user)
+    ):
+        self.log.debug(f"current_user {current_user}")
         return {"message": "Authenticated", "user": current_user}
