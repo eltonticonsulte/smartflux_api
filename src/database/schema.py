@@ -15,15 +15,9 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from enum import Enum as pyEnum
+from ..common import UserRole
 
 Base = declarative_base()
-
-
-class UserRole(pyEnum):
-    ADMIN = "admin"
-    EMPRESA = "empresa"
-    FILIAL = "filial"
 
 
 class Usuario(Base):
@@ -31,7 +25,6 @@ class Usuario(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False, unique=True)
-    email = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)

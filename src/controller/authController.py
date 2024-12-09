@@ -5,9 +5,9 @@ import logging
 from core import get_settings
 from fastapi_sessions.backends.implementations import InMemoryBackend
 from jose import JWTError, jwt
-from datetime import datetime, timedelta
+
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from ..repository import userRepository, ExceptionUserNameExists
+from ..repository import UserRepository, ExceptionUserNameExists
 from ..entity import UserReciver
 from ..services import AuthServices, auth2_scheme
 
@@ -17,7 +17,8 @@ class AuthController:
         self.log = logging.getLogger(__name__)
         self.router = APIRouter(prefix="/auth", tags=["Auth"])
         self.setup_routes()
-        self.user_repository = userRepository()
+
+        self.service_auth = AuthServices()
 
     def setup_routes(self):
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
@@ -25,28 +26,13 @@ class AuthController:
 
         # self.router.add_api_route("/logget", self.get_current_user, methods=["GET"])
 
-    def create_access_token(self, data: dict):
-        to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(
-            minutes=get_settings().ACCESS_TOKEN_EXPIRE_MINUTES
-        )
-
-        to_encode.update({"exp": expire})
-        return jwt.encode(
-            to_encode, get_settings().SECRET_KEY, algorithm=get_settings().ALGORITHM
-        )
-
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
-        # self.user_repository.get_login(user, password)
+        if self.service_auth.auth_user(from_data.username, from_data.password):
+            token = AuthServices.create_access_token(data={"sub": from_data.username})
+            return {"access_token": token, "token_type": "bearer"}
 
-        if from_data.username != "admin":
-            self.log.critical("Usuario ou senhna invalida")
-            raise HTTPException(422, detail="Usuario ou senhna invalida")
-        if from_data.password != "admin123":
-            self.log.critical("Usuario ou senhna invalida")
-            raise HTTPException(422, detail="Usuario ou senhna invalida")
-        token = self.create_access_token(data={"sub": from_data.username})
-        return {"access_token": token, "token_type": "bearer"}
+        self.log.critical("Usuario ou senhna invalida")
+        raise HTTPException(422, detail="Usuario ou senhna invalida")
 
     async def create_user(
         self, current_user: str = Depends(AuthServices.get_current_user)

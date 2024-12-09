@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from .visitorEntity import PullEventReciver, UserReciver
+from .visitorEntity import PullEventReciver

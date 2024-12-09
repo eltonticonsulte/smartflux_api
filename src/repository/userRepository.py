@@ -1,9 +1,18 @@
 # -*- coding: utf-8 -*-
 import logging
-from uuid import uuid4
-from ..entity import UserReciver
-from ..database import DataRepository, Filial, Camera, Zone, EventCountTemp
+from typing import Optional
+from ..database import (
+    DataUserDB,
+    Filial,
+    Camera,
+    Zone,
+    EventCountTemp,
+    Usuario,
+    DBConnectionHandler,
+)
 from ..database import IntegrityError
+from ..dto import UserDTO
+from ..mappers import UserMapper
 
 
 class ExceptionUserNameExists(Exception):
@@ -15,27 +24,33 @@ class ExceptionUserNameExists(Exception):
         return self.messge
 
 
-class userRepository:
+class UserRepository:
     def __init__(self):
         self.log = logging.getLogger(__name__)
-        self.data_base = DataRepository()
+        self.data_base = DataUserDB()
 
-    def create_user(self, user: UserReciver):
+    def get_login(self, user: str) -> Filial:
+        self.log.debug(f"get_login {user}")
+        user = self.data_base.get_user_by_name(user)
+        return user
+
+    def create_user(self, user: UserDTO) -> bool:
         self.log.debug(f"create_user {user}")
-        db_user = Filial(
-            name=user.username,
-            description=user.description,
-            token_api=self.genetate_token(),
-            password_hash=user.password,
-        )
+        db_user = UserMapper.to_entity(user)
         try:
-            self.data_base.create_device(db_user)
-        except IntegrityError:
+            with DBConnectionHandler() as session:
+                session.add(db_user)
+                session.commit()
+                return True
+        except Exception:
+            session.rollback()
             raise ExceptionUserNameExists(user.username)
 
-    def get_login(self, user: UserReciver) -> Filial:
-        self.log.debug(f"get_login {user}")
-        return self.data_base.get_login(user)
+    def get_user_by_name(self, username: str) -> Optional[Usuario]:
+        with DBConnectionHandler() as db:
+            try:
+                user = db.query(Usuario).filter(Usuario.name == username).one_or_none()
 
-    def genetate_token(self):
-        return str(uuid4())
+            except Exception as error:
+                db.rollback()
+                raise error

@@ -6,7 +6,15 @@ from sqlalchemy.orm.exc import NoResultFound
 from sqlalchemy.orm import joinedload
 from sqlalchemy import func, case
 from .connect import DBConnectionHandler
-from .schema import Filial, Camera, Zone, EventCountTemp, Empresa, EventCountHourly
+from .schema import (
+    Filial,
+    Camera,
+    Zone,
+    EventCountTemp,
+    Empresa,
+    EventCountHourly,
+    Usuario,
+)
 
 T = TypeVar("T")
 
@@ -91,6 +99,19 @@ class DataRepositoryOtimazeInsert:
             try:
                 db.bulk_save_objects(events)
                 db.commit()
+            except Exception as error:
+                db.rollback()
+                raise error
+
+
+class DataUserDB:
+    def __init__(self):
+        self.log = getLogger(__name__)
+
+    def get_user_by_name(self, username: str) -> Optional[Usuario]:
+        with DBConnectionHandler() as db:
+            try:
+                return db.query(Usuario).filter(Usuario.name == username).one_or_none()
             except Exception as error:
                 db.rollback()
                 raise error
