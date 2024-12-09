@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime, timedelta
+import logging
 import hmac
 from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
@@ -8,7 +9,7 @@ from core import get_settings
 from ..database import DataUserDB, DBConnectionHandler
 from ..repository import UserRepository
 from ..common import UserRole
-from ..dto import userDTO
+from ..dto import UserDTO
 from ..mappers import UserMapper
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
@@ -17,20 +18,26 @@ auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 class UserServices:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
+        self.log = logging.getLogger(__name__)
 
-    def create_user(self, user: userDTO) -> bool:
-        if self.user_repository.get_user_by_name(user.username):
-            return False
-        self.user_repository.create_user(user)
-        return True
+    def create_user(self, user: UserDTO) -> bool:
+        data_user: UserDTO = self.user_repository.get_user_by_name(user.username)
+        if data_user.username != "":
+            raise ValueError("User name already exists")
+
+        return self.user_repository.create_user(user)
 
     def auth_user(self, user_name: str, password: str) -> bool:
-        self.log.debug(f"get_login {user_name}")
-        hash_password: str = self.user_repository.get_user_by_name(user_name)
-        if not hash_password:
+        user_input = UserDTO(username=user_name, password=password)
+        user_entity = UserMapper.to_entity(user_input)
+        user: UserDTO = self.user_repository.get_user_by_name(user_name)
+        if user.username == "":
+            return False
+        if not user.is_active:
             return False
         return hmac.compare_digest(
-            hash_password.encode("utf-8"), password.encode("utf-8")
+            user.hash_password.encode("utf-8"),
+            user_entity.password_hash.encode("utf-8"),
         )
 
     @staticmethod
