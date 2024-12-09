@@ -14,19 +14,19 @@ from ..mappers import UserMapper
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
 
-class AuthServices:
-    def __init__(self):
-        self.data_base = UserRepository()
+class UserServices:
+    def __init__(self, user_repository: UserRepository):
+        self.user_repository = user_repository
 
     def create_user(self, user: userDTO) -> bool:
-        if self.data_base.get_user_by_name(user.username):
+        if self.user_repository.get_user_by_name(user.username):
             return False
-        self.data_base.create_user(user)
+        self.user_repository.create_user(user)
         return True
 
     def auth_user(self, user_name: str, password: str) -> bool:
         self.log.debug(f"get_login {user_name}")
-        hash_password: str = self.data_base.get_user_by_name(user_name)
+        hash_password: str = self.user_repository.get_user_by_name(user_name)
         if not hash_password:
             return False
         return hmac.compare_digest(

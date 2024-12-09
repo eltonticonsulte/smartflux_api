@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
 from src.database.connect import DBConnectionHandler
 from src.database.schema import Usuario, UserRole
-from src.services import AuthServices
+from src.services import UserServices
 from src.dto import userDTO
 from src.mappers import UserMapper
 from core.config import get_settings
 
 
 def create_user_admin():
-    auth_services = AuthServices()
+    auth_services = UserServices()
     user = userDTO(
         username="admin3",
         password="admin123",

@@ -46,11 +46,11 @@ class UserRepository:
             session.rollback()
             raise ExceptionUserNameExists(user.username)
 
-    def get_user_by_name(self, username: str) -> Optional[Usuario]:
+    def get_user_by_name(self, username: str) -> Optional[UserDTO]:
         with DBConnectionHandler() as db:
             try:
                 user = db.query(Usuario).filter(Usuario.name == username).one_or_none()
-
+                return UserMapper.to_dto(user)
             except Exception as error:
                 db.rollback()
                 raise error

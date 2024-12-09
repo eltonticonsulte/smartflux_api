@@ -1,2 +1,2 @@
 # -*- coding: utf-8 -*-
-from .auth import AuthServices, auth2_scheme
+from .user_service import UserServices, auth2_scheme

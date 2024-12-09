@@ -3,8 +3,10 @@ import logging
 import os
 from fastapi import FastAPI
 
-from src.controller import EmpresaController, AuthController
+from src.controller import EmpresaController, UserController
 from src.controller import VisitorController
+from src.services import UserServices
+from src.repository import UserRepository
 from utils import LoggerConfig
 
 __version__ = "0.0.0"
@@ -22,7 +24,9 @@ from core import get_settings
 
 app = FastAPI(title=get_settings().PROJECT_NAME, version=__version__)
 
-admin_controller = AuthController()
+user_repository = UserRepository()
+user_services = UserServices(user_repository)
+admin_controller = UserController(user_services)
 app.include_router(admin_controller.router, prefix="/api")
 
 empresa_controller = EmpresaController()
