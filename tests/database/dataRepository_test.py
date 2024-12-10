@@ -3,7 +3,6 @@ import unittest
 import uuid
 from unittest.mock import patch
 from src.database import DataRepository, Empresa, DBConnectionHandler
-from src.entity import UserReciver
 from core import get_settings
 
 

@@ -23,7 +23,7 @@ class UserController:
         self.router.add_api_route("/login", self.get_login, methods=["POST"])
         self.router.add_api_route("/create-user", self.create_user, methods=["POST"])
 
-    async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
+    async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()) -> dict:
         if self.user_services.auth_user(from_data.username, from_data.password):
             token = UserServices.create_access_token(data={"sub": from_data.username})
             return {"access_token": token, "token_type": "bearer"}

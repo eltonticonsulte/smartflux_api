@@ -41,4 +41,4 @@ log.info(f"smartflux_api version: {__version__}")
 
 @app.get("/")
 async def get():
-    return {"status": True, "message": "Redsoft API IA", "version": __version__}
+    return {"status": True, "message": "SmartFlux API IA", "version": __version__}
