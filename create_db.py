@@ -11,7 +11,7 @@ from core.config import get_settings
 def create_user_admin():
     auth_services = UserServices(UserRepository())
     user = UserDTO(
-        username="admin3",
+        username="admin",
         password="admin123",
         role=UserRole.ADMIN,
         is_active=True,
@@ -22,6 +22,6 @@ def create_user_admin():
 
 if __name__ == "__main__":
     engine = DBConnectionHandler.get_engine(get_settings().DATABASE_URL)
-    # Usuario.metadata.create_all(engine)
+    Usuario.metadata.create_all(engine)
     print("Tabelas criadas com sucesso!")
     print("Admin criado com sucesso!", create_user_admin())

@@ -4,18 +4,17 @@ from fastapi import APIRouter
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from ..common import ExceptionUserNameExists
-from ..repository import UserRepository
 
 from ..dto import EmpresaDTO
-from ..services import UserServices
+from ..services import EmpresaServices, UserServices
 
 
 class EmpresaController:
-    def __init__(self):
+    def __init__(self, empresa_services: EmpresaServices):
         self.log = logging.getLogger(__name__)
         self.router = APIRouter(prefix="/empresa", tags=["Empresa"])
         self.setup_routes()
-        self.user_repository = UserRepository()
+        self.empresa_repository: EmpresaServices = empresa_services
 
     def setup_routes(self):
         # self.router.add_api_route("/all", self.get_users, methods=["GET"])
@@ -28,21 +27,22 @@ class EmpresaController:
 
     async def create(
         self,
-        user: str,
+        name_empresa: str,
         current_user: str = Depends(UserServices.get_current_user),
     ):
+
         try:
-            self.user_repository.create_user(user)
+            self.empresa_repository.create_empresa(name_empresa)
         except ExceptionUserNameExists as error:
-            self.log.critical(error.messge)
-            raise HTTPException(422, detail=error.messge)
+            self.log.critical(error)
+            raise HTTPException(422, detail=error)
         except Exception as error:
-            self.log.critical(error.messge)
-            raise HTTPException(500, detail=error.messge)
+            self.log.critical(error)
+            raise HTTPException(500, detail=error)
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
         try:
-            self.user_repository.get_login(from_data.username)
+            self.empresa_repository.get_login(from_data.username)
         except ExceptionUserNameExists as error:
             self.log.critical(error.messge)
             raise HTTPException(422, detail=error.messge)

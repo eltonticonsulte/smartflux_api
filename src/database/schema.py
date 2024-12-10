@@ -29,9 +29,6 @@ class Usuario(Base):
     is_active = Column(Boolean, default=True)
     role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)
 
-    empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=True)
-    filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=True)
-
     data_criacao = Column(DateTime, default=func.now())
     ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
@@ -41,13 +38,17 @@ class Empresa(Base):
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
-    password_hash = Column(String, nullable=False)
+    token_api = Column(
+        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+    )
+    # password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
     data_criacao = Column(DateTime, default=func.now())
 
-    filiais = relationship("Filial", backref="empresa", cascade="all, delete-orphan")
-    usuarios = relationship("Usuario", backref="empresa", cascade="all, delete-orphan")
+    filiais = relationship(
+        "Filial", back_populates="empresa", cascade="all, delete-orphan"
+    )
 
 
 class Filial(Base):
@@ -62,10 +63,8 @@ class Filial(Base):
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
     empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=False)
-
-    # Relationships
-    zones = relationship("Zone", backref="filial", cascade="all, delete-orphan")
-    usuarios = relationship("Usuario", backref="filial", cascade="all, delete-orphan")
+    empresa = relationship("Empresa", back_populates="filiais")
+    zones = relationship("Zone", back_populates="filial", cascade="all, delete-orphan")
 
 
 class Zone(Base):
@@ -74,8 +73,8 @@ class Zone(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=False)
-
-    camera = relationship("Camera", backref="zone", cascade="all, delete-orphan")
+    filial = relationship("Filial", back_populates="zones")
+    camera = relationship("Camera", back_populates="zone", cascade="all, delete-orphan")
 
 
 class Camera(Base):
@@ -86,9 +85,9 @@ class Camera(Base):
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     name = Column(String, nullable=False)
+    metadate = Column(JSON, nullable=True)
     zona_id = Column(Integer, ForeignKey("zones.id"), nullable=False)
-    metadate = Column(JSON, nullable=True)  # Using JSON for flexible metadata
-
+    zone = relationship("Zone", back_populates="camera")
     eventos = relationship(
         "EventCountTemp", backref="camera", cascade="all, delete-orphan"
     )
