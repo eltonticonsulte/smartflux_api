@@ -14,7 +14,7 @@ class EmpresaController:
         self.log = logging.getLogger(__name__)
         self.router = APIRouter(prefix="/empresa", tags=["Empresa"])
         self.setup_routes()
-        self.empresa_repository: EmpresaServices = empresa_services
+        self.empresa_services: EmpresaServices = empresa_services
 
     def setup_routes(self):
         # self.router.add_api_route("/all", self.get_users, methods=["GET"])
@@ -30,9 +30,8 @@ class EmpresaController:
         name_empresa: str,
         current_user: str = Depends(UserServices.get_current_user),
     ):
-
         try:
-            self.empresa_repository.create_empresa(name_empresa)
+            return self.empresa_services.create_empresa(name_empresa)
         except ExceptionUserNameExists as error:
             self.log.critical(error)
             raise HTTPException(422, detail=error)
@@ -42,7 +41,7 @@ class EmpresaController:
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
         try:
-            self.empresa_repository.get_login(from_data.username)
+            self.empresa_services.get_login(from_data.username)
         except ExceptionUserNameExists as error:
             self.log.critical(error.messge)
             raise HTTPException(422, detail=error.messge)

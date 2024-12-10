@@ -18,5 +18,5 @@ class EmpresaServices:
         self.empresa_repository = empresa_repository
         self.log = logging.getLogger(__name__)
 
-    def create_empresa(self, name_empresa: str) -> bool:
+    def create_empresa(self, name_empresa: str) -> int:
         return self.empresa_repository.create_empresa(name_empresa)
