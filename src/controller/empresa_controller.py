@@ -2,6 +2,7 @@
 import logging
 from fastapi import APIRouter
 from fastapi import HTTPException, Depends
+from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
 from ..common import ExceptionUserNameExists
 
@@ -31,7 +32,8 @@ class EmpresaController:
         current_user: str = Depends(UserServices.get_current_user),
     ):
         try:
-            return self.empresa_services.create_empresa(name_empresa)
+            id_empresa = self.empresa_services.create_empresa(name_empresa)
+            return JSONResponse(status_code=201, content={"id_empresa": id_empresa})
         except ExceptionUserNameExists as error:
             self.log.critical(error)
             raise HTTPException(422, detail=error)
