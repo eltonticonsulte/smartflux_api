@@ -18,11 +18,19 @@ class EmpresaController:
         self.empresa_services: EmpresaServices = empresa_services
 
     def setup_routes(self):
-        # self.router.add_api_route("/all", self.get_users, methods=["GET"])
-        # self.router.add_api_route("/{user_id}", self.get_user_by_id, methods=["GET"])
-        self.router.add_api_route("/create", self.create, methods=["POST"])
-        self.router.add_api_route("/login", self.get_login, methods=["POST"])
-        self.router.add_api_route("/all", self.get_all, methods=["GET"])
+        self.router.add_api_route(
+            "/create",
+            self.create,
+            methods=["POST"],
+            dependencies=[Depends(UserServices.get_current_user)],
+        )
+        # self.router.add_api_route("/login", self.get_login, methods=["POST"])
+        self.router.add_api_route(
+            "/all",
+            self.get_all,
+            methods=["GET"],
+            dependencies=[Depends(UserServices.get_current_user)],
+        )
         # self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
         # self.router.add_api_route("/{empresa_id}", self.delete_empresa, methods=["DELETE"])
 
@@ -41,19 +49,11 @@ class EmpresaController:
             self.log.critical(error)
             raise HTTPException(500, detail=error)
 
-    async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
-        try:
-            self.empresa_services.get_login(from_data.username)
-        except ExceptionUserNameExists as error:
-            self.log.critical(error.messge)
-            raise HTTPException(422, detail=error.messge)
-        except Exception as error:
-            self.log.critical(error.messge)
-            raise HTTPException(404, detail=error.messge)
-
     async def get_all(self, current_user: str = Depends(UserServices.get_current_user)):
         try:
-            return self.user_repository.get_all()
+            result = self.empresa_services.get_all()
+
+            return JSONResponse(status_code=200, content=result)
         except Exception as error:
-            self.log.critical(error.messge)
-            raise HTTPException(422, detail=error.messge)
+            self.log.critical(error)
+            raise HTTPException(422, detail=error)

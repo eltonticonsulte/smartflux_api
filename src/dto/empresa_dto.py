@@ -5,15 +5,17 @@ from ..common import UserRole
 class EmpresaDTO:
     def __init__(
         self,
-        username: str,
-        password: str,
+        name: str,
         is_active: bool = True,
-        filial_id: int = None,
     ):
         self.is_active = is_active
-        self.username = username
-        self.password = password
-        self.filial_id = filial_id
+        self.name = name
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "is_active": self.is_active,
+        }
 
     def __repr__(self):
-        return f"EmpresaDTO(username={self.username}, password={self.password},is_active={self.is_active} filial_id={self.filial_id})"
+        return f"EmpresaDTO(name={self.name},is_active={self.is_active})"

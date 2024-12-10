@@ -1,9 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import List
 from ..common import ExceptionUserNameExists
 from .base_repository import BaseRepository
 from ..database import Empresa, Camera, Zone, EventCountTemp
-from ..database import IntegrityError
+from ..database import IntegrityError, DBConnectionHandler
+from ..dto import EmpresaDTO
+from ..mappers import EmpresaMapper
 
 
 class EmpresaRepository(BaseRepository):
@@ -21,6 +24,24 @@ class EmpresaRepository(BaseRepository):
             self.log.critical(error)
             raise error
 
-    def get_login(self, user) -> Empresa:
-        self.log.debug(f"get_login {user}")
-        return self.data_base.get_login(user)
+    def get_all(self) -> List[EmpresaDTO]:
+        try:
+            with DBConnectionHandler() as session:
+                empresas = session.query(Empresa).all()
+                return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
+        except Exception as error:
+            self.log.critical(error)
+            raise error
+
+    def get_empresa_by_name(self, name: str) -> Empresa:
+        try:
+            with DBConnectionHandler() as session:
+                empresa = (
+                    session.query(Empresa).filter(Empresa.name == name).one_or_none()
+                )
+                if empresa is None:
+                    raise ValueError("Empresa not found")
+                return EmpresaMapper.to_dto(empresa)
+        except Exception as error:
+            self.log.critical(error)
+            raise error

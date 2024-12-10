@@ -3,6 +3,7 @@ from fastapi import APIRouter
 from fastapi import HTTPException, Depends
 import logging
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import JSONResponse
 from ..repository import UserRepository
 from ..services import UserServices
 
@@ -22,7 +23,9 @@ class UserController:
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()) -> dict:
         if self.user_services.auth_user(from_data.username, from_data.password):
             token = UserServices.create_access_token(data={"sub": from_data.username})
-            return {"access_token": token, "token_type": "bearer"}
+            return JSONResponse(
+                status_code=200, content={"access_token": token, "token_type": "bearer"}
+            )
 
         self.log.critical("Usuario ou senhna invalida")
         raise HTTPException(422, detail="Usuario ou senhna invalida")
