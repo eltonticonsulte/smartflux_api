@@ -15,7 +15,7 @@ from ..mappers import UserMapper
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/auth/login")
 
 
-class UserServices:
+class EmpresaServices:
     def __init__(self, user_repository: UserRepository):
         self.user_repository = user_repository
         self.log = logging.getLogger(__name__)

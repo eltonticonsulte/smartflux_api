@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, Depends
 import logging
-from core import get_settings
-from fastapi_sessions.backends.implementations import InMemoryBackend
-from jose import JWTError, jwt
-
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from ..repository import UserRepository, ExceptionUserNameExists
-from ..services import UserServices, auth2_scheme
+from fastapi.security import OAuth2PasswordRequestForm
+from ..repository import UserRepository
+from ..services import UserServices
 
 
 class UserController:

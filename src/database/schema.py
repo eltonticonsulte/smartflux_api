@@ -71,7 +71,7 @@ class Filial(Base):
 class Zone(Base):
     __tablename__ = "zones"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
     filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=False)
 

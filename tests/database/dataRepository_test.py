@@ -2,7 +2,7 @@
 import unittest
 import uuid
 from unittest.mock import patch
-from src.database import DataRepository, Empresa, DBConnectionHandler
+from src.database import BaseRepository, Empresa, DBConnectionHandler
 from core import get_settings
 
 
@@ -15,7 +15,7 @@ def create_data_base():
 class TestDataRepositoryEmpresa(unittest.TestCase):
     def setUp(self):
         create_data_base()
-        self.repo = DataRepository()
+        self.repo = BaseRepository()
         self.name = "dflaskfddj"
 
     def tearDown(self) -> None:

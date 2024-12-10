@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
 from fastapi import APIRouter
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
-from ..repository import UserRepository, ExceptionUserNameExists
+from ..common import ExceptionUserNameExists
+from ..repository import UserRepository
 
 from ..dto import EmpresaDTO
 from ..services import UserServices

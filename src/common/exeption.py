@@ -17,3 +17,12 @@ class InactiveUserException(BaseAppException):
     def __init__(self, message="User account is inactive."):
         self.message = message
         super().__init__(self.message)
+
+
+class ExceptionUserNameExists(Exception):
+    def __init__(self, username: str):
+        self.messge = f"User name '{username}' already exists"
+        super().__init__(self.messge)
+
+    def __str__(self):
+        return self.messge

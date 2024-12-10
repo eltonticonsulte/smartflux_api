@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 from uuid import uuid4
-from ..entity import UserReciver
-from ..database import DataRepository, Filial, Camera, Zone, EventCountTemp
+from .base_repository import BaseRepository
+from ..database import Filial, Camera, Zone, EventCountTemp
 from ..database import IntegrityError
 
 
@@ -15,25 +15,24 @@ class ExceptionUserNameExists(Exception):
         return self.messge
 
 
-class userRepository:
+class EmpresaRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
-        self.data_base = DataRepository()
 
-    def create_user(self, user: UserReciver):
+    def create_empresa(self, user):
         self.log.debug(f"create_user {user}")
-        db_user = Filial(
+        entity_filial = Filial(
             name=user.username,
             description=user.description,
             token_api=self.genetate_token(),
             password_hash=user.password,
         )
         try:
-            self.data_base.create_device(db_user)
+            self.add(entity_filial)
         except IntegrityError:
             raise ExceptionUserNameExists(user.username)
 
-    def get_login(self, user: UserReciver) -> Filial:
+    def get_login(self, user) -> Filial:
         self.log.debug(f"get_login {user}")
         return self.data_base.get_login(user)
 

@@ -1,2 +1,3 @@
 # -*- coding: utf-8 -*-
-from .user_repository import UserRepository, ExceptionUserNameExists
+from .user_repository import UserRepository
+from .empresa_repository import EmpresaRepository

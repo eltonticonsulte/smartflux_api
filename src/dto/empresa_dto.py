@@ -8,10 +8,12 @@ class EmpresaDTO:
         username: str,
         password: str,
         is_active: bool = True,
+        filial_id: int = None,
     ):
         self.is_active = is_active
         self.username = username
         self.password = password
+        self.filial_id = filial_id
 
     def __repr__(self):
-        return f"UserDTO(username={self.username}, password={self.password},is_active={self.is_active})"
+        return f"EmpresaDTO(username={self.username}, password={self.password},is_active={self.is_active} filial_id={self.filial_id})"
