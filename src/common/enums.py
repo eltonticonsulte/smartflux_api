@@ -6,3 +6,9 @@ class UserRole(Enum):
     ADMIN = "admin"
     EMPRESA = "empresa"
     FILIAL = "filial"
+
+
+class CameraState(Enum):
+    RUNING = 0
+    STOP = 2
+    ERROR = 3

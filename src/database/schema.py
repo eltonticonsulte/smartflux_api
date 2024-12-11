@@ -15,7 +15,7 @@ from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
 from sqlalchemy.dialects.postgresql import UUID
 import uuid
-from ..common import UserRole
+from ..common import UserRole, CameraState
 
 Base = declarative_base()
 
@@ -89,6 +89,7 @@ class Camera(Base):
     name = Column(String, nullable=False)
     metadate = Column(JSON, nullable=True)
     zona_id = Column(Integer, ForeignKey("zones.id"), nullable=False)
+    status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
     zone = relationship("Zone", back_populates="camera")
     eventos = relationship(
         "EventCountTemp", backref="camera", cascade="all, delete-orphan"

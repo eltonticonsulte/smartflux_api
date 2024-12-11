@@ -3,7 +3,6 @@ import logging
 from fastapi import APIRouter
 from fastapi import HTTPException, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
 from ..common import ExceptionUserNameExists
 
 from ..dto import EmpresaDTO

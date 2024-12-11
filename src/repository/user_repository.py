@@ -2,15 +2,10 @@
 import logging
 from typing import Optional
 from ..database import (
-    Filial,
-    Camera,
-    Zone,
-    EventCountTemp,
     Usuario,
     DBConnectionHandler,
 )
 from .base_repository import BaseRepository
-from ..database import IntegrityError
 from ..dto import UserDTO
 from ..common import UserRole
 from ..mappers import UserMapper

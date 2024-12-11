@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
-from fastapi import HTTPException, status, Depends
 from typing import List
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-from jose import JWTError, jwt
-from core import get_settings
+from fastapi.security import OAuth2PasswordBearer
 from ..repository import FilialRepository
 from ..dto import FilialDTO
-from ..mappers import FilialMapper
+
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/filial/login")
 
@@ -34,7 +31,3 @@ class FilialServices:
         if not filial.is_active:
             raise ValueError("Usuário inativo")
         return str(filial.password_hash)
-
-    @staticmethod
-    def get_current_user(token: str = Depends(auth2_scheme)):
-        return token

@@ -3,12 +3,10 @@ from datetime import datetime, timedelta
 import logging
 import hmac
 from fastapi import HTTPException, status, Depends
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
-from ..database import DBConnectionHandler
 from ..repository import UserRepository
-from ..common import UserRole
 from ..dto import UserDTO
 from ..mappers import UserMapper
 

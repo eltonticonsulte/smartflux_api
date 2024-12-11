@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
+import logging
 from fastapi import APIRouter
 from fastapi import HTTPException, Depends
-import logging
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
-from ..repository import UserRepository
 from ..services import UserServices
 
 

@@ -3,7 +3,7 @@ import logging
 from typing import List
 from ..common import ExceptionUserNameExists
 from .base_repository import BaseRepository
-from ..database import Empresa, Camera, Zone, EventCountTemp
+from ..database import Empresa
 from ..database import IntegrityError, DBConnectionHandler
 from ..dto import EmpresaDTO
 from ..mappers import EmpresaMapper
