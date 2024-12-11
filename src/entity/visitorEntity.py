@@ -11,6 +11,16 @@ class EventReciver(BaseModel):
     count_in: int
     count_out: int
 
+    def to_dict(self):
+        return {
+            "event_id": self.event_id,
+            "channel_id": self.channel_id,
+            "token_api": self.token_api,
+            "event_time": self.event_time,
+            "count_in": self.count_in,
+            "count_out": self.count_out,
+        }
+
 
 class PullEventReciver(BaseModel):
     data: List[EventReciver]

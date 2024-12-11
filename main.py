@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from src.controller import (
     EmpresaController,
     UserController,
-    VisitorController,
+    CounterEventController,
     FilialController,
 )
 
@@ -44,7 +44,7 @@ filial_service = FilialServices(filial_repository)
 filial_controller = FilialController(filial_service)
 app.include_router(filial_controller.router, prefix="/api")
 
-visitor_controller = VisitorController()
+visitor_controller = CounterEventController()
 app.include_router(visitor_controller.router, prefix="/api")
 
 # app.include_router(api_router, prefix="/api")

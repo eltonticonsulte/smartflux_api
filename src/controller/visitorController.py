@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter, status
-from ..entity.visitorEntity import PullEventReciver
+from ..dto import PullCountEventDTO, CountEventDTO
 
 
 class CounterEventController:
@@ -20,5 +20,5 @@ class CounterEventController:
     async def get_users(self):
         pass
 
-    async def register_event(self, data: PullEventReciver):
+    async def register_event(self, data: PullCountEventDTO):
         pass
