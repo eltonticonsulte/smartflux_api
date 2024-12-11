@@ -2,10 +2,8 @@
 import logging
 from fastapi import HTTPException, status, Depends
 from typing import List
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
-from core import get_settings
-from ..database import DBConnectionHandler
 from ..repository import UserRepository, EmpresaRepository
 from ..common import UserRole
 from ..dto import EmpresaDTO

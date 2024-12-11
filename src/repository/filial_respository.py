@@ -1,22 +1,23 @@
 # -*- coding: utf-8 -*-
+import logging
+from .base_repository import BaseRepository
+from ..database import Filial, DBConnectionHandler
+from ..dto import FilialDTO
 
 
-class FiliaryRepository:
+class FilialRepository(BaseRepository):
     def __init__(self):
-        pass
+        self.log = logging.getLogger(__name__)
 
-    def create_user(self, user: UserReciver):
-        self.log.debug(f"create_user {user}")
-        db_user = Filial(
-            name=user.username,
-            description=user.description,
-            token_api=self.genetate_token(),
-            password_hash=user.password,
+    def create(self, filial: FilialDTO) -> int:
+        entity = Filial(
+            name=filial.name,
+            cnpj=filial.cnpj,
+            empresa_id=filial.empresa_id,
+            password_hash=filial.password_hash,
         )
         try:
-            self.data_base.create_device(db_user)
-        except IntegrityError:
-            raise ExceptionUserNameExists(user.username)
-
-    def genetate_token(self):
-        return str(uuid4())
+            return self.add(entity)
+        except Exception as error:
+            self.log.critical(error)
+            raise error
