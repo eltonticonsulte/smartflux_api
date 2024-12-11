@@ -18,7 +18,6 @@ class FilialMapper:
 
     @staticmethod
     def to_entity(empresa: FilialDTO) -> Filial:
-
         return Filial(
             name=empresa.name,
             cnpj=empresa.cnpj,

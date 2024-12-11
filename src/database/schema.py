@@ -54,9 +54,11 @@ class Empresa(Base):
 class Filial(Base):
     __tablename__ = "filiais"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
+    name = Column(String, nullable=False, unique=True)
     cnpj = Column(String(18), nullable=False)
-    password_hash = Column(String, nullable=False)
+    password_hash = Column(
+        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+    )
     token_api = Column(
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
@@ -124,8 +126,6 @@ class EventCountHourly(Base):
     total_count_out = Column(Integer, default=0, nullable=False)
 
     __table_args__ = (
-        # Índice para otimizar consultas por câmera e hora
         Index("idx_camera_hour", "camera_id", "hour_timestamp"),
-        # Garante unicidade de registro por câmera e hora
         UniqueConstraint("camera_id", "hour_timestamp", name="uq_camera_hour"),
     )

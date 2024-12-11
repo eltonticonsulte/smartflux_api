@@ -3,10 +3,15 @@ import logging
 import os
 from fastapi import FastAPI
 
-from src.controller import EmpresaController, UserController, VisitorController
+from src.controller import (
+    EmpresaController,
+    UserController,
+    VisitorController,
+    FilialController,
+)
 
-from src.services import UserServices, EmpresaServices
-from src.repository import UserRepository, EmpresaRepository
+from src.services import UserServices, EmpresaServices, FilialServices
+from src.repository import UserRepository, EmpresaRepository, FilialRepository
 from utils import LoggerConfig
 
 __version__ = "0.0.0"
@@ -33,6 +38,11 @@ empresa_repository = EmpresaRepository()
 empresa_service = EmpresaServices(empresa_repository)
 empresa_controller = EmpresaController(empresa_service)
 app.include_router(empresa_controller.router, prefix="/api")
+
+filial_repository = FilialRepository()
+filial_service = FilialServices(filial_repository)
+filial_controller = FilialController(filial_service)
+app.include_router(filial_controller.router, prefix="/api")
 
 visitor_controller = VisitorController()
 app.include_router(visitor_controller.router, prefix="/api")

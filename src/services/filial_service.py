@@ -5,12 +5,9 @@ from typing import List
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from jose import JWTError, jwt
 from core import get_settings
-from ..database import DBConnectionHandler
-from ..repository import UserRepository, FilialRepository
-from ..common import UserRole
+from ..repository import FilialRepository
 from ..dto import FilialDTO
-from ..mappers import EmpresaMapper
-from .user_service import UserServices
+
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/filial/login")
 

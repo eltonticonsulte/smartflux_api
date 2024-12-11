@@ -25,8 +25,8 @@ class FilialDTO:
         return {
             "name": self.name,
             "cnpj": self.cnpj,
-            "password_hash": self.password_hash,
-            "token_api": self.token_api,
+            "password_hash": str(self.password_hash),
+            "token_api": str(self.token_api),
             "is_active": self.is_active,
             "description": self.description,
             "empresa_id": self.empresa_id,
