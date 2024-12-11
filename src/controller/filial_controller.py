@@ -24,7 +24,7 @@ class FilialController:
             methods=["POST"],
             dependencies=[Depends(UserServices.get_current_user)],
         )
-        # self.router.add_api_route("/login", self.get_login, methods=["POST"])
+        self.router.add_api_route("/login", self.get_login, methods=["POST"])
         self.router.add_api_route(
             "/all",
             self.get_all,
@@ -59,3 +59,13 @@ class FilialController:
         except Exception as error:
             self.log.critical(error)
             raise HTTPException(422, detail=error)
+
+    async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
+        if self.filial_services.auth_user(from_data.username, from_data.password):
+            token = UserServices.create_access_token(data={"sub": from_data.username})
+            return JSONResponse(
+                status_code=200, content={"access_token": token, "token_type": "bearer"}
+            )
+
+        self.log.critical("Usuario ou senhna invalida")
+        raise HTTPException(422, detail="Usuario ou senhna invalida")

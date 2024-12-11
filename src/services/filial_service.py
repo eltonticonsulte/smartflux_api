@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from core import get_settings
 from ..repository import FilialRepository
 from ..dto import FilialDTO
-
+from ..mappers import FilialMapper
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/filial/login")
 
@@ -25,6 +25,14 @@ class FilialServices:
         datas = self.filial_repository.get_all()
         result = {"data": [filial.to_dict() for filial in datas]}
         return result
+
+    def auth(self, name: str, password: str) -> bool:
+        filial: FilialDTO = self.filial_repository.get_user_by_name(name)
+        if filial.password_hash != password:
+            return False
+        if not filial.is_active:
+            return False
+        return True
 
     @staticmethod
     def get_current_user(token: str = Depends(auth2_scheme)):
