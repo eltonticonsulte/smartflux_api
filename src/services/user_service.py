@@ -28,15 +28,18 @@ class UserServices:
         return self.user_repository.create_user(user)
 
     def auth_user(self, user_name: str, password: str) -> bool:
-        user_input = UserDTO(username=user_name, password=password)
-        user_input = UserMapper.to_entity(user_input)
+        password_hash = UserMapper.password_to_hash(password)
         user: UserDTO = self.user_repository.get_user_by_name(user_name)
+
+        self.__validate_user(user)
+        if self.__compare_hash(user.hash_password, password_hash):
+            return UserServices.create_access_token(data={"sub": user_name})
+
+    def __validate_user(self, user: UserDTO) -> None:
         if user.username == "":
             raise ValueError("User not exists")
         if not user.is_active:
             raise ValueError("User not active")
-        if self.__compare_hash(user.hash_password, user_input.password_hash):
-            return UserServices.create_access_token(data={"sub": user_name})
 
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))

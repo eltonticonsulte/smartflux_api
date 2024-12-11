@@ -17,13 +17,16 @@ class UserMapper:
 
     @staticmethod
     def to_entity(user: UserDTO) -> Usuario:
-        salt = "safdasjldkfaoeel"
-        hash_password = hashlib.pbkdf2_hmac(
-            "sha256", user.password.encode("utf-8"), salt.encode("utf-8"), 100000
-        ).hex()
         return Usuario(
             username=user.username,
-            password_hash=hash_password,
+            password_hash=UserMapper.password_to_hash(user.password),
             role=user.role,
             is_active=user.is_active,
         )
+
+    @staticmethod
+    def password_to_hash(password: str) -> str:
+        salt = "safdasjldkfaoeel"
+        return hashlib.pbkdf2_hmac(
+            "sha256", password.encode("utf-8"), salt.encode("utf-8"), 100000
+        ).hex()
