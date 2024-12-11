@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi import HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.responses import JSONResponse
@@ -16,8 +16,16 @@ class UserController:
         self.user_services = user_services
 
     def setup_routes(self):
-        self.router.add_api_route("/login", self.get_login, methods=["POST"])
-        self.router.add_api_route("/create-user", self.create_user, methods=["POST"])
+        self.router.add_api_route(
+            "/login", self.get_login, methods=["POST"], status_code=status.HTTP_200_OK
+        )
+        self.router.add_api_route(
+            "/create-user",
+            self.create_user,
+            methods=["POST"],
+            status_code=status.HTTP_201_CREATED,
+            dependencies=[Depends(UserServices.get_current_user)],
+        )
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()) -> dict:
         token = self.user_services.auth_user(from_data.username, from_data.password)

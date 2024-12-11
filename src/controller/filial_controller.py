@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 from fastapi import HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
@@ -24,11 +24,14 @@ class FilialController:
             methods=["POST"],
             dependencies=[Depends(UserServices.get_current_user)],
         )
-        self.router.add_api_route("/login", self.get_login, methods=["POST"])
+        self.router.add_api_route(
+            "/login", self.get_login, methods=["POST"], status_code=status.HTTP_200_OK
+        )
         self.router.add_api_route(
             "/all",
             self.get_all,
             methods=["GET"],
+            status_code=status.HTTP_200_OK,
             dependencies=[Depends(UserServices.get_current_user)],
         )
         # self.router.add_api_route("/{user_id}", self.update_user, methods=["PUT"])
