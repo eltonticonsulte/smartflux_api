@@ -61,8 +61,8 @@ class FilialController:
             raise HTTPException(422, detail=error)
 
     async def get_login(self, from_data: OAuth2PasswordRequestForm = Depends()):
-        if self.filial_services.auth_user(from_data.username, from_data.password):
-            token = UserServices.create_access_token(data={"sub": from_data.username})
+        token =  self.filial_services.auth(from_data.username, from_data.password)
+        if token:
             return JSONResponse(
                 status_code=200, content={"access_token": token, "token_type": "bearer"}
             )

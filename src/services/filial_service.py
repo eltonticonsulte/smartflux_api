@@ -27,13 +27,14 @@ class FilialServices:
         return result
 
     def auth(self, name: str, password: str) -> bool:
-        filial: FilialDTO = self.filial_repository.get_user_by_name(name)
-        if filial.password_hash != password:
-            return False
+        filial: FilialDTO = self.filial_repository.get_by_name(name)
+        if str(filial.password_hash) != password:
+            print(filial.password_hash, password)
+            raise ValueError("Senha inválida")
         if not filial.is_active:
-            return False
-        return True
-
+            raise ValueError("Usuário inativo")
+        return str(filial.password_hash)
+    
     @staticmethod
     def get_current_user(token: str = Depends(auth2_scheme)):
         return token

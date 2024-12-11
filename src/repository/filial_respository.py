@@ -26,3 +26,10 @@ class FilialRepository(BaseRepository):
     def get_all(self) -> List[FilialDTO]:
         result = super().get_all(Filial)
         return [FilialMapper.to_dto(filial) for filial in result]
+
+    def get_by_name(self, name: str) -> FilialDTO:
+        with DBConnectionHandler() as session:
+            filial = session.query(Filial).filter(Filial.name == name).one_or_none()
+            if filial is None:
+                return FilialDTO(name=name, cnpj="")
+        return FilialMapper.to_dto(filial)
