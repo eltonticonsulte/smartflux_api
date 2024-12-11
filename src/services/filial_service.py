@@ -34,7 +34,7 @@ class FilialServices:
         if not filial.is_active:
             raise ValueError("Usuário inativo")
         return str(filial.password_hash)
-    
+
     @staticmethod
     def get_current_user(token: str = Depends(auth2_scheme)):
         return token
