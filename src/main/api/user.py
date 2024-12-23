@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
 
 from ..composers import AuthComposer, AuthComposerLogin
