@@ -19,7 +19,7 @@ class EmpresaRepository(BaseRepository):
         try:
             return self.add(db_empresa)
         except IntegrityError:
-            raise ExceptionUserNameExists(name)
+            raise ValueError(f"Empresa {name} already exists")
         except Exception as error:
             self.log.critical(error)
             raise error
