@@ -17,11 +17,9 @@ logging.getLogger("multipart").setLevel(logging.ERROR)
 
 from core import get_settings
 
-
 app = FastAPI(title=get_settings().PROJECT_NAME, version=__version__)
 app.include_router(base_ruter, prefix="/api")
 
-# app.include_router(api_router, prefix="/api")
 log.info(f"smartflux_api version: {__version__}")
 
 
