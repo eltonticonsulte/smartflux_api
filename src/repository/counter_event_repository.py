@@ -2,7 +2,7 @@
 from typing import List
 from .base_repository import BaseRepository
 from ..database import EventCountTemp, DBConnectionHandler, Camera
-from ..dto import CountEventDTO, CameraDTO
+from ..dto import CountEventDTO
 from ..mappers import CountEventMapper
 
 
