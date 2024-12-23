@@ -5,10 +5,9 @@ from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
 
 from ..composers import AuthComposer, AuthComposerLogin
-from fastapi.security import OAuth2PasswordBearer
+from .core import auth2_scheme
 
 router = APIRouter()
-auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
 
 @router.post("/login")

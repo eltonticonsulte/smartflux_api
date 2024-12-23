@@ -3,6 +3,7 @@
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
+from ..composers import AuthComposer
 
 router = APIRouter()
 
