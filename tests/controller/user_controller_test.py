@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from fastapi.security import OAuth2PasswordRequestForm
-from src.controller.user_controller import UserController
+from src.controller import AuthController
 
 
 import pytest

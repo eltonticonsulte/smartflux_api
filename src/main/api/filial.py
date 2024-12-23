@@ -2,15 +2,17 @@
 from fastapi import APIRouter
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
-from ..composers import AuthComposer
+from .core import auth2_scheme
+from ..composers import CreateFilialComposer
 
-router = APIRouter(prefix="/counter-event")
+router = APIRouter()
 
 
 @router.post("/create")
-async def create(data: Annotated[AuthComposer, Depends()]):
+async def create(
+    data: Annotated[CreateFilialComposer, Depends()], token: str = Depends(auth2_scheme)
+):
     return JSONResponse(
         status_code=200,
         content={"access_token": data.get_token(), "token_type": "bearer"},
@@ -18,10 +20,10 @@ async def create(data: Annotated[AuthComposer, Depends()]):
 
 
 @router.post("/login")
-async def get_login(token: Annotated[AuthComposer, Depends()]):
+async def get_login(token: Annotated[CreateFilialComposer, Depends()]):
     pass
 
 
 @router.get("/all")
-async def get_all():
+async def get_all(token: str = Depends(auth2_scheme)):
     pass
