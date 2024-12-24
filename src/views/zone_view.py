@@ -1,17 +1,12 @@
 # -*- coding: utf-8 -*-
-import logging
 from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from typing_extensions import Annotated
 from pydantic import BaseModel
 from src.interfaces import InterfaceAuthController, InterfaceZoneController
 from .core import auth2_admin, get_controller_auth, get_controller_zone
-from ..compose import FactoryController
 
 router = APIRouter()
-LOG = logging.getLogger(__name__)
-controller = FactoryController().create_zone_controller()
 
 
 class FilialData(BaseModel):
@@ -23,6 +18,7 @@ class FilialData(BaseModel):
 async def create(
     token: str = Depends(auth2_admin),
     auth: InterfaceAuthController = Depends(get_controller_auth),
+    controller: InterfaceZoneController = Depends(get_controller_zone),
 ):
     try:
         data = auth.curret_user(token)
@@ -40,6 +36,7 @@ async def create(
 async def get_all(
     token: str = Depends(auth2_admin),
     auth: InterfaceAuthController = Depends(get_controller_auth),
+    controller: InterfaceZoneController = Depends(get_controller_zone),
 ):
     try:
         auth.curret_user(token)

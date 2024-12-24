@@ -1,18 +1,12 @@
 # -*- coding: utf-8 -*-
 
 from fastapi import APIRouter, HTTPException, Depends
-from typing_extensions import Annotated
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceEmpresaController, InterfaceAuthController
-from ..compose import FactoryController
-from .core import auth2_admin, get_controller_auth
+from .core import auth2_admin, get_controller_auth, get_controller_empresa
 
 router = APIRouter()
-
-
-def controller_empresa(self) -> InterfaceEmpresaController:
-    return FactoryController().create_empresa_controller()
 
 
 class EmpresaData(BaseModel):
@@ -23,7 +17,7 @@ class EmpresaData(BaseModel):
 async def create(
     empresa: EmpresaData,
     token: str = Depends(auth2_admin),
-    controller: InterfaceEmpresaController = Depends(controller_empresa),
+    controller: InterfaceEmpresaController = Depends(get_controller_empresa),
     controller_auth: InterfaceAuthController = Depends(get_controller_auth),
 ):
     user = controller_auth.curret_user(token)
@@ -39,7 +33,7 @@ async def create(
 @router.get("/all")
 async def get_all(
     token: str = Depends(auth2_admin),
-    controller: InterfaceEmpresaController = Depends(controller_empresa),
+    controller: InterfaceEmpresaController = Depends(get_controller_empresa),
 ):
     try:
         get_controller_auth.curret_user(token)
