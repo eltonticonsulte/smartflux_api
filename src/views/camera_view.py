@@ -32,8 +32,8 @@ async def get_status(
     token: str = Depends(auth2_admin),
     controller: InterfaceCameraController = Depends(get_controller_camera),
 ):
-    controller.get_all()
-    return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
+    controller.current_user()
+    return JSONResponse(status_code=200, content={"status": "ok", "name": "nameuser"})
 
 
 @router.get("/all")

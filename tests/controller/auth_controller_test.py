@@ -7,7 +7,6 @@ from src.controller import AuthController
 class TestUserController(unittest.TestCase):
     def setUp(self):
         self.services = Mock()
-
         self.user_controller = AuthController(self.services)
 
     def test_successful_login(self):
