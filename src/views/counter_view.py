@@ -2,8 +2,6 @@
 from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
-from typing_extensions import Annotated
 from ..compose import FactoryController
 
 router = APIRouter()

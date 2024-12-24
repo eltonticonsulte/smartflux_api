@@ -5,7 +5,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceAuthController, InterfaceFilialController
 from .core import auth2_admin, controller_auth, controller_filial
-from ..compose import FactoryController
+
 
 router = APIRouter()
 
