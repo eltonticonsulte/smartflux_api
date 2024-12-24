@@ -8,3 +8,9 @@ class AuthController:
 
     def login(self, user_name: str, password: str):
         return self.services.auth_user(user_name, password)
+
+    def curret_user(self, token: str):
+        return self.services.get_current_user(token)
+
+    def validate_token(self, token: str):
+        return self.services.get_current_user(token)

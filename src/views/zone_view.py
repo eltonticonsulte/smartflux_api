@@ -4,29 +4,43 @@ from fastapi import APIRouter
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
-from .core import auth2_scheme
-from ..composers import CreateZoneCompose, GetZoneCompose
+from pydantic import BaseModel
+from .core import auth2_admin
+from ..compose import FactoryController
 
 router = APIRouter()
 LOG = logging.getLogger(__name__)
+controller = FactoryController().create_zone_controller()
+auth = FactoryController().create_auth_controller()
+
+
+class FilialData(BaseModel):
+    name: str
+    filial_id: int
 
 
 @router.post("/create")
-async def create(
-    data: Annotated[CreateZoneCompose, Depends()], token: str = Depends(auth2_scheme)
-):
-    return JSONResponse(
-        status_code=200,
-        content={"access_token": data.get_token(), "token_type": "bearer"},
-    )
+async def create(token: str = Depends(auth2_admin)):
+    try:
+        data = auth.curret_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+
+    try:
+        id_zone = controller.create(data.name, data.id_filial)
+        return JSONResponse(status_code=201, content={"id_zone": id_zone})
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
 
 
 @router.get("/all")
-async def get_all(
-    controller: Annotated[GetZoneCompose, Depends()], token: str = Depends(auth2_scheme)
-):
+async def get_all(token: str = Depends(auth2_admin)):
     try:
-        return JSONResponse(status_code=200, content=controller.get_all())
+        auth.curret_user(token)
     except Exception as error:
-        LOG.error(error, exc_info=error)
-        return HTTPException(500, detail=str(error))
+        raise HTTPException(401, detail=str(error))
+    try:
+        result = controller.get_all()
+        return JSONResponse(status_code=200, content=result)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))

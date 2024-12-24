@@ -23,11 +23,10 @@ class FilialServices:
         result = {"data": [filial.to_dict() for filial in datas]}
         return result
 
-    def auth(self, name: str, password: str) -> bool:
+    def auth(self, name: str, password: str) -> None:
         filial: FilialDTO = self.repository.get_by_name(name)
         if str(filial.password_hash) != password:
             self.log.error(filial.password_hash, password)
             raise ValueError("Senha inválida")
         if not filial.is_active:
             raise ValueError("Usuário inativo")
-        return str(filial.password_hash)

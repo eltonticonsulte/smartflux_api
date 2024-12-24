@@ -1,35 +1,60 @@
 # -*- coding: utf-8 -*-
-import logging
-from fastapi import APIRouter
+from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
 from typing_extensions import Annotated
-from .core import auth2_scheme
-from ..composers import FilialCreateComposer, FilialAuthComposer
+from pydantic import BaseModel
+from .core import auth2_admin
+from ..compose import FactoryController
 
 router = APIRouter()
-LOG = logging.getLogger(__name__)
+controller = FactoryController().create_filial_controller()
+auth = FactoryController().create_auth_controller()
+
+
+class CreateFilialData(BaseModel):
+    name_filial: str
+    empresa_id: int
+    cnpj: str
 
 
 @router.post("/create")
-async def create(
-    data: Annotated[FilialCreateComposer, Depends()], token: str = Depends(auth2_scheme)
-):
-    return JSONResponse(
-        status_code=200,
-        content={"access_token": data.get_token(), "token_type": "bearer"},
-    )
-
-
-@router.post("/login")
-async def get_login(compose: Annotated[FilialAuthComposer, Depends()]):
+async def create(data: CreateFilialData, token: str = Depends(auth2_admin)):
     try:
-        compose.auth()
+        auth.curret_user(token)
     except Exception as error:
-        LOG.error(error, exc_info=error)
-        return HTTPException(500, detail=str(error))
+        raise HTTPException(401, detail=str(error))
+    try:
+        id_filial = controller.create(data.name_filial, data.empresa_id, data.cnpj)
+        return JSONResponse(status_code=201, content={"id_filial": id_filial})
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.post("/Auth")
+async def get_login(token: str = Header(...)):
+    try:
+        controller.auth(auth.username, auth.password)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        return JSONResponse(
+            status_code=200,
+            content={"access_token": token, "token_type": "bearer"},
+        )
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
 
 
 @router.get("/all")
-async def get_all(token: str = Depends(auth2_scheme)):
-    pass
+async def get_all(token: str = Depends(auth2_admin)):
+    try:
+        auth.curret_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        result = controller.get_all()
+        return JSONResponse(status_code=200, content=result)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
