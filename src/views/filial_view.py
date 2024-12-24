@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceAuthController, InterfaceFilialController
-from .core import auth2_admin, controller_auth, controller_filial
+from .core import auth2_admin, get_controller_auth, get_controller_filial
 
 
 router = APIRouter()
@@ -20,8 +20,8 @@ class CreateFilialData(BaseModel):
 async def create(
     data: CreateFilialData,
     token: str = Depends(auth2_admin),
-    controller: InterfaceFilialController = Depends(controller_filial),
-    controller_auth: InterfaceAuthController = Depends(controller_auth),
+    controller: InterfaceFilialController = Depends(get_controller_filial),
+    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
 ):
     try:
         controller_auth.current_user(token)
@@ -37,7 +37,7 @@ async def create(
 @router.post("/Auth")
 async def get_login(
     token: str = Header(...),
-    controller: InterfaceAuthController = Depends(controller_auth),
+    controller: InterfaceAuthController = Depends(get_controller_auth),
 ):
     try:
         controller.auth(token)
@@ -55,8 +55,8 @@ async def get_login(
 @router.get("/all")
 async def get_all(
     token: str = Depends(auth2_admin),
-    controller: InterfaceFilialController = Depends(controller_filial),
-    controller_auth: InterfaceAuthController = Depends(controller_auth),
+    controller: InterfaceFilialController = Depends(get_controller_filial),
+    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
 ):
     try:
         controller_auth.current_user(token)
@@ -64,6 +64,18 @@ async def get_all(
         raise HTTPException(401, detail=str(error))
     try:
         result = controller.get_all()
+        return JSONResponse(status_code=200, content=result)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/data/{day}")
+async def get_data_day(
+    token: str = Header(...),
+    controller: InterfaceFilialController = Depends(get_controller_filial),
+):
+    try:
+        result = controller.get_data_day(token)
         return JSONResponse(status_code=200, content=result)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

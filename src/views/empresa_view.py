@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceEmpresaController, InterfaceAuthController
 from ..compose import FactoryController
-from .core import auth2_admin, controller_auth
+from .core import auth2_admin, get_controller_auth
 
 router = APIRouter()
 
@@ -24,7 +24,7 @@ async def create(
     empresa: EmpresaData,
     token: str = Depends(auth2_admin),
     controller: InterfaceEmpresaController = Depends(controller_empresa),
-    controller_auth: InterfaceAuthController = Depends(controller_auth),
+    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
 ):
     user = controller_auth.curret_user(token)
     if not user:
@@ -42,7 +42,7 @@ async def get_all(
     controller: InterfaceEmpresaController = Depends(controller_empresa),
 ):
     try:
-        controller_auth.curret_user(token)
+        get_controller_auth.curret_user(token)
     except Exception:
         raise HTTPException(401, detail="Unauthorized")
     result = controller.get_all()

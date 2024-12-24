@@ -7,8 +7,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
 from src.interfaces import InterfaceAuthController
-from ..compose import FactoryController
-from .core import auth2_admin, controller_auth
+from .core import auth2_admin, get_controller_auth
 
 router = APIRouter()
 
@@ -16,7 +15,7 @@ router = APIRouter()
 @router.post("/login")
 async def get_login(
     auth: Annotated[OAuth2PasswordRequestForm, Depends()],
-    controller: InterfaceAuthController = Depends(controller_auth),
+    controller: InterfaceAuthController = Depends(get_controller_auth),
 ):
     try:
         token = controller.login(auth.username, auth.password)
@@ -31,7 +30,7 @@ async def get_login(
 @router.get("/status")
 async def get_status(
     token: str = Depends(auth2_admin),
-    controller: InterfaceAuthController = Depends(controller_auth),
+    controller: InterfaceAuthController = Depends(get_controller_auth),
 ):
     nameuser = controller.current_user(token)
     return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
