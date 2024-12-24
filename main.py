@@ -3,7 +3,7 @@ import logging
 import os
 from fastapi import FastAPI
 from utils import LoggerConfig
-from src.main import base_ruter
+from src import base_ruter
 
 
 __version__ = "0.0.0"

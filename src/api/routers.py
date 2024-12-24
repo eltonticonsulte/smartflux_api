@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 
-from .user import router as user_route
-from .empresa import router as empresa_route
-from .filial import router as filial_route
-from .counter import router as counter_route
-from .zone import router as zone_route
+from ..views.auth_view import router as user_route
+from ..views.empresa_view import router as empresa_route
+from ..views.filial_view import router as filial_route
+from ..views.counter_view import router as counter_route
+from ..views.zone_view import router as zone_route
 
 base_ruter = APIRouter()
 base_ruter.include_router(user_route, prefix="/user", tags=["Usuario"])

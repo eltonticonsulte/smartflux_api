@@ -27,20 +27,12 @@ class AuthComposerLogin(AuthComposer):
         username: Annotated[
             str,
             Form(),
-            Doc(
-                """
-                username string requeired for authentication
-                                                           """
-            ),
+            Doc("username string requeired for authentication"),
         ],
         password: Annotated[
             str,
             Form(),
-            Doc(
-                """
-                    password string requeired for authentication
-                                                           """
-            ),
+            Doc("password string requeired for authentication"),
         ]
     ):
         super().__init__()
