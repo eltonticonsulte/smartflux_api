@@ -2,14 +2,15 @@
 import logging
 import os
 from fastapi import FastAPI
+from utils import LoggerConfig
 from src.main import base_ruter
 
-from utils import LoggerConfig
 
 __version__ = "0.0.0"
 os.environ["__VERSION__"] = __version__
 
 LoggerConfig()
+
 
 log = logging.getLogger("smartflux_api")
 logging.getLogger("urllib3").setLevel(logging.ERROR)

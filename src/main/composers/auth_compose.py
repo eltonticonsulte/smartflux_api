@@ -14,7 +14,6 @@ class AuthComposer:
         self.repository = AuthRepository()
         self.user_services = AuthServices(self.repository)
         self.controller = AuthController(self.user_services)
-        self.log.critical("AuthComposer")
 
     @staticmethod
     def current_user(token: str):
