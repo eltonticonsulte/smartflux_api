@@ -5,13 +5,13 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
 from pydantic import BaseModel
-from .core import auth2_admin
+from src.interfaces import InterfaceAuthController, InterfaceZoneController
+from .core import auth2_admin, controller_auth, controller_zone
 from ..compose import FactoryController
 
 router = APIRouter()
 LOG = logging.getLogger(__name__)
 controller = FactoryController().create_zone_controller()
-auth = FactoryController().create_auth_controller()
 
 
 class FilialData(BaseModel):
@@ -20,7 +20,10 @@ class FilialData(BaseModel):
 
 
 @router.post("/create")
-async def create(token: str = Depends(auth2_admin)):
+async def create(
+    token: str = Depends(auth2_admin),
+    auth: InterfaceAuthController = Depends(controller_auth),
+):
     try:
         data = auth.curret_user(token)
     except Exception as error:
@@ -34,7 +37,10 @@ async def create(token: str = Depends(auth2_admin)):
 
 
 @router.get("/all")
-async def get_all(token: str = Depends(auth2_admin)):
+async def get_all(
+    token: str = Depends(auth2_admin),
+    auth: InterfaceAuthController = Depends(controller_auth),
+):
     try:
         auth.curret_user(token)
     except Exception as error:

@@ -6,16 +6,18 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
-
+from src.interfaces import InterfaceAuthController
 from ..compose import FactoryController
-from .core import auth2_admin
+from .core import auth2_admin, controller_auth
 
 router = APIRouter()
-controller = FactoryController().create_auth_controller()
 
 
 @router.post("/login")
-async def get_login(auth: Annotated[OAuth2PasswordRequestForm, Depends()]):
+async def get_login(
+    auth: Annotated[OAuth2PasswordRequestForm, Depends()],
+    controller: InterfaceAuthController = Depends(controller_auth),
+):
     try:
         token = controller.login(auth.username, auth.password)
         return JSONResponse(
@@ -27,6 +29,9 @@ async def get_login(auth: Annotated[OAuth2PasswordRequestForm, Depends()]):
 
 
 @router.get("/status")
-async def get_status(token: str = Depends(auth2_admin)):
-    nameuser = controller.curret_user(token)
+async def get_status(
+    token: str = Depends(auth2_admin),
+    controller: InterfaceAuthController = Depends(controller_auth),
+):
+    nameuser = controller.current_user(token)
     return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})

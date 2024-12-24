@@ -2,9 +2,10 @@
 from typing import List
 from src.services import EmpresaServices
 from src.dto import EmpresaDTO
+from src.interfaces import InterfaceEmpresaController
 
 
-class EmpresaController:
+class EmpresaController(InterfaceEmpresaController):
     def __init__(self, service: EmpresaServices):
         self.service = service
 

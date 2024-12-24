@@ -3,12 +3,15 @@ from fastapi import APIRouter
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-
+from src.interfaces import InterfaceCameraController
 from ..compose import FactoryController
 from .core import auth2_admin
 
 router = APIRouter()
-controller = FactoryController().create_camera_controller()
+
+
+def controller_camera() -> InterfaceCameraController:
+    return FactoryController().create_camera_controller()
 
 
 class CreateCameraData(BaseModel):
@@ -17,7 +20,11 @@ class CreateCameraData(BaseModel):
 
 
 @router.post("/create")
-async def create(camera: CreateCameraData, token: str = Depends(auth2_admin)):
+async def create(
+    camera: CreateCameraData,
+    token: str = Depends(auth2_admin),
+    controller: InterfaceCameraController = Depends(controller_camera),
+):
     try:
         controller.create(camera.name, camera.zone_id)
         return JSONResponse(status_code=200, content={"status": "ok"})
@@ -26,13 +33,19 @@ async def create(camera: CreateCameraData, token: str = Depends(auth2_admin)):
 
 
 @router.get("/status")
-async def get_status(token: str = Depends(auth2_admin)):
+async def get_status(
+    token: str = Depends(auth2_admin),
+    controller: InterfaceCameraController = Depends(controller_camera),
+):
     controller.get_all()
     return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
 
 
 @router.get("/all")
-async def get_all(token: str = Depends(auth2_admin)):
+async def get_all(
+    token: str = Depends(auth2_admin),
+    controller: InterfaceCameraController = Depends(controller_camera),
+):
     try:
         result = controller.get_all()
         return JSONResponse(status_code=200, content=result)

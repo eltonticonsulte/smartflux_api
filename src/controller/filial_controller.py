@@ -3,9 +3,10 @@ import logging
 from typing import List
 from src.dto.filial_dto import FilialDTO
 from src.services.filial_service import FilialServices
+from src.interfaces import InterfaceFilialController
 
 
-class FilialController:
+class FilialController(InterfaceFilialController):
     def __init__(self, services: FilialServices):
         self.log = logging.getLogger(__name__)
         self.services = services

@@ -2,15 +2,12 @@
 from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from fastapi.security import OAuth2PasswordRequestForm
-from typing_extensions import Annotated
 from pydantic import BaseModel
-from .core import auth2_admin
+from src.interfaces import InterfaceAuthController, InterfaceFilialController
+from .core import auth2_admin, controller_auth, controller_filial
 from ..compose import FactoryController
 
 router = APIRouter()
-controller = FactoryController().create_filial_controller()
-auth = FactoryController().create_auth_controller()
 
 
 class CreateFilialData(BaseModel):
@@ -20,9 +17,14 @@ class CreateFilialData(BaseModel):
 
 
 @router.post("/create")
-async def create(data: CreateFilialData, token: str = Depends(auth2_admin)):
+async def create(
+    data: CreateFilialData,
+    token: str = Depends(auth2_admin),
+    controller: InterfaceFilialController = Depends(controller_filial),
+    controller_auth: InterfaceAuthController = Depends(controller_auth),
+):
     try:
-        auth.curret_user(token)
+        controller_auth.current_user(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
@@ -33,9 +35,12 @@ async def create(data: CreateFilialData, token: str = Depends(auth2_admin)):
 
 
 @router.post("/Auth")
-async def get_login(token: str = Header(...)):
+async def get_login(
+    token: str = Header(...),
+    controller: InterfaceAuthController = Depends(controller_auth),
+):
     try:
-        controller.auth(auth.username, auth.password)
+        controller.auth(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
@@ -48,9 +53,13 @@ async def get_login(token: str = Header(...)):
 
 
 @router.get("/all")
-async def get_all(token: str = Depends(auth2_admin)):
+async def get_all(
+    token: str = Depends(auth2_admin),
+    controller: InterfaceFilialController = Depends(controller_filial),
+    controller_auth: InterfaceAuthController = Depends(controller_auth),
+):
     try:
-        auth.curret_user(token)
+        controller_auth.current_user(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:

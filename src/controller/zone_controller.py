@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from src.services.zone_service import ZoneServices
+from src.interfaces import InterfaceZoneController
 import logging
 
 
-class ZoneController:
+class ZoneController(InterfaceZoneController):
     def __init__(self, services: ZoneServices):
         self.log = logging.getLogger(__name__)
         self.services = services
