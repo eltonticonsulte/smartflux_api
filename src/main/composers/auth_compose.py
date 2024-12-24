@@ -12,8 +12,8 @@ class AuthComposer:
     def __init__(self):
         self.log = logging.getLogger(__name__)
         self.repository = AuthRepository()
-        self.user_services = AuthServices(self.repository)
-        self.controller = AuthController(self.user_services)
+        self.service = AuthServices(self.repository)
+        self.controller = AuthController(self.service)
 
     @staticmethod
     def current_user(token: str):

@@ -3,3 +3,4 @@
 from .auth_compose import AuthComposer, AuthComposerLogin
 from .empresa_compose import CreateEmpresaComposer, EmpresaComposer
 from .filial_composer import FilialCreateComposer, FilialComposer, FilialAuthComposer
+from .zone_compose import CreateZoneCompose, GetZoneCompose
