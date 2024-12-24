@@ -18,7 +18,7 @@ class EmpresaServices:
         self.log = logging.getLogger(__name__)
 
     def create_empresa(self, name_empresa: str) -> int:
-        return self.empresa_repository.create_empresa(name_empresa)
+        return self.empresa_repository.create(name_empresa)
 
     def get_all(self) -> List[EmpresaDTO]:
         datas = self.empresa_repository.get_all()

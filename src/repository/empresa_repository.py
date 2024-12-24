@@ -13,7 +13,7 @@ class EmpresaRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def create_empresa(self, name: str) -> int:
+    def create(self, name: str) -> int:
         self.log.debug(f"create_empresa {name}")
         db_empresa = Empresa(name=name, is_active=True)
         try:

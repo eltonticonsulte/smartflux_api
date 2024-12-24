@@ -19,8 +19,7 @@ class UserRepository(BaseRepository):
     def create_user(self, user: UserDTO) -> bool:
         self.log.debug(f"create_user {user}")
         db_user = UserMapper.to_entity(user)
-        self.add(db_user)
-        return True
+        return self.add(db_user)
 
     def get_user_by_name(self, username: str) -> Optional[UserDTO]:
         with DBConnectionHandler() as db:
