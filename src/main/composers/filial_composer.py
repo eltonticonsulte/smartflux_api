@@ -34,7 +34,7 @@ class FilialAuthComposer(FilialComposer):
         return self.controller.auth(self.name, self.token)
 
 
-class CreateFilialComposer(FilialComposer):
+class FilialCreateComposer(FilialComposer):
     def __init__(
         self,
         name_filial: Annotated[str, Form(), Doc("name_filial string requeired")],
