@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .visitorController import CounterEventController
-from .empresa import EmpresaController
-from .user import AuthController
-from .filial import FilialController
+from .empresa_controller import EmpresaController
+from .auth_controller import AuthController
+from .filial_controller import FilialController
 from .camera_controller import CameraController
 from .zone_controller import ZoneController
