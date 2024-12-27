@@ -3,7 +3,7 @@ import logging
 import uuid
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
-from ..database import Camera, DBConnectionHandler, IntegrityError
+from ..database import Camera, DBConnectionHandler, IntegrityError, EventCountTemp
 from .base_repository import BaseRepository
 from ..dto import CameraDTO
 from ..mappers import CameraMapper
@@ -52,3 +52,12 @@ class CameraRepository(BaseRepository):
             except Exception as error:
                 self.log.error(error)
                 raise RepositoryCameraExeption(f"Invalid token {token}")
+
+    def add_all(self, events: List[EventCountTemp]):
+        with DBConnectionHandler() as db:
+            try:
+                db.bulk_save_objects(events)
+                db.commit()
+            except Exception as error:
+                db.rollback()
+                raise error

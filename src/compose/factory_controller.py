@@ -5,7 +5,6 @@ from src.repository import (
     EmpresaRepository,
     FilialRepository,
     ZoneRepository,
-    CounterEventRepository,
 )
 from src.services import (
     CameraServices,
@@ -13,7 +12,6 @@ from src.services import (
     EmpresaServices,
     FilialServices,
     ZoneServices,
-    CountEventServices,
 )
 from src.controller import (
     CameraController,
@@ -21,7 +19,6 @@ from src.controller import (
     EmpresaController,
     FilialController,
     ZoneController,
-    CounterEventController,
 )
 from src.interfaces import (
     InterfaceCameraController,
@@ -50,6 +47,3 @@ class FactoryController:
 
     def create_zone_controller(self) -> InterfaceZoneController:
         return ZoneController(ZoneServices(ZoneRepository()))
-
-    def create_counter_event_controller(self) -> CounterEventController:
-        return CounterEventController(CountEventServices(CounterEventRepository()))

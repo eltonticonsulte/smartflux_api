@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from .visitorController import CounterEventController
 from .empresa_controller import EmpresaController
 from .auth_controller import AuthController
 from .filial_controller import FilialController

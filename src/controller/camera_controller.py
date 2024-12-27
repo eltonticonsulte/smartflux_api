@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
 import uuid
+from typing import List
+from src.dto import CountEventDTO
 from src.services import CameraServices
 from src.interfaces import InterfaceCameraController
 
@@ -22,5 +24,5 @@ class CameraController(InterfaceCameraController):
     def validate_token(self, token: uuid.UUID):
         return self.services.validate_token(token)
 
-    def register_event(self, data):
-        pass
+    def register_event(self, data: List[CountEventDTO]) -> dict:
+        return self.services.register_event(data)
