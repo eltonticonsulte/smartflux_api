@@ -77,7 +77,7 @@ async def insert_event(
 ):
     try:
         controller.validate_token(token)
-        # controller.register_event(data)
+        controller.register_event(data)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

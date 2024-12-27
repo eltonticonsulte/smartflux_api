@@ -2,7 +2,6 @@
 import logging
 import uuid
 from src.services import CameraServices
-
 from src.interfaces import InterfaceCameraController
 
 

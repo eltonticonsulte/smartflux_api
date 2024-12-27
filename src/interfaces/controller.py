@@ -45,3 +45,7 @@ class InterfaceCameraController(ABC):
     @abstractmethod
     def validate_token(self, token: str):
         raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def register_event(self, data):
+        raise NotImplementedError("Method not implemented")
