@@ -2,9 +2,14 @@
 import logging
 from typing import List
 from .base_repository import BaseRepository
-from ..database import Filial, DBConnectionHandler
+from ..database import Filial, DBConnectionHandler, IntegrityError
 from ..dto import FilialDTO
 from ..mappers import FilialMapper
+
+
+class RepositoryFilialExecption(Exception):
+    def __init__(self, message):
+        super().__init__(message)
 
 
 class FilialRepository(BaseRepository):
@@ -19,6 +24,8 @@ class FilialRepository(BaseRepository):
         )
         try:
             return self.add(entity)
+        except IntegrityError:
+            raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
         except Exception as error:
             self.log.critical(error)
             raise error
@@ -31,5 +38,5 @@ class FilialRepository(BaseRepository):
         with DBConnectionHandler() as session:
             filial = session.query(Filial).filter(Filial.name == name).one_or_none()
             if filial is None:
-                return FilialDTO(name=name, cnpj="")
+                raise RepositoryFilialExecption(f"Filial {name} not found")
         return FilialMapper.to_dto(filial)
