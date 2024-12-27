@@ -15,12 +15,11 @@ class ZoneServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, user: ZoneDTO) -> bool:
-        data_user: ZoneDTO = self.repository.get_by_name(user.username)
-        if data_user.username != "":
-            raise ValueError("User name already exists")
+    def create(self, name: str, filial_id: int) -> bool:
+        self.log.debug(f"create_user {name}, {filial_id}")
+        zone = ZoneDTO(name=name, filial_id=filial_id)
 
-        return self.repository.create_user(user)
+        return self.repository.create(zone)
 
     def get_by_name(self, name: str) -> ZoneDTO:
         return self.repository.get_by_name(name)

@@ -12,12 +12,9 @@ class CameraServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, camera: CameraDTO) -> bool:
-        cam: CameraDTO = self.repository.get_by_name(camera.name)
-        if cam.name != "":
-            raise ValueError("camera name already exists")
-
-        return self.repository.create_user(camera)
+    def create(self, name: str, zona_id: int) -> bool:
+        came = CameraDTO(name=name, zona_id=zona_id)
+        return self.repository.create(came)
 
     def get_by_name(self, name: str) -> CameraDTO:
         return self.repository.get_by_name(name)

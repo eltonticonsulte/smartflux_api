@@ -9,24 +9,26 @@ from .core import auth2_admin, get_controller_auth, get_controller_zone
 router = APIRouter()
 
 
-class FilialData(BaseModel):
+class ZonaData(BaseModel):
     name: str
     filial_id: int
 
 
 @router.post("/create")
 async def create(
+    data: ZonaData = Depends(),
     token: str = Depends(auth2_admin),
     auth: InterfaceAuthController = Depends(get_controller_auth),
     controller: InterfaceZoneController = Depends(get_controller_zone),
 ):
     try:
-        data = auth.curret_user(token)
+        pass
+        # data = auth.curret_user(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
 
     try:
-        id_zone = controller.create(data.name, data.id_filial)
+        id_zone = controller.create(data.name, data.filial_id)
         return JSONResponse(status_code=201, content={"id_zone": id_zone})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

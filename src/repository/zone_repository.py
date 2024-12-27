@@ -20,7 +20,8 @@ class ZoneRepository(BaseRepository):
         self.log.debug(f"create_user {user}")
         try:
             db_zone = ZoneMapper.to_entity(user)
-            return self.add(db_zone)
+            result: Zone = self.add(db_zone)
+            return result.zone_id
         except IntegrityError:
             raise RepositoryZoneExcption(f"Zone {user.name} already exists")
         except Exception as error:

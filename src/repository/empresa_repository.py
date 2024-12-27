@@ -21,17 +21,41 @@ class EmpresaRepository(BaseRepository):
     def create(self, name: str) -> int:
         self.log.debug(f"create_empresa {name}")
         db_empresa = Empresa(name=name, is_active=True)
-        try:
-            return self.add(db_empresa)
-        except IntegrityError:
-            raise RepositoryEmpresaExecption(f"Empresa {name} already exists")
-        except Exception as error:
-            self.log.critical(error)
-            raise error
+        with DBConnectionHandler() as db:
+            try:
+                db.add(db_empresa)
+                db.commit()
+                return db_empresa.empresa_id
+            except IntegrityError:
+                raise RepositoryEmpresaExecption(f"Empresa {name} already exists")
+            except Exception as error:
+                self.log.critical(error, exc_info=error)
+                db.rollback()
+                raise error
 
     def get_all(self) -> List[EmpresaDTO]:
-        empresas = super().get_all(Empresa)
-        return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
+        with DBConnectionHandler() as db:
+            try:
+                empresas = db.query(Empresa).all()
+                return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
+            except Exception as error:
+                db.rollback()
+                raise error
+
+    def get_by_id(self, empresa_id: int) -> Empresa:
+        with DBConnectionHandler() as db:
+            try:
+                empresa = (
+                    db.query(Empresa)
+                    .filter(Empresa.empresa_id == empresa_id)
+                    .one_or_none()
+                )
+                return EmpresaMapper.to_dto(empresa)
+            except NoResultFound:
+                raise RepositoryEmpresaExecption(f'User "{empresa_id}" not found')
+            except Exception as error:
+                db.rollback()
+                raise error
 
     def get_empresa_by_name(self, name: str) -> Empresa:
         try:

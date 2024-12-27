@@ -3,16 +3,15 @@ from datetime import datetime
 from pydantic import BaseModel
 from typing import Optional
 import uuid
-from ..common import UserRole
 
 
 class CameraDTO:
     def __init__(
         self,
-        channel_id: int,
         name: str,
         zona_id: int,
-        metadate: dict,
+        channel_id: int = None,
+        metadate: dict = {},
     ):
         self.channel_id = channel_id
         self.name = name

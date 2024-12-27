@@ -10,7 +10,7 @@ class EmpresaController(InterfaceEmpresaController):
         self.service = service
 
     def create(self, name_empresa: str):
-        return self.service.create_empresa(name_empresa)
+        return self.service.create(name_empresa)
 
     def get_all(self) -> List[EmpresaDTO]:
         return self.service.get_all()

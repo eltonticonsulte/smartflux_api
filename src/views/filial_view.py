@@ -18,7 +18,7 @@ class CreateFilialData(BaseModel):
 
 @router.post("/create")
 async def create(
-    data: CreateFilialData,
+    data: CreateFilialData = Depends(),
     token: str = Depends(auth2_admin),
     controller: InterfaceFilialController = Depends(get_controller_filial),
     controller_auth: InterfaceAuthController = Depends(get_controller_auth),

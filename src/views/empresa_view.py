@@ -20,7 +20,7 @@ async def create(
     controller: InterfaceEmpresaController = Depends(get_controller_empresa),
     controller_auth: InterfaceAuthController = Depends(get_controller_auth),
 ):
-    user = controller_auth.curret_user(token)
+    user = controller_auth.current_user(token)
     if not user:
         raise HTTPException(401, detail="Unauthorized")
     try:
@@ -33,10 +33,11 @@ async def create(
 @router.get("/all")
 async def get_all(
     token: str = Depends(auth2_admin),
+    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
     controller: InterfaceEmpresaController = Depends(get_controller_empresa),
 ):
     try:
-        get_controller_auth.curret_user(token)
+        controller_auth.current_user(token)
     except Exception:
         raise HTTPException(401, detail="Unauthorized")
     result = controller.get_all()

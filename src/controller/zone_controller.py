@@ -9,8 +9,8 @@ class ZoneController(InterfaceZoneController):
         self.log = logging.getLogger(__name__)
         self.services = services
 
-    def create(self, name: str):
-        return self.services.create(name)
+    def create(self, name: str, filial_id: int):
+        return self.services.create(name, filial_id)
 
     def get_all(self):
         return self.services.get_all()

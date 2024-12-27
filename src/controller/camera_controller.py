@@ -12,8 +12,8 @@ class CameraController(InterfaceCameraController):
         self.log = logging.getLogger(__name__)
         self.services = services
 
-    def create(self, name: str):
-        return self.services.create(name)
+    def create(self, name: str, zone_id: int):
+        return self.services.create(name, zone_id)
 
     def get_all(self):
         return self.services.get_all()

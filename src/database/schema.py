@@ -36,7 +36,7 @@ class Usuario(Base):
 class Empresa(Base):
     __tablename__ = "empresas"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    empresa_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
     token_api = Column(
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
@@ -53,7 +53,7 @@ class Empresa(Base):
 
 class Filial(Base):
     __tablename__ = "filiais"
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    filial_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
     cnpj = Column(String(18), nullable=False)
     password_hash = Column(
@@ -64,7 +64,7 @@ class Filial(Base):
     )
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
-    empresa_id = Column(Integer, ForeignKey("empresas.id"), nullable=False)
+    empresa_id = Column(Integer, ForeignKey("empresas.empresa_id"), nullable=False)
     empresa = relationship("Empresa", back_populates="filiais")
     zones = relationship("Zone", back_populates="filial", cascade="all, delete-orphan")
 
@@ -72,9 +72,9 @@ class Filial(Base):
 class Zone(Base):
     __tablename__ = "zones"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    zone_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False)
-    filial_id = Column(Integer, ForeignKey("filiais.id"), nullable=False)
+    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
     filial = relationship("Filial", back_populates="zones")
     camera = relationship("Camera", back_populates="zone", cascade="all, delete-orphan")
 
@@ -82,13 +82,13 @@ class Zone(Base):
 class Camera(Base):
     __tablename__ = "cameras"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    camera_id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     name = Column(String, nullable=False)
     metadate = Column(JSON, nullable=True)
-    zona_id = Column(Integer, ForeignKey("zones.id"), nullable=False)
+    zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
     status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
     zone = relationship("Zone", back_populates="camera")
     eventos = relationship(
@@ -106,11 +106,11 @@ class EventCountTemp(Base):
         UniqueConstraint("camera_id", "event_time"),
     )
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    count_event_id = Column(Integer, primary_key=True, autoincrement=True)
     event_time = Column(DateTime, default=func.now())
     count_in = Column(Integer, default=0)
     count_out = Column(Integer, default=0)
-    camera_id = Column(Integer, ForeignKey("cameras.id"), nullable=False)
+    camera_id = Column(Integer, ForeignKey("cameras.camera_id"), nullable=False)
 
 
 class EventCountHourly(Base):
@@ -120,8 +120,8 @@ class EventCountHourly(Base):
 
     __tablename__ = "event_count_hourly"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    camera_id = Column(Integer, ForeignKey("cameras.id"), nullable=False)
+    event_id = Column(Integer, primary_key=True, autoincrement=True)
+    camera_id = Column(Integer, ForeignKey("cameras.camera_id"), nullable=False)
     hour_timestamp = Column(DateTime, nullable=False)
     total_count_in = Column(Integer, default=0, nullable=False)
     total_count_out = Column(Integer, default=0, nullable=False)

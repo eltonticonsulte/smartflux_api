@@ -22,7 +22,8 @@ class CameraRepository(BaseRepository):
         self.log.debug(f"create {camera}")
         db_camera = CameraMapper.to_entity(camera)
         try:
-            return self.add(db_camera)
+            result: Camera = self.add(db_camera)
+            return result.camera_id
         except IntegrityError:
             raise RepositoryCameraExeption(f"Camera {camera.name} already exists")
         except Exception as error:

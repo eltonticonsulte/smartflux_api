@@ -23,7 +23,8 @@ class FilialRepository(BaseRepository):
             empresa_id=filial.empresa_id,
         )
         try:
-            return self.add(entity)
+            result: Filial = self.add(entity)
+            return result.filial_id
         except IntegrityError:
             raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
         except Exception as error:
@@ -31,8 +32,9 @@ class FilialRepository(BaseRepository):
             raise error
 
     def get_all(self) -> List[FilialDTO]:
-        result = super().get_all(Filial)
-        return [FilialMapper.to_dto(filial) for filial in result]
+        with DBConnectionHandler() as session:
+            filials = session.query(Filial).all()
+            return [FilialMapper.to_dto(filial) for filial in filials]
 
     def get_by_name(self, name: str) -> FilialDTO:
         with DBConnectionHandler() as session:

@@ -26,7 +26,7 @@ class InterfaceFilialController(ABC):
 
 class InterfaceZoneController(ABC):
     @abstractmethod
-    def create(self, name: str):
+    def create(self, name: str, filial_id: int):
         pass
 
 
