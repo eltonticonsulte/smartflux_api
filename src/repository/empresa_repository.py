@@ -29,17 +29,11 @@ class EmpresaRepository(BaseRepository):
             raise error
 
     def get_all(self) -> List[EmpresaDTO]:
-        try:
-            with DBConnectionHandler() as session:
-                empresas = session.query(Empresa).all()
-                return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
-        except Exception as error:
-            self.log.critical(error)
-            raise error
+        empresas = super().get_all(Empresa)
+        return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
 
     def get_empresa_by_name(self, name: str) -> Empresa:
-        with DBConnectionHandler() as session:
-            empresa = session.query(Empresa).filter(Empresa.name == name).one_or_none()
-            if empresa is None:
-                raise RepositoryEmpresaExecption(f"Empresa {name} not found")
-            return EmpresaMapper.to_dto(empresa)
+        empresa = super().get_by_name(Empresa, name)
+        if empresa is None:
+            raise RepositoryEmpresaExecption(f"Empresa {name} not found")
+        return EmpresaMapper.to_dto(empresa)
