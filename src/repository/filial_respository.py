@@ -22,14 +22,18 @@ class FilialRepository(BaseRepository):
             cnpj=filial.cnpj,
             empresa_id=filial.empresa_id,
         )
-        try:
-            result: Filial = self.add(entity)
-            return result.filial_id
-        except IntegrityError:
-            raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
-        except Exception as error:
-            self.log.critical(error)
-            raise error
+        with DBConnectionHandler() as session:
+
+            try:
+                session.add(entity)
+                session.commit()
+
+                return entity.filial_id
+            except IntegrityError:
+                raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
+            except Exception as error:
+                self.log.critical(error)
+                raise error
 
     def get_all(self) -> List[FilialDTO]:
         with DBConnectionHandler() as session:
