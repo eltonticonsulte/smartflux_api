@@ -73,16 +73,6 @@ class BaseRepository(Repository[T]):
                 db.rollback()
                 raise error
 
-    def get_by_name(self, entity: T, name: str) -> Optional[T]:
-        with DBConnectionHandler() as db:
-            try:
-                return db.query(entity).filter(T.name == name).one_or_none()
-            except NoResultFound:
-                return None
-            except Exception as error:
-                db.rollback()
-                raise error
-
     def get_by_id(self, entity: T) -> Optional[T]:
         with DBConnectionHandler() as db:
             try:

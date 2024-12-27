@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-from fastapi import APIRouter
+import uuid
+from fastapi import APIRouter, Header
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
@@ -14,10 +15,30 @@ class CreateCameraData(BaseModel):
     zone_id: int
 
 
+from pydantic import BaseModel
+from typing import List, Optional
+
+
+class CountEventData(BaseModel):
+    event_id: Optional[int]
+    channel_id: str
+    event_time: str
+    count_in: int
+    count_out: int
+    camera_id: Optional[int]
+
+    def to_dict(self):
+        return self.model_dump()
+
+
+class PullCountEventData(BaseModel):
+    events: List[CountEventData]
+
+
 @router.post("/create")
 async def create(
     camera: CreateCameraData,
-    token: str = Depends(auth2_admin),
+    token: uuid.UUID = Depends(auth2_admin),
     controller: InterfaceCameraController = Depends(get_controller_camera),
 ):
     try:
@@ -44,5 +65,19 @@ async def get_all(
     try:
         result = controller.get_all()
         return JSONResponse(status_code=200, content=result)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.post("/event")
+async def insert_event(
+    data: PullCountEventData,
+    token: uuid.UUID = Header(...),
+    controller: InterfaceCameraController = Depends(get_controller_camera),
+):
+    try:
+        controller.validate_token(token)
+        # controller.register_event(data)
+        return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

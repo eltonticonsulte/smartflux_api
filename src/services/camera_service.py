@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+import uuid
 from typing import List
 from ..repository import CameraRepository
 from ..dto import CameraDTO
@@ -22,3 +23,7 @@ class CameraServices:
 
     def get_all(self) -> List[CameraDTO]:
         return self.repository.get_all()
+
+    def validate_token(self, token: uuid.UUID):
+        self.log.debug(f"validate_token {token}")
+        self.repository.validade_token(token)

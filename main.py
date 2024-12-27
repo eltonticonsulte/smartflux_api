@@ -14,7 +14,7 @@ LoggerConfig()
 
 log = logging.getLogger("smartflux_api")
 logging.getLogger("urllib3").setLevel(logging.ERROR)
-logging.getLogger("multipart").setLevel(logging.ERROR)
+logging.getLogger("python_multipart").setLevel(logging.ERROR)
 
 from core import get_settings
 

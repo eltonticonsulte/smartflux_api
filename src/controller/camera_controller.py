@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
-from src.services import CameraServices
 import logging
+import uuid
+from src.services import CameraServices
+
 from src.interfaces import InterfaceCameraController
 
 
@@ -17,3 +19,9 @@ class CameraController(InterfaceCameraController):
 
     def get_by_name(self, name: str):
         return self.services.get_by_name(name)
+
+    def validate_token(self, token: uuid.UUID):
+        return self.services.validate_token(token)
+
+    def register_event(self, data):
+        pass

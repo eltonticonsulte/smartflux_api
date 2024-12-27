@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import logging
+import uuid
 from typing import List
+from sqlalchemy.orm.exc import NoResultFound
 from ..database import Camera, DBConnectionHandler, IntegrityError
 from .base_repository import BaseRepository
 from ..dto import CameraDTO
@@ -38,3 +40,15 @@ class CameraRepository(BaseRepository):
         with DBConnectionHandler() as session:
             cameras = session.query(Camera).all()
             return [CameraMapper.to_dto(camera) for camera in cameras]
+
+    def validade_token(self, token: uuid.UUID) -> bool:
+        with DBConnectionHandler() as session:
+            try:
+                result = (
+                    session.query(Camera).filter(Camera.channel_id == token).first()
+                )
+                if result is None:
+                    raise RepositoryCameraExeption(f"Invalid token {token}")
+            except Exception as error:
+                self.log.error(error)
+                raise RepositoryCameraExeption(f"Invalid token {token}")

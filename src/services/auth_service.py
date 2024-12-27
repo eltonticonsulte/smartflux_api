@@ -13,6 +13,11 @@ from ..mappers import UserMapper
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
 
+class ServiceAuthExecption(Exception):
+    def __init__(self, message):
+        self.message = message
+
+
 class AuthServices:
     def __init__(self, repository: AuthRepository):
         self.repository = repository
@@ -21,8 +26,12 @@ class AuthServices:
     def auth_user(self, user_name: str, password: str) -> str:
         password_hash = UserMapper.password_to_hash(password)
         user: UserDTO = self.repository.get_user_by_name(user_name)
-        if self.__compare_hash(user.hash_password, password_hash):
-            return AuthServices.create_access_token(data={"sub": user_name})
+        if not self.__compare_hash(user.hash_password, password_hash):
+            raise ServiceAuthExecption("Invalid credentials")
+        if not user.is_active:
+            raise ServiceAuthExecption("Inactive user")
+
+        return AuthServices.create_access_token(data={"sub": user_name})
 
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))

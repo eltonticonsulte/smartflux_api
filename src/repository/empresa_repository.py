@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from typing import List
+from sqlalchemy.orm.exc import NoResultFound
 from .base_repository import BaseRepository
 from ..database import Empresa
 from ..database import IntegrityError, DBConnectionHandler
@@ -33,7 +34,12 @@ class EmpresaRepository(BaseRepository):
         return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
 
     def get_empresa_by_name(self, name: str) -> Empresa:
-        empresa = super().get_by_name(Empresa, name)
-        if empresa is None:
-            raise RepositoryEmpresaExecption(f"Empresa {name} not found")
-        return EmpresaMapper.to_dto(empresa)
+        try:
+            with DBConnectionHandler() as db:
+                empresa = db.query(Empresa).filter(Empresa.name == name).one_or_none()
+                return EmpresaMapper.to_dto(empresa)
+        except NoResultFound:
+            raise RepositoryEmpresaExecption(f'User "{name}" not found')
+        except Exception as error:
+            db.rollback()
+            raise error

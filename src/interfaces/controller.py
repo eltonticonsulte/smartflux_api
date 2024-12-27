@@ -33,7 +33,7 @@ class InterfaceZoneController(ABC):
 class InterfaceCameraController(ABC):
     @abstractmethod
     def create(self, name: str):
-        pass
+        raise NotImplementedError("Method not implemented")
 
     def get_by_name(self, name: str):
         pass
@@ -41,3 +41,7 @@ class InterfaceCameraController(ABC):
     @abstractmethod
     def get_all(self):
         pass
+
+    @abstractmethod
+    def validate_token(self, token: str):
+        raise NotImplementedError("Method not implemented")

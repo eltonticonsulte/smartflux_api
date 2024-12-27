@@ -18,7 +18,6 @@ async def get_login(
     controller: InterfaceAuthController = Depends(get_controller_auth),
 ):
     try:
-        print("####", auth.username, auth.password)
         token = controller.login(auth.username, auth.password)
         return JSONResponse(
             status_code=200,
