@@ -14,7 +14,7 @@ class TestAuthRepository(unittest.TestCase):
 
     @patch.object(DBConnectionHandler, "__enter__")
     @patch.object(DBConnectionHandler, "__exit__")
-    def dtest_get_user_by_name_found(self, mock_exit, mock_enter):
+    def test_get_user_by_name_found(self, mock_exit, mock_enter):
         mock_db = mock_enter.return_value
         mock_db.query.return_value.filter.return_value.one_or_none.return_value = Mock(
             spec=Usuario
