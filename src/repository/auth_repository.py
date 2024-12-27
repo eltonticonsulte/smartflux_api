@@ -7,31 +7,21 @@ from ..database import (
 )
 from .base_repository import BaseRepository
 from ..dto import UserDTO
-from ..common import UserRole
 from ..mappers import UserMapper
+
+
+class RepositoryAuthExecption(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
 
 
 class AuthRepository(BaseRepository):
     def __init__(self):
-
         self.log = logging.getLogger(__name__)
 
     def get_user_by_name(self, username: str) -> Optional[UserDTO]:
         with DBConnectionHandler() as db:
-            try:
-                user = (
-                    db.query(Usuario).filter(Usuario.username == username).one_or_none()
-                )
-                if user is None:
-                    return UserDTO(
-                        username="",
-                        password="",
-                        hash_password="",
-                        role=UserRole.FILIAL,
-                        is_active=False,
-                    )
-                return UserMapper.to_dto(user)
-            except Exception as error:
-                db.rollback()
-                self.log.critical(error)
-                raise error
+            user = db.query(Usuario).filter(Usuario.username == username).one_or_none()
+            if user is None:
+                raise RepositoryAuthExecption(f'User "{username}" not found')
+            return UserMapper.to_dto(user)

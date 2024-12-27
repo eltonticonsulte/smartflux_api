@@ -9,6 +9,11 @@ from ..dto import EmpresaDTO
 from ..mappers import EmpresaMapper
 
 
+class RepositoryEmpresaExecption(Exception):
+    def __init__(self, message: str):
+        super().__init__(message)
+
+
 class EmpresaRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
@@ -19,7 +24,7 @@ class EmpresaRepository(BaseRepository):
         try:
             return self.add(db_empresa)
         except IntegrityError:
-            raise ValueError(f"Empresa {name} already exists")
+            raise RepositoryEmpresaExecption(f"Empresa {name} already exists")
         except Exception as error:
             self.log.critical(error)
             raise error
@@ -34,14 +39,8 @@ class EmpresaRepository(BaseRepository):
             raise error
 
     def get_empresa_by_name(self, name: str) -> Empresa:
-        try:
-            with DBConnectionHandler() as session:
-                empresa = (
-                    session.query(Empresa).filter(Empresa.name == name).one_or_none()
-                )
-                if empresa is None:
-                    raise ValueError("Empresa not found")
-                return EmpresaMapper.to_dto(empresa)
-        except Exception as error:
-            self.log.critical(error)
-            raise error
+        with DBConnectionHandler() as session:
+            empresa = session.query(Empresa).filter(Empresa.name == name).one_or_none()
+            if empresa is None:
+                raise RepositoryEmpresaExecption(f"Empresa {name} not found")
+            return EmpresaMapper.to_dto(empresa)
