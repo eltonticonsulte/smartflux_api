@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from .user_dto import UserDTO, UserResponseAuth
-from .empresa_dto import (
+from .empresa import (
     CreateRequestEmpresa,
     CreateResponseEmpresa,
     GetResponseEmpresa,

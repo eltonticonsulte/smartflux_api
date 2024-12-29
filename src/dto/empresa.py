@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
 from pydantic import BaseModel
-from ..common import UserRole
 
 
 class CreateRequestEmpresa(BaseModel):
@@ -9,6 +8,7 @@ class CreateRequestEmpresa(BaseModel):
 
 
 class CreateResponseEmpresa(BaseModel):
+    name: str
     empresa_id: int
 
 

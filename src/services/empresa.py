@@ -20,7 +20,7 @@ class EmpresaServices:
     def create(self, request: CreateRequestEmpresa) -> CreateResponseEmpresa:
         empresa = EmpresaMapper.create_request_to_entity(request)
         new_id = self.empresa_repository.create(empresa)
-        return CreateResponseEmpresa(empresa_id=new_id)
+        return CreateResponseEmpresa(empresa_id=new_id, name=request.name)
 
     def get_all(self) -> List[GetResponseEmpresa]:
         empresas = self.empresa_repository.get_all()
