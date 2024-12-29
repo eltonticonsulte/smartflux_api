@@ -1,16 +1,16 @@
 # -*- coding: utf-8 -*-
 from ..database import Empresa
 from ..dto import (
-    CreateRequestEmpresa,
-    CreateResponseEmpresa,
-    GetResponseEmpresa,
+    CreateEmpresaRequest,
+    CreateEmpresaResponse,
+    GetEmpresaResponse,
 )
 
 
 class EmpresaMapper:
     @staticmethod
-    def get_entity_to_response(empresa: Empresa) -> GetResponseEmpresa:
-        return GetResponseEmpresa(
+    def get_entity_to_response(empresa: Empresa) -> GetEmpresaResponse:
+        return GetEmpresaResponse(
             empresa_id=empresa.empresa_id,
             name=empresa.name,
             is_active=empresa.is_active,
@@ -18,9 +18,9 @@ class EmpresaMapper:
         )
 
     @staticmethod
-    def create_entity_to_response(empresa: Empresa) -> CreateResponseEmpresa:
-        return CreateResponseEmpresa(empresa_id=empresa.empresa_id)
+    def create_entity_to_response(empresa: Empresa) -> CreateEmpresaResponse:
+        return CreateEmpresaResponse(empresa_id=empresa.empresa_id)
 
     @staticmethod
-    def create_request_to_entity(new_empresa: CreateRequestEmpresa) -> Empresa:
+    def create_request_to_entity(new_empresa: CreateEmpresaRequest) -> Empresa:
         return Empresa(name=new_empresa.name)

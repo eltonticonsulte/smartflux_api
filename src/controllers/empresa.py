@@ -5,14 +5,14 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceEmpresaService, InterfaceAuthService
 from .core import auth2_admin, get_service_auth, get_service_empresa
-from ..dto import CreateRequestEmpresa, CreateResponseEmpresa, GetResponseEmpresa
+from ..dto import CreateEmpresaRequest, CreateEmpresaResponse, GetEmpresaResponse
 
 router = APIRouter()
 
 
-@router.post("/create", status_code=201, response_model=CreateResponseEmpresa)
+@router.post("/create", status_code=201, response_model=CreateEmpresaResponse)
 async def create(
-    request: CreateRequestEmpresa,
+    request: CreateEmpresaRequest,
     token: str = Depends(auth2_admin),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
     auth: InterfaceAuthService = Depends(get_service_auth),
@@ -21,13 +21,13 @@ async def create(
     if not user:
         raise HTTPException(401, detail="Unauthorized")
     try:
-        result: CreateResponseEmpresa = service.create(request)
+        result: CreateEmpresaResponse = service.create(request)
         return result
     except Exception as error:
         raise HTTPException(422, detail=str(error))
 
 
-@router.get("/all", status_code=200, response_model=List[GetResponseEmpresa])
+@router.get("/all", status_code=200, response_model=List[GetEmpresaResponse])
 async def get_all(
     token: str = Depends(auth2_admin),
     auth: InterfaceAuthService = Depends(get_service_auth),
@@ -38,7 +38,7 @@ async def get_all(
     except Exception:
         raise HTTPException(401, detail="Unauthorized")
     try:
-        result: List[GetResponseEmpresa] = service.get_all()
+        result: List[GetEmpresaResponse] = service.get_all()
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from .user_dto import UserDTO, UserResponseAuth
 from .empresa import (
-    CreateRequestEmpresa,
-    CreateResponseEmpresa,
-    GetResponseEmpresa,
+    CreateEmpresaRequest,
+    CreateEmpresaResponse,
+    GetEmpresaResponse,
 )
 from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
 from .count_event_dto import CountEventDTO

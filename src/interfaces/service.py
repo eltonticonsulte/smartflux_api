@@ -4,9 +4,9 @@ from typing import List
 from ..dto import (
     UserResponseAuth,
     CreateRequestCamera,
-    CreateRequestEmpresa,
-    CreateResponseEmpresa,
-    GetResponseEmpresa,
+    CreateEmpresaRequest,
+    CreateEmpresaResponse,
+    GetEmpresaResponse,
     CreateFilialRequest,
     CreateFilialResponse,
     GetFilialResponse,
@@ -25,11 +25,11 @@ class InterfaceAuthService(ABC):
 
 class InterfaceEmpresaService(ABC):
     @abstractmethod
-    def create(self, empresa: CreateRequestEmpresa) -> CreateResponseEmpresa:
+    def create(self, empresa: CreateEmpresaRequest) -> CreateEmpresaResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_all(self) -> List[GetResponseEmpresa]:
+    def get_all(self) -> List[GetEmpresaResponse]:
         raise NotImplementedError("Method not implemented")
 
 

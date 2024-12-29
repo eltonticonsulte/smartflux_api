@@ -3,16 +3,16 @@ from datetime import datetime
 from pydantic import BaseModel
 
 
-class CreateRequestEmpresa(BaseModel):
+class CreateEmpresaRequest(BaseModel):
     name: str
 
 
-class CreateResponseEmpresa(BaseModel):
+class CreateEmpresaResponse(BaseModel):
     name: str
     empresa_id: int
 
 
-class GetResponseEmpresa(BaseModel):
+class GetEmpresaResponse(BaseModel):
     empresa_id: int
     name: str
     is_active: bool
