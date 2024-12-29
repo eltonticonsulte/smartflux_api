@@ -10,6 +10,9 @@ from ..dto import (
     CreateFilialRequest,
     CreateFilialResponse,
     GetFilialResponse,
+    CreateZoneRequest,
+    CreateZoneResponse,
+    GetZoneResponse,
 )
 
 
@@ -45,7 +48,11 @@ class InterfaceFilialService(ABC):
 
 class InterfaceZoneService(ABC):
     @abstractmethod
-    def create(self, name: str, filial_id: int):
+    def create(self, request: CreateZoneRequest) -> CreateZoneResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_all(self) -> List[GetZoneResponse]:
         raise NotImplementedError("Method not implemented")
 
 
