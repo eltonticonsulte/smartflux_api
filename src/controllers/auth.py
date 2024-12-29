@@ -8,21 +8,19 @@ from fastapi.responses import JSONResponse
 from typing_extensions import Annotated
 from src.interfaces import InterfaceAuthService
 from .core import auth2_admin, get_service_auth
+from src.dto import UserResponseAuth
 
 router = APIRouter()
 
 
-@router.post("/login")
+@router.post("/login", response_model=UserResponseAuth, status_code=200)
 async def get_login(
     auth: Annotated[OAuth2PasswordRequestForm, Depends()],
     service: InterfaceAuthService = Depends(get_service_auth),
 ):
     try:
-        token = service.auth_user(auth.username, auth.password)
-        return JSONResponse(
-            status_code=200,
-            content={"access_token": token, "token_type": "bearer"},
-        )
+        result: UserResponseAuth = service.auth_user(auth.username, auth.password)
+        return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 

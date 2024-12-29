@@ -1,10 +1,11 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+from ..dto import UserResponseAuth
 
 
 class InterfaceAuthService(ABC):
     @abstractmethod
-    def auth_user(self, name: str, password: str):
+    def auth_user(self, name: str, password: str) -> UserResponseAuth:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

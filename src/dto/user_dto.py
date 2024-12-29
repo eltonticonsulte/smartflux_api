@@ -3,6 +3,13 @@ from pydantic import BaseModel
 from ..common import UserRole
 
 
+class UserResponseAuth(BaseModel):
+    username: str
+    access_token: str
+    token_type: str
+    role: UserRole
+
+
 class UserDTO:
     def __init__(
         self,

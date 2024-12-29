@@ -7,7 +7,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
 from ..repository import AuthRepository
-from ..dto import UserDTO
+from ..dto import UserDTO, UserResponseAuth
 from ..mappers import UserMapper
 from ..interfaces import InterfaceAuthService
 
@@ -24,7 +24,7 @@ class AuthServices(InterfaceAuthService):
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def auth_user(self, user_name: str, password: str) -> str:
+    def auth_user(self, user_name: str, password: str) -> UserResponseAuth:
         password_hash = UserMapper.password_to_hash(password)
         user: UserDTO = self.repository.get_user_by_name(user_name)
         if not self.__compare_hash(user.hash_password, password_hash):
@@ -32,7 +32,14 @@ class AuthServices(InterfaceAuthService):
         if not user.is_active:
             raise ServiceAuthExecption("Inactive user")
 
-        return AuthServices.create_access_token(user_name)
+        new_token = AuthServices.create_access_token(user_name)
+
+        return UserResponseAuth(
+            username=user.username,
+            access_token=new_token,
+            token_type="bearer",
+            role=user.role,
+        )
 
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
