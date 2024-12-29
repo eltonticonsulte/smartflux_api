@@ -1,15 +1,19 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime
+from pydantic import BaseModel
 from ..common import UserRole
 
 
-class EmpresaDTO:
-    def __init__(self, name: str, is_active: bool = True, empresa_id: int = None):
-        self.is_active = is_active
-        self.name = name
-        self.empresa_id = empresa_id
+class CreateRequestEmpresa(BaseModel):
+    name: str
 
-    def to_dict(self):
-        return {"name": self.name, "is_active": self.is_active, "id": self.empresa_id}
 
-    def __repr__(self):
-        return f"EmpresaDTO(name={self.name},is_active={self.is_active}, id={self.empresa_id})"
+class CreateResponseEmpresa(BaseModel):
+    empresa_id: int
+
+
+class GetResponseEmpresa(BaseModel):
+    empresa_id: int
+    name: str
+    is_active: bool
+    data_criacao: datetime

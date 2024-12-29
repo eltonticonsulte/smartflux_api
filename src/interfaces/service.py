@@ -1,6 +1,13 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from ..dto import UserResponseAuth, CreateRequestCamera
+from typing import List
+from ..dto import (
+    UserResponseAuth,
+    CreateRequestCamera,
+    CreateRequestEmpresa,
+    CreateResponseEmpresa,
+    GetResponseEmpresa,
+)
 
 
 class InterfaceAuthService(ABC):
@@ -15,7 +22,11 @@ class InterfaceAuthService(ABC):
 
 class InterfaceEmpresaService(ABC):
     @abstractmethod
-    def create(self, name: str):
+    def create(self, empresa: CreateRequestEmpresa) -> CreateResponseEmpresa:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_all(self) -> List[GetResponseEmpresa]:
         raise NotImplementedError("Method not implemented")
 
 

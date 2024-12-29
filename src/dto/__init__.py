@@ -1,6 +1,10 @@
 # -*- coding: utf-8 -*-
 from .user_dto import UserDTO, UserResponseAuth
-from .empresa_dto import EmpresaDTO
+from .empresa_dto import (
+    CreateRequestEmpresa,
+    CreateResponseEmpresa,
+    GetResponseEmpresa,
+)
 from .filial_dto import FilialDTO
 from .count_event_dto import CountEventDTO
 from .zone_dto import ZoneDTO

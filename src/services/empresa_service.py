@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 import logging
-from fastapi import HTTPException, status, Depends
+from fastapi import status, Depends
 from typing import List
-from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
-from ..repository import UserRepository, EmpresaRepository
+from ..repository import EmpresaRepository
 from ..common import UserRole
-from ..dto import EmpresaDTO
+from ..dto import (
+    CreateRequestEmpresa,
+    CreateResponseEmpresa,
+    GetResponseEmpresa,
+)
 from ..mappers import EmpresaMapper
-
-auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/empresa/login")
 
 
 class EmpresaServices:
@@ -17,14 +17,12 @@ class EmpresaServices:
         self.empresa_repository = empresa_repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, name_empresa: str) -> int:
-        return self.empresa_repository.create(name_empresa)
+    def create(self, request: CreateRequestEmpresa) -> CreateResponseEmpresa:
+        empresa = EmpresaMapper.create_request_to_entity(request)
+        new_id = self.empresa_repository.create(empresa)
+        return CreateResponseEmpresa(empresa_id=new_id)
 
-    def get_all(self) -> List[EmpresaDTO]:
-        datas = self.empresa_repository.get_all()
-        result = {"data": [empres.to_dict() for empres in datas]}
+    def get_all(self) -> List[GetResponseEmpresa]:
+        empresas = self.empresa_repository.get_all()
+        result = [EmpresaMapper.get_entity_to_response(empresa) for empresa in empresas]
         return result
-
-    @staticmethod
-    def get_current_user(token: str = Depends(auth2_scheme)):
-        return token

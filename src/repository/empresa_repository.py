@@ -5,7 +5,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from .base_repository import BaseRepository
 from ..database import Empresa
 from ..database import IntegrityError, DBConnectionHandler
-from ..dto import EmpresaDTO
 from ..mappers import EmpresaMapper
 
 
@@ -18,26 +17,26 @@ class EmpresaRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def create(self, name: str) -> int:
-        self.log.debug(f"create_empresa {name}")
-        db_empresa = Empresa(name=name, is_active=True)
+    def create(self, empresa: Empresa) -> int:
+        self.log.debug(f"create_empresa {empresa}")
+
         with DBConnectionHandler() as db:
             try:
-                db.add(db_empresa)
+                db.add(empresa)
                 db.commit()
-                return db_empresa.empresa_id
+                return empresa.empresa_id
             except IntegrityError:
-                raise RepositoryEmpresaExecption(f"Empresa {name} already exists")
+                raise RepositoryEmpresaExecption(f"Empresa {empresa} already exists")
             except Exception as error:
                 self.log.critical(error, exc_info=error)
                 db.rollback()
                 raise error
 
-    def get_all(self) -> List[EmpresaDTO]:
+    def get_all(self) -> List[Empresa]:
         with DBConnectionHandler() as db:
             try:
                 empresas = db.query(Empresa).all()
-                return [EmpresaMapper.to_dto(empresa) for empresa in empresas]
+                return empresas
             except Exception as error:
                 db.rollback()
                 raise error
@@ -50,7 +49,7 @@ class EmpresaRepository(BaseRepository):
                     .filter(Empresa.empresa_id == empresa_id)
                     .one_or_none()
                 )
-                return EmpresaMapper.to_dto(empresa)
+                return empresa
             except NoResultFound:
                 raise RepositoryEmpresaExecption(f'User "{empresa_id}" not found')
             except Exception as error:
@@ -61,7 +60,7 @@ class EmpresaRepository(BaseRepository):
         try:
             with DBConnectionHandler() as db:
                 empresa = db.query(Empresa).filter(Empresa.name == name).one_or_none()
-                return EmpresaMapper.to_dto(empresa)
+                return empresa
         except NoResultFound:
             raise RepositoryEmpresaExecption(f'User "{name}" not found')
         except Exception as error:
