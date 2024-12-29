@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from ..dto import UserResponseAuth
+from ..dto import UserResponseAuth, CreateRequestCamera
 
 
 class InterfaceAuthService(ABC):
@@ -33,7 +33,7 @@ class InterfaceZoneService(ABC):
 
 class InterfaceCameraService(ABC):
     @abstractmethod
-    def create(self, name: str):
+    def create(self, request: CreateRequestCamera):
         raise NotImplementedError("Method not implemented")
 
     def get_by_name(self, name: str):

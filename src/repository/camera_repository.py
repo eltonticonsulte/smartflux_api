@@ -18,17 +18,18 @@ class CameraRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def create(self, camera: CameraDTO) -> bool:
+    def create(self, camera: Camera) -> int:
         self.log.debug(f"create {camera}")
-        db_camera = CameraMapper.to_entity(camera)
-        try:
-            result: Camera = self.add(db_camera)
-            return result.camera_id
-        except IntegrityError:
-            raise RepositoryCameraExeption(f"Camera {camera.name} already exists")
-        except Exception as error:
-            self.log.error(error)
-            raise error
+        with DBConnectionHandler() as session:
+            try:
+                session.add(camera)
+                session.commit()
+                return camera.camera_id
+            except IntegrityError:
+                raise RepositoryCameraExeption(f"Camera {camera.name} already exists")
+            except Exception as error:
+                self.log.error(error)
+                raise error
 
     def get_by_name(self, name: str) -> CameraDTO:
         with DBConnectionHandler() as session:

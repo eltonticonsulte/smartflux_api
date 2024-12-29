@@ -5,6 +5,11 @@ from typing import Optional
 import uuid
 
 
+class CreateRequestCamera(BaseModel):
+    name: str
+    zone_id: int
+
+
 class CameraDTO:
     def __init__(
         self,

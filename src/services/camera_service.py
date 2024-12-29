@@ -3,8 +3,8 @@ import logging
 import uuid
 from typing import List
 from ..repository import CameraRepository
-from ..dto import CameraDTO, CountEventDTO
-from ..mappers import CountEventMapper
+from ..dto import CameraDTO, CountEventDTO, CreateRequestCamera
+from ..mappers import CountEventMapper, CameraMapper
 
 
 class CameraServices:
@@ -12,9 +12,9 @@ class CameraServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, name: str, zona_id: int) -> bool:
-        came = CameraDTO(name=name, zona_id=zona_id)
-        return self.repository.create(came)
+    def create(self, request: CreateRequestCamera) -> bool:
+        new_camera = CameraMapper.create_request_to_entity(request)
+        return self.repository.create(new_camera)
 
     def get_by_name(self, name: str) -> CameraDTO:
         return self.repository.get_by_name(name)

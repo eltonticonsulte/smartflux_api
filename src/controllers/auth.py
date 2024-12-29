@@ -25,7 +25,7 @@ async def get_login(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/status")
+@router.get("/status", status_code=200)
 async def get_status(
     token: str = Depends(auth2_admin),
     service: InterfaceAuthService = Depends(get_service_auth),

@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 from ..database import Camera
-from ..dto import CameraDTO
+from ..dto import CameraDTO, CreateRequestCamera
 
 
 class CameraMapper:
+    @staticmethod
+    def create_request_to_entity(new_camera: CreateRequestCamera) -> Camera:
+        return Camera(name=new_camera.name, zona_id=new_camera.zona_id)
+
     @staticmethod
     def to_dto(camera: Camera) -> CameraDTO:
         return CameraDTO(

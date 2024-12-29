@@ -6,14 +6,9 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceCameraService
 from .core import auth2_admin, get_service_camera
-from src.dto import CountEventDTO
+from src.dto import CountEventDTO, CreateRequestCamera
 
 router = APIRouter()
-
-
-class CreateCameraData(BaseModel):
-    name: str
-    zone_id: int
 
 
 from pydantic import BaseModel
@@ -26,12 +21,12 @@ class CountEventData(BaseModel):
 
 @router.post("/create")
 async def create(
-    camera: CreateCameraData,
+    request: CreateRequestCamera,
     token: uuid.UUID = Depends(auth2_admin),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
-        service.create(camera.name, camera.zone_id)
+        service.create(request)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))
