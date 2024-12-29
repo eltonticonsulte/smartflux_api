@@ -8,31 +8,31 @@ from src.interfaces import (
     InterfaceFilialService,
     InterfaceZoneService,
 )
-from ..compose import FactoryController
+from ..compose import FactoryService
 
 auth2_admin = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
 
 @lru_cache()
-def get_controller_auth() -> InterfaceAuthService:
-    return FactoryController().create_auth_controller()
+def get_service_auth() -> InterfaceAuthService:
+    return FactoryService().create_auth()
 
 
 @lru_cache()
-def get_controller_camera() -> InterfaceCameraService:
-    return FactoryController().create_camera_controller()
+def get_service_camera() -> InterfaceCameraService:
+    return FactoryService().create_camera()
 
 
 @lru_cache()
-def get_controller_empresa() -> InterfaceEmpresaService:
-    return FactoryController().create_empresa_controller()
+def get_service_empresa() -> InterfaceEmpresaService:
+    return FactoryService().create_empresa()
 
 
 @lru_cache()
-def get_controller_filial() -> InterfaceFilialService:
-    return FactoryController().create_filial_controller()
+def get_service_filial() -> InterfaceFilialService:
+    return FactoryService().create_filial()
 
 
 @lru_cache()
-def get_controller_zone() -> InterfaceZoneService:
-    return FactoryController().create_zone_controller()
+def get_service_zone() -> InterfaceZoneService:
+    return FactoryService().create_zone()

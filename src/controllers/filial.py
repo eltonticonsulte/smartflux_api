@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceAuthService, InterfaceFilialService
-from .core import auth2_admin, get_controller_auth, get_controller_filial
+from .core import auth2_admin, get_service_auth, get_service_filial
 
 
 router = APIRouter()
@@ -20,8 +20,8 @@ class CreateFilialData(BaseModel):
 async def create(
     data: CreateFilialData = Depends(),
     token: str = Depends(auth2_admin),
-    service: InterfaceFilialService = Depends(get_controller_filial),
-    auth: InterfaceAuthService = Depends(get_controller_auth),
+    service: InterfaceFilialService = Depends(get_service_filial),
+    auth: InterfaceAuthService = Depends(get_service_auth),
 ):
     try:
         auth.current_user(token)
@@ -37,7 +37,7 @@ async def create(
 @router.post("/Auth")
 async def get_login(
     token: str = Header(...),
-    service: InterfaceAuthService = Depends(get_controller_auth),
+    service: InterfaceAuthService = Depends(get_service_auth),
 ):
     try:
         service.auth(token)
@@ -55,8 +55,8 @@ async def get_login(
 @router.get("/all")
 async def get_all(
     token: str = Depends(auth2_admin),
-    service: InterfaceFilialService = Depends(get_controller_filial),
-    auth: InterfaceAuthService = Depends(get_controller_auth),
+    service: InterfaceFilialService = Depends(get_service_filial),
+    auth: InterfaceAuthService = Depends(get_service_auth),
 ):
     try:
         auth.current_user(token)
@@ -72,7 +72,7 @@ async def get_all(
 @router.get("/data/{day}")
 async def get_data_day(
     token: str = Header(...),
-    service: InterfaceFilialService = Depends(get_controller_filial),
+    service: InterfaceFilialService = Depends(get_service_filial),
 ):
     try:
         result = service.get_data_day(token)

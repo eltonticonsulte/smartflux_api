@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
 
-from .factory_controller import FactoryController
+from .factory_service import FactoryService
