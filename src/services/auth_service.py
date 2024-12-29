@@ -31,7 +31,7 @@ class AuthServices:
         if not user.is_active:
             raise ServiceAuthExecption("Inactive user")
 
-        return AuthServices.create_access_token(data={"sub": user_name})
+        return AuthServices.create_access_token(user_name)
 
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
@@ -56,8 +56,8 @@ class AuthServices:
         return username
 
     @staticmethod
-    def create_access_token(data: dict):
-        to_encode = data.copy()
+    def create_access_token(user_name: str) -> str:
+        to_encode = {"sub": user_name}
         expire = datetime.utcnow() + timedelta(
             minutes=get_settings().ACCESS_TOKEN_EXPIRE_MINUTES
         )
