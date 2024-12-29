@@ -2,8 +2,7 @@
 import logging
 import uuid
 from typing import List
-from sqlalchemy.orm.exc import NoResultFound
-from ..database import Camera, DBConnectionHandler, IntegrityError, EventCountTemp
+from ..database import Camera, DBConnectionHandler, IntegrityError
 from .base_repository import BaseRepository
 from ..mappers import CameraMapper
 
@@ -46,11 +45,8 @@ class CameraRepository(BaseRepository):
         with DBConnectionHandler() as session:
             return session.query(Camera).filter(Camera.channel_id == channel_id).first()
 
-    def add_all(self, events: List[EventCountTemp]):
-        with DBConnectionHandler() as db:
-            try:
-                db.bulk_save_objects(events)
-                db.commit()
-            except Exception as error:
-                db.rollback()
-                raise error
+    def delete(self, channel_id: uuid.UUID):
+        self.log.debug(f"delete {channel_id}")
+        with DBConnectionHandler() as session:
+            session.query(Camera).filter(Camera.channel_id == channel_id).delete()
+            session.commit()

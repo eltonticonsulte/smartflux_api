@@ -5,7 +5,6 @@ from sqlalchemy.orm.exc import NoResultFound
 from .base_repository import BaseRepository
 from ..database import Empresa
 from ..database import IntegrityError, DBConnectionHandler
-from ..mappers import EmpresaMapper
 
 
 class RepositoryEmpresaExecption(Exception):

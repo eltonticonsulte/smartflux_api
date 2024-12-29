@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List
-from sqlalchemy.orm.exc import NoResultFound
-from ..database import Camera, DBConnectionHandler, IntegrityError, EventCountTemp
+from ..database import DBConnectionHandler, EventCountTemp
 from .base_repository import BaseRepository
 
 

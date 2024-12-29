@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABC
 from typing import Generic, List, TypeVar
-from sqlalchemy.orm.exc import NoResultFound
-from sqlalchemy.orm import joinedload
-from sqlalchemy import func, case
 from ..database.connect import DBConnectionHandler
 
 

@@ -20,9 +20,6 @@ class ZoneServices:
         zone_id = self.repository.create(zone)
         return CreateZoneResponse(zone_id=zone_id, name=zone.name)
 
-    # def get_by_name(self, name: str) -> Zone:
-    #    return self.repository.get_by_name(name)
-
     def get_all(self) -> List[GetZoneResponse]:
         zonas = self.repository.get_all()
         result = [ZoneMapper.get_entity_to_response(zone) for zone in zonas]

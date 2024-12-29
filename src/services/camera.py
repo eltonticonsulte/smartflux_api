@@ -31,6 +31,10 @@ class CameraServices:
         result = [camera.channel_id for camera in datas]
         return result
 
+    def delete(self, channel_id: str):
+        self.log.debug(f"delete {channel_id}")
+        self.repository.delete(uuid.UUID(channel_id))
+
     def validate_channel_id(self, channel_id: uuid.UUID):
         self.log.debug(f"validate_channel_id {channel_id}")
         self.repository.get_by_channel_id(channel_id)
