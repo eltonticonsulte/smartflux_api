@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from src.repository import (
     CameraRepository,
-    AuthRepository,
+    UserRepository,
     EmpresaRepository,
     FilialRepository,
     ZoneRepository,
@@ -9,7 +9,7 @@ from src.repository import (
 )
 from src.services import (
     CameraServices,
-    AuthServices,
+    UserServices,
     EmpresaServices,
     FilialServices,
     ZoneServices,
@@ -18,7 +18,7 @@ from src.services import (
 
 from src.interfaces import (
     InterfaceCameraService,
-    InterfaceAuthService,
+    InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
@@ -33,8 +33,8 @@ class FactoryService:
     def create_camera(self) -> InterfaceCameraService:
         return CameraServices(CameraRepository())
 
-    def create_auth(self) -> InterfaceAuthService:
-        return AuthServices(AuthRepository())
+    def create_user(self) -> InterfaceUserService:
+        return UserServices(UserRepository())
 
     def create_empresa(self) -> InterfaceEmpresaService:
         return EmpresaServices(EmpresaRepository())

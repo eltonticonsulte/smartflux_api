@@ -2,7 +2,7 @@
 import unittest
 from unittest.mock import Mock, patch
 from src.common import UserRole
-from src.repository import AuthRepository, RepositoryAuthExecption
+from src.repository import UserRepository, RepositoryAuthExecption
 from src.dto import UserDTO
 from src.database import DBConnectionHandler, Usuario
 from src.mappers import UserMapper
@@ -10,7 +10,7 @@ from src.mappers import UserMapper
 
 class TestAuthRepository(unittest.TestCase):
     def setUp(self):
-        self.auth_repository = AuthRepository()
+        self.auth_repository = UserRepository()
 
     def test_get_user_by_name_found(self):
         user = Usuario(

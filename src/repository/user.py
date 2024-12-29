@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
 import logging
-from typing import Optional
 from sqlalchemy.orm.exc import NoResultFound
 from ..database import (
     Usuario,
     DBConnectionHandler,
 )
 from .base_repository import BaseRepository
-from ..dto import UserDTO
+
 from ..mappers import UserMapper
 
 
@@ -16,18 +15,28 @@ class RepositoryAuthExecption(Exception):
         super().__init__(message)
 
 
-class AuthRepository(BaseRepository):
+class UserRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def get_user_by_name(self, username: str) -> Optional[UserDTO]:
+    def create(self, entity: Usuario) -> int:
+        with DBConnectionHandler() as db:
+            try:
+                db.add(entity)
+                db.commit()
+                return entity.id
+            except Exception as error:
+                db.rollback()
+                raise error
+
+    def get_user_by_name(self, username: str) -> Usuario:
         self.log.debug(f"get_user_by_name {username}")
         with DBConnectionHandler() as db:
             try:
                 user = (
                     db.query(Usuario).filter(Usuario.username == username).one_or_none()
                 )
-                return UserMapper.to_dto(user)
+                return user
             except NoResultFound:
                 raise RepositoryAuthExecption(f'User "{username}" not found')
             except Exception as error:

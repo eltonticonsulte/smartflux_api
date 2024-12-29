@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from fastapi import APIRouter
 
-from ..controllers.auth import router as user_route
+from ..controllers.user import router as user_route
 from ..controllers.empresa import router as empresa_route
 from ..controllers.filial import router as filial_route
 from ..controllers.zone import router as zone_route

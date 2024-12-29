@@ -1,27 +1,26 @@
 # -*- coding: utf-8 -*-
 import hashlib
 from ..database import UserRole, Usuario
-from ..dto import UserDTO
+from ..dto import CreateUserRequest, AuthUserResponse
 
 
 class UserMapper:
     @staticmethod
-    def to_dto(user: Usuario) -> UserDTO:
-        return UserDTO(
+    def auth_entity_to_response(user: Usuario) -> AuthUserResponse:
+        return AuthUserResponse(
             username=user.username,
-            password="",
-            hash_password=user.password_hash,
+            access_token=user.username,
+            token_type="bearer",
             role=user.role,
-            is_active=user.is_active,
         )
 
     @staticmethod
-    def to_entity(user: UserDTO) -> Usuario:
+    def create_user_to_entity(user: CreateUserRequest) -> Usuario:
         return Usuario(
             username=user.username,
             password_hash=UserMapper.password_to_hash(user.password),
             role=user.role,
-            is_active=user.is_active,
+            is_active=True,
         )
 
     @staticmethod

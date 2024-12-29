@@ -3,8 +3,8 @@ from typing import List
 from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from src.interfaces import InterfaceAuthService, InterfaceFilialService
-from .core import auth2_admin, get_service_auth, get_service_filial
+from src.interfaces import InterfaceUserService, InterfaceFilialService
+from .core import auth2_admin, get_service_user, get_service_filial
 from ..dto import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
 
 router = APIRouter()
@@ -15,7 +15,7 @@ async def create(
     request: CreateFilialRequest,
     token: str = Depends(auth2_admin),
     service: InterfaceFilialService = Depends(get_service_filial),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
 ):
     try:
         auth.current_user(token)
@@ -31,7 +31,7 @@ async def create(
 @router.post("/Auth")
 async def get_login(
     token: str = Header(...),
-    service: InterfaceAuthService = Depends(get_service_auth),
+    service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
         service.auth(token)
@@ -50,7 +50,7 @@ async def get_login(
 async def get_all(
     token: str = Depends(auth2_admin),
     service: InterfaceFilialService = Depends(get_service_filial),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
 ):
     try:
         auth.current_user(token)

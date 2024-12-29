@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from .service import (
     InterfaceCameraService,
-    InterfaceAuthService,
+    InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,

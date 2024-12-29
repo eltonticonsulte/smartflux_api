@@ -2,7 +2,7 @@
 from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
 from src.interfaces import (
-    InterfaceAuthService,
+    InterfaceUserService,
     InterfaceCameraService,
     InterfaceEmpresaService,
     InterfaceFilialService,
@@ -15,8 +15,8 @@ auth2_admin = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
 
 @lru_cache()
-def get_service_auth() -> InterfaceAuthService:
-    return FactoryService().create_auth()
+def get_service_user() -> InterfaceUserService:
+    return FactoryService().create_user()
 
 
 @lru_cache()

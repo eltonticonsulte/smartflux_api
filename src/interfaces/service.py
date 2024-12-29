@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from typing import List
 from uuid import UUID
 from ..dto import (
-    UserResponseAuth,
+    AuthUserResponse,
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
@@ -21,9 +21,9 @@ from ..dto import (
 )
 
 
-class InterfaceAuthService(ABC):
+class InterfaceUserService(ABC):
     @abstractmethod
-    def auth_user(self, name: str, password: str) -> UserResponseAuth:
+    def auth_user(self, name: str, password: str) -> AuthUserResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

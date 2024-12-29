@@ -3,8 +3,8 @@ import uuid
 from fastapi import APIRouter, Header
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from src.interfaces import InterfaceCameraService, InterfaceAuthService
-from .core import auth2_admin, get_service_camera, get_service_auth
+from src.interfaces import InterfaceCameraService, InterfaceUserService
+from .core import auth2_admin, get_service_camera, get_service_user
 from src.dto import (
     CreateCameraRequest,
     CreateCameraResponse,
@@ -20,7 +20,7 @@ from typing import List
 async def create(
     request: CreateCameraRequest,
     token: uuid.UUID = Depends(auth2_admin),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
@@ -37,11 +37,11 @@ async def create(
 @router.get("/status")
 async def get_status(
     token: str = Depends(auth2_admin),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
-        service.current_user(get_service_auth)
+        service.current_user(get_service_user)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     return JSONResponse(status_code=200, content={"status": "ok", "name": "nameuser"})
@@ -50,7 +50,7 @@ async def get_status(
 @router.get("/all", status_code=200, response_model=List[GetCameraResponse])
 async def get_all(
     token: str = Depends(auth2_admin),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
@@ -68,7 +68,7 @@ async def get_all(
 async def delete(
     channel_id: str,
     token: str = Depends(auth2_admin),
-    auth: InterfaceAuthService = Depends(get_service_auth),
+    auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
