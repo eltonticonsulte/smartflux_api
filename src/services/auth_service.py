@@ -9,6 +9,7 @@ from core import get_settings
 from ..repository import AuthRepository
 from ..dto import UserDTO
 from ..mappers import UserMapper
+from ..interfaces import InterfaceAuthService
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
@@ -18,7 +19,7 @@ class ServiceAuthExecption(Exception):
         self.message = message
 
 
-class AuthServices:
+class AuthServices(InterfaceAuthService):
     def __init__(self, repository: AuthRepository):
         self.repository = repository
         self.log = logging.getLogger(__name__)
@@ -37,7 +38,7 @@ class AuthServices:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
 
     @staticmethod
-    def get_current_user(token: str):
+    def current_user(token: str):
 
         credentials_exception = HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

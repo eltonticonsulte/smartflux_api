@@ -13,19 +13,13 @@ from src.services import (
     FilialServices,
     ZoneServices,
 )
-from src.controller import (
-    CameraController,
-    AuthController,
-    EmpresaController,
-    FilialController,
-    ZoneController,
-)
+
 from src.interfaces import (
-    InterfaceCameraController,
-    InterfaceAuthController,
-    InterfaceEmpresaController,
-    InterfaceFilialController,
-    InterfaceZoneController,
+    InterfaceCameraService,
+    InterfaceAuthService,
+    InterfaceEmpresaService,
+    InterfaceFilialService,
+    InterfaceZoneService,
 )
 
 
@@ -33,17 +27,17 @@ class FactoryController:
     def __init__(self):
         pass
 
-    def create_camera_controller(self) -> InterfaceCameraController:
-        return CameraController(CameraServices(CameraRepository()))
+    def create_camera_controller(self) -> InterfaceCameraService:
+        return CameraServices(CameraRepository())
 
-    def create_auth_controller(self) -> InterfaceAuthController:
-        return AuthController(AuthServices(AuthRepository()))
+    def create_auth_controller(self) -> InterfaceAuthService:
+        return AuthServices(AuthRepository())
 
-    def create_empresa_controller(self) -> InterfaceEmpresaController:
-        return EmpresaController(EmpresaServices(EmpresaRepository()))
+    def create_empresa_controller(self) -> InterfaceEmpresaService:
+        return EmpresaServices(EmpresaRepository())
 
-    def create_filial_controller(self) -> InterfaceFilialController:
-        return FilialController(FilialServices(FilialRepository()))
+    def create_filial_controller(self) -> InterfaceFilialService:
+        return FilialServices(FilialRepository())
 
-    def create_zone_controller(self) -> InterfaceZoneController:
-        return ZoneController(ZoneServices(ZoneRepository()))
+    def create_zone_controller(self) -> InterfaceZoneService:
+        return ZoneServices(ZoneRepository())

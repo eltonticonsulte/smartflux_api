@@ -2,35 +2,35 @@
 from abc import ABC, abstractmethod
 
 
-class InterfaceAuthController(ABC):
+class InterfaceAuthService(ABC):
     @abstractmethod
-    def login(self, name: str, password: str):
-        pass
+    def auth_user(self, name: str, password: str):
+        raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def current_user(self, token: str):
-        pass
+        raise NotImplementedError("Method not implemented")
 
 
-class InterfaceEmpresaController(ABC):
+class InterfaceEmpresaService(ABC):
     @abstractmethod
     def create(self, name: str):
-        pass
+        raise NotImplementedError("Method not implemented")
 
 
-class InterfaceFilialController(ABC):
+class InterfaceFilialService(ABC):
     @abstractmethod
     def create(self, name: str, cnpj: str, empresa_id: int):
-        pass
+        raise NotImplementedError("Method not implemented")
 
 
-class InterfaceZoneController(ABC):
+class InterfaceZoneService(ABC):
     @abstractmethod
     def create(self, name: str, filial_id: int):
-        pass
+        raise NotImplementedError("Method not implemented")
 
 
-class InterfaceCameraController(ABC):
+class InterfaceCameraService(ABC):
     @abstractmethod
     def create(self, name: str):
         raise NotImplementedError("Method not implemented")

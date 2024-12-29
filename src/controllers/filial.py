@@ -3,7 +3,7 @@ from fastapi import APIRouter, Header
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from pydantic import BaseModel
-from src.interfaces import InterfaceAuthController, InterfaceFilialController
+from src.interfaces import InterfaceAuthService, InterfaceFilialService
 from .core import auth2_admin, get_controller_auth, get_controller_filial
 
 
@@ -20,15 +20,15 @@ class CreateFilialData(BaseModel):
 async def create(
     data: CreateFilialData = Depends(),
     token: str = Depends(auth2_admin),
-    controller: InterfaceFilialController = Depends(get_controller_filial),
-    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
+    service: InterfaceFilialService = Depends(get_controller_filial),
+    auth: InterfaceAuthService = Depends(get_controller_auth),
 ):
     try:
-        controller_auth.current_user(token)
+        auth.current_user(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        id_filial = controller.create(data.name_filial, data.empresa_id, data.cnpj)
+        id_filial = service.create(data.name_filial, data.empresa_id, data.cnpj)
         return JSONResponse(status_code=201, content={"id_filial": id_filial})
     except Exception as error:
         raise HTTPException(500, detail=str(error))
@@ -37,10 +37,10 @@ async def create(
 @router.post("/Auth")
 async def get_login(
     token: str = Header(...),
-    controller: InterfaceAuthController = Depends(get_controller_auth),
+    service: InterfaceAuthService = Depends(get_controller_auth),
 ):
     try:
-        controller.auth(token)
+        service.auth(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
@@ -55,15 +55,15 @@ async def get_login(
 @router.get("/all")
 async def get_all(
     token: str = Depends(auth2_admin),
-    controller: InterfaceFilialController = Depends(get_controller_filial),
-    controller_auth: InterfaceAuthController = Depends(get_controller_auth),
+    service: InterfaceFilialService = Depends(get_controller_filial),
+    auth: InterfaceAuthService = Depends(get_controller_auth),
 ):
     try:
-        controller_auth.current_user(token)
+        auth.current_user(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        result = controller.get_all()
+        result = service.get_all()
         return JSONResponse(status_code=200, content=result)
     except Exception as error:
         raise HTTPException(500, detail=str(error))
@@ -72,10 +72,10 @@ async def get_all(
 @router.get("/data/{day}")
 async def get_data_day(
     token: str = Header(...),
-    controller: InterfaceFilialController = Depends(get_controller_filial),
+    service: InterfaceFilialService = Depends(get_controller_filial),
 ):
     try:
-        result = controller.get_data_day(token)
+        result = service.get_data_day(token)
         return JSONResponse(status_code=200, content=result)
     except Exception as error:
         raise HTTPException(500, detail=str(error))
