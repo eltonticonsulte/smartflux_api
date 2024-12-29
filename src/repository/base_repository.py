@@ -29,14 +29,3 @@ class BaseRepository(ABC, Generic[T]):
             except Exception as error:
                 db.rollback()
                 raise error
-
-
-class DataRepositoryOtimazeInsert:
-    def add(self, events: List[T]) -> int:
-        with DBConnectionHandler() as db:
-            try:
-                db.bulk_save_objects(events)
-                db.commit()
-            except Exception as error:
-                db.rollback()
-                raise error

@@ -23,11 +23,9 @@ class FilialRepository(BaseRepository):
             empresa_id=filial.empresa_id,
         )
         with DBConnectionHandler() as session:
-
             try:
                 session.add(entity)
                 session.commit()
-
                 return entity.filial_id
             except IntegrityError:
                 raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
