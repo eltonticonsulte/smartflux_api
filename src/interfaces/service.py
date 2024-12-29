@@ -7,6 +7,9 @@ from ..dto import (
     CreateRequestEmpresa,
     CreateResponseEmpresa,
     GetResponseEmpresa,
+    CreateFilialRequest,
+    CreateFilialResponse,
+    GetFilialResponse,
 )
 
 
@@ -32,7 +35,11 @@ class InterfaceEmpresaService(ABC):
 
 class InterfaceFilialService(ABC):
     @abstractmethod
-    def create(self, name: str, cnpj: str, empresa_id: int):
+    def create(self, resquest: CreateFilialRequest) -> CreateFilialResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_all(self) -> List[GetFilialResponse]:
         raise NotImplementedError("Method not implemented")
 
 

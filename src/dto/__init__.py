@@ -5,7 +5,7 @@ from .empresa import (
     CreateResponseEmpresa,
     GetResponseEmpresa,
 )
-from .filial_dto import FilialDTO
+from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
 from .count_event_dto import CountEventDTO
 from .zone_dto import ZoneDTO
 from .camera_dto import CameraDTO, CountEventDTO, CreateRequestCamera

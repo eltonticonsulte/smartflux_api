@@ -3,8 +3,6 @@ import logging
 from typing import List
 from .base_repository import BaseRepository
 from ..database import Filial, DBConnectionHandler, IntegrityError
-from ..dto import FilialDTO
-from ..mappers import FilialMapper
 
 
 class RepositoryFilialExecption(Exception):
@@ -16,31 +14,26 @@ class FilialRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def create(self, filial: FilialDTO) -> int:
-        entity = Filial(
-            name=filial.name,
-            cnpj=filial.cnpj,
-            empresa_id=filial.empresa_id,
-        )
+    def create(self, filial: Filial) -> int:
         with DBConnectionHandler() as session:
             try:
-                session.add(entity)
+                session.add(filial)
                 session.commit()
-                return entity.filial_id
+                return filial.filial_id
             except IntegrityError:
                 raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
             except Exception as error:
                 self.log.critical(error)
                 raise error
 
-    def get_all(self) -> List[FilialDTO]:
+    def get_all(self) -> List[Filial]:
         with DBConnectionHandler() as session:
             filials = session.query(Filial).all()
-            return [FilialMapper.to_dto(filial) for filial in filials]
+            return filials
 
-    def get_by_name(self, name: str) -> FilialDTO:
+    def get_by_name(self, name: str) -> Filial:
         with DBConnectionHandler() as session:
             filial = session.query(Filial).filter(Filial.name == name).one_or_none()
             if filial is None:
                 raise RepositoryFilialExecption(f"Filial {name} not found")
-        return FilialMapper.to_dto(filial)
+        return filial
