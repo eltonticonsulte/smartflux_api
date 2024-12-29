@@ -4,13 +4,13 @@ import logging
 from fastapi.testclient import TestClient
 from unittest.mock import Mock
 from fastapi import HTTPException
-from src.interfaces import InterfaceAuthController
-from src.views import auth_view
+from src.interfaces import InterfaceAuthService
+from src.controllers import auth
 from main import app
 
 
-class MockAuthController(InterfaceAuthController):
-    def login(self, username: str, password: str) -> str:
+class MockAuthController(InterfaceAuthService):
+    def auth_user(self, username: str, password: str) -> str:
 
         if username == "testuser" and password == "testpass":
             return "mock_token"
@@ -29,9 +29,7 @@ def get_mock_controller_auth():
 class TestLogin(unittest.TestCase):
     def setUp(self):
         self.log = logging.getLogger(__name__)
-        app.dependency_overrides[
-            auth_view.get_controller_auth
-        ] = get_mock_controller_auth
+        app.dependency_overrides[auth.get_service_auth] = get_mock_controller_auth
         self.client = TestClient(app)
 
     def tearDown(self):
