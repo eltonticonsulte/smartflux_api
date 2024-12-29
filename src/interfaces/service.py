@@ -3,7 +3,8 @@ from abc import ABC, abstractmethod
 from typing import List
 from ..dto import (
     UserResponseAuth,
-    CreateRequestCamera,
+    CreateCameraRequest,
+    CreateCameraResponse,
     CreateEmpresaRequest,
     CreateEmpresaResponse,
     GetEmpresaResponse,
@@ -58,7 +59,7 @@ class InterfaceZoneService(ABC):
 
 class InterfaceCameraService(ABC):
     @abstractmethod
-    def create(self, request: CreateRequestCamera):
+    def create(self, request: CreateCameraRequest) -> CreateCameraResponse:
         raise NotImplementedError("Method not implemented")
 
     def get_by_name(self, name: str):

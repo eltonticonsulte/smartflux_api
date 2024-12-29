@@ -6,7 +6,12 @@ from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 from src.interfaces import InterfaceCameraService
 from .core import auth2_admin, get_service_camera
-from src.dto import CountEventDTO, CreateRequestCamera
+from src.dto import (
+    CountEventDTO,
+    CreateCameraRequest,
+    CreateCameraResponse,
+    GetCameraResponse,
+)
 
 router = APIRouter()
 
@@ -19,15 +24,15 @@ class CountEventData(BaseModel):
     events: List[CountEventDTO]
 
 
-@router.post("/create")
+@router.post("/create", status_code=201, response_model=CreateCameraResponse)
 async def create(
-    request: CreateRequestCamera,
+    request: CreateCameraRequest,
     token: uuid.UUID = Depends(auth2_admin),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
-        service.create(request)
-        return JSONResponse(status_code=200, content={"status": "ok"})
+        result: CreateCameraResponse = service.create(request)
+        return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
@@ -41,14 +46,14 @@ async def get_status(
     return JSONResponse(status_code=200, content={"status": "ok", "name": "nameuser"})
 
 
-@router.get("/all")
+@router.get("/all", status_code=200, response_model=List[GetCameraResponse])
 async def get_all(
     token: str = Depends(auth2_admin),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
-        result = service.get_all()
-        return JSONResponse(status_code=200, content=result)
+        result: List[GetCameraResponse] = service.get_all()
+        return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 

@@ -5,7 +5,6 @@ from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from ..database import Camera, DBConnectionHandler, IntegrityError, EventCountTemp
 from .base_repository import BaseRepository
-from ..dto import CameraDTO
 from ..mappers import CameraMapper
 
 
@@ -31,17 +30,17 @@ class CameraRepository(BaseRepository):
                 self.log.error(error)
                 raise error
 
-    def get_by_name(self, name: str) -> CameraDTO:
+    def get_by_name(self, name: str) -> Camera:
         with DBConnectionHandler() as session:
             camera = session.query(Camera).filter(Camera.name == name).one_or_none()
             if camera is None:
                 raise RepositoryCameraExeption(f"Camera {name} not found")
             return CameraMapper.to_dto(camera)
 
-    def get_all(self) -> List[CameraDTO]:
+    def get_all(self) -> List[Camera]:
         with DBConnectionHandler() as session:
             cameras = session.query(Camera).all()
-            return [CameraMapper.to_dto(camera) for camera in cameras]
+            return cameras
 
     def validade_token(self, token: uuid.UUID) -> bool:
         with DBConnectionHandler() as session:

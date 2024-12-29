@@ -5,4 +5,4 @@ from .filial import FilialRepository
 
 from .auth_repository import AuthRepository, RepositoryAuthExecption
 from .zone import ZoneRepository
-from .camera_repository import CameraRepository
+from .camera import CameraRepository

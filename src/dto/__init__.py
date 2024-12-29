@@ -8,4 +8,9 @@ from .empresa import (
 from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
 from .count_event_dto import CountEventDTO
 from .zone import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
-from .camera_dto import CameraDTO, CountEventDTO, CreateRequestCamera
+from .camera import (
+    CountEventDTO,
+    CreateCameraRequest,
+    CreateCameraResponse,
+    GetCameraResponse,
+)

@@ -4,4 +4,4 @@ from .empresa import EmpresaMapper
 from .filial import FilialMapper
 from .count_even_mapper import CountEventMapper
 from .zone import ZoneMapper
-from .camera_mapper import CameraMapper
+from .camera import CameraMapper

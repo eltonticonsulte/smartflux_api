@@ -5,26 +5,20 @@ from typing import Optional
 import uuid
 
 
-class CreateRequestCamera(BaseModel):
+class CreateCameraRequest(BaseModel):
     name: str
     zone_id: int
 
 
-class CameraDTO:
-    def __init__(
-        self,
-        name: str,
-        zona_id: int,
-        channel_id: int = None,
-        metadate: dict = {},
-    ):
-        self.channel_id = channel_id
-        self.name = name
-        self.zona_id = zona_id
-        self.metadate = metadate
+class CreateCameraResponse(BaseModel):
+    camera_id: int
+    name: str
 
-    def __repr__(self):
-        return f"ZoneDTO(channel_id={self.channel_id}, name={self.name}, zona_id={self.zona_id}, metadate={self.metadate})"
+
+class GetCameraResponse(BaseModel):
+    camera_id: int
+    name: str
+    zone_id: int
 
 
 class CountEventDTO(BaseModel):
