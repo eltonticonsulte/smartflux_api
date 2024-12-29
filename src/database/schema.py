@@ -41,7 +41,6 @@ class Empresa(Base):
     token_api = Column(
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
-    # password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
     data_criacao = Column(DateTime, default=func.now())
@@ -55,7 +54,7 @@ class Filial(Base):
     __tablename__ = "filiais"
     filial_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
-    cnpj = Column(String(18), nullable=False)
+    cnpj = Column(String, nullable=False)
     password_hash = Column(
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
@@ -81,13 +80,12 @@ class Zone(Base):
 
 class Camera(Base):
     __tablename__ = "cameras"
-
-    camera_id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(
-        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, doc="UUID da camera"
     )
     name = Column(String, nullable=False)
     metadate = Column(JSON, nullable=True)
+    worker_id = Column(String, nullable=True)
     zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
     status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
     zone = relationship("Zone", back_populates="camera")
@@ -102,15 +100,15 @@ class Camera(Base):
 class EventCountTemp(Base):
     __tablename__ = "event_count_temp"
     __table_args__ = (
-        Index("idx_camera_timestamp", "camera_id", "event_time"),
-        UniqueConstraint("camera_id", "event_time"),
+        Index("idx_camera_timestamp", "channel_id", "event_time"),
+        UniqueConstraint("channel_id", "event_time"),
     )
 
     count_event_id = Column(Integer, primary_key=True, autoincrement=True)
     event_time = Column(DateTime, default=func.now())
     count_in = Column(Integer, default=0)
     count_out = Column(Integer, default=0)
-    camera_id = Column(Integer, ForeignKey("cameras.camera_id"), nullable=False)
+    channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
 
 
 class EventCountHourly(Base):
@@ -121,12 +119,12 @@ class EventCountHourly(Base):
     __tablename__ = "event_count_hourly"
 
     event_id = Column(Integer, primary_key=True, autoincrement=True)
-    camera_id = Column(Integer, ForeignKey("cameras.camera_id"), nullable=False)
+    channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
     hour_timestamp = Column(DateTime, nullable=False)
     total_count_in = Column(Integer, default=0, nullable=False)
     total_count_out = Column(Integer, default=0, nullable=False)
 
     __table_args__ = (
-        Index("idx_camera_hour", "camera_id", "hour_timestamp"),
-        UniqueConstraint("camera_id", "hour_timestamp", name="uq_camera_hour"),
+        Index("idx_camera_hour", "channel_id", "hour_timestamp"),
+        UniqueConstraint("channel_id", "hour_timestamp", name="uq_camera_hour"),
     )

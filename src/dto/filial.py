@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from pydantic import BaseModel
-from ..common import UserRole
 
 
 class CreateFilialRequest(BaseModel):

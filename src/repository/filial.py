@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from uuid import UUID
 from typing import List
 from .base_repository import BaseRepository
 from ..database import Filial, DBConnectionHandler, IntegrityError
@@ -30,6 +31,13 @@ class FilialRepository(BaseRepository):
         with DBConnectionHandler() as session:
             filials = session.query(Filial).all()
             return filials
+
+    def get_by_token(self, token: UUID) -> Filial:
+        with DBConnectionHandler() as session:
+            filial = (
+                session.query(Filial).filter(Filial.token_api == token).one_or_none()
+            )
+            return filial
 
     def get_by_name(self, name: str) -> Filial:
         with DBConnectionHandler() as session:

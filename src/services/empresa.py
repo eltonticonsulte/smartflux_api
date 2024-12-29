@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
-from fastapi import status, Depends
 from typing import List
 from ..repository import EmpresaRepository
-from ..common import UserRole
 from ..dto import (
     CreateEmpresaRequest,
     CreateEmpresaResponse,

@@ -7,7 +7,8 @@ from pydantic import BaseModel
 from src.interfaces import InterfaceCameraService
 from .core import auth2_admin, get_service_camera
 from src.dto import (
-    CountEventDTO,
+    EventCountRequest,
+    EventCountResponse,
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
@@ -15,13 +16,7 @@ from src.dto import (
 
 router = APIRouter()
 
-
-from pydantic import BaseModel
 from typing import List
-
-
-class CountEventData(BaseModel):
-    events: List[CountEventDTO]
 
 
 @router.post("/create", status_code=201, response_model=CreateCameraResponse)
@@ -54,19 +49,5 @@ async def get_all(
     try:
         result: List[GetCameraResponse] = service.get_all()
         return result
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
-
-
-@router.post("/event")
-async def insert_event(
-    data: CountEventData = Depends(),
-    token: uuid.UUID = Header(...),
-    service: InterfaceCameraService = Depends(get_service_camera),
-):
-    try:
-        service.validate_token(token)
-        result = service.register_event(data.events)
-        return JSONResponse(status_code=200, content=result)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

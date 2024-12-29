@@ -42,17 +42,9 @@ class CameraRepository(BaseRepository):
             cameras = session.query(Camera).all()
             return cameras
 
-    def validade_token(self, token: uuid.UUID) -> bool:
+    def get_by_channel_id(self, channel_id: uuid.UUID) -> Camera:
         with DBConnectionHandler() as session:
-            try:
-                result = (
-                    session.query(Camera).filter(Camera.channel_id == token).first()
-                )
-                if result is None:
-                    raise RepositoryCameraExeption(f"Invalid token {token}")
-            except Exception as error:
-                self.log.error(error)
-                raise RepositoryCameraExeption(f"Invalid token {token}")
+            return session.query(Camera).filter(Camera.channel_id == channel_id).first()
 
     def add_all(self, events: List[EventCountTemp]):
         with DBConnectionHandler() as db:

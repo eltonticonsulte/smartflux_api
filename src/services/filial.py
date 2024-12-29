@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 from typing import List
+from uuid import UUID
 from ..repository import FilialRepository
 from ..dto import CreateFilialRequest, CreateFilialResponse
 from ..mappers import FilialMapper
@@ -21,6 +22,12 @@ class FilialServices:
         datas: List[Filial] = self.repository.get_all()
         result = [FilialMapper.get_entity_to_response(filial) for filial in datas]
         return result
+
+    def validate_token(self, token: UUID):
+        self.log.debug(f"validate_token {token}")
+        filial = self.repository.get_by_token(token)
+        if filial is None:
+            raise ValueError("Token filial é inválido")
 
     def auth(self, name: str, password: str) -> None:
         filial: Filial = self.repository.get_by_name(name)

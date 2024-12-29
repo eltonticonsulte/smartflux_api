@@ -1,10 +1,14 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 from typing import List
+from uuid import UUID
 from ..dto import (
     UserResponseAuth,
     CreateCameraRequest,
     CreateCameraResponse,
+    GetCameraResponse,
+    EventCountRequest,
+    EventCountResponse,
     CreateEmpresaRequest,
     CreateEmpresaResponse,
     GetEmpresaResponse,
@@ -43,6 +47,10 @@ class InterfaceFilialService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def validate_token(self, token: str):
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def get_all(self) -> List[GetFilialResponse]:
         raise NotImplementedError("Method not implemented")
 
@@ -62,17 +70,29 @@ class InterfaceCameraService(ABC):
     def create(self, request: CreateCameraRequest) -> CreateCameraResponse:
         raise NotImplementedError("Method not implemented")
 
+    @abstractmethod
+    def get_all(self) -> List[GetCameraResponse]:
+        raise NotImplementedError("Method not implemented")
+
     def get_by_name(self, name: str):
         pass
 
     @abstractmethod
-    def get_all(self):
-        pass
+    def get_all_channels(self):
+        raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def validate_token(self, token: str):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def register_event(self, data):
+    def create(self, data):
+        raise NotImplementedError("Method not implemented")
+
+
+class InterfaceEventCountService(ABC):
+    @abstractmethod
+    def insert_pull(
+        self, request: List[EventCountRequest], channels: List[UUID]
+    ) -> List[EventCountResponse]:
         raise NotImplementedError("Method not implemented")

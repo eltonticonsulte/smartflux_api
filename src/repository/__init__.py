@@ -6,3 +6,4 @@ from .filial import FilialRepository
 from .auth_repository import AuthRepository, RepositoryAuthExecption
 from .zone import ZoneRepository
 from .camera import CameraRepository
+from .count_event import CountEventRepository

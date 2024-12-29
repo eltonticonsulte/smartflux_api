@@ -6,11 +6,11 @@ from .empresa import (
     GetEmpresaResponse,
 )
 from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
-from .count_event_dto import CountEventDTO
 from .zone import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
 from .camera import (
-    CountEventDTO,
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
 )
+
+from .event_count import EventCountRequest, EventCountResponse

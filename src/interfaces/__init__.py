@@ -5,4 +5,5 @@ from .service import (
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
+    InterfaceEventCountService,
 )
