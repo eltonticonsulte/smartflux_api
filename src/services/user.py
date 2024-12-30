@@ -32,8 +32,9 @@ class UserServices(InterfaceUserService):
 
     def create(self, user: CreateUserRequest) -> int:
         entity = UserMapper.create_user_to_entity(user)
-        self.repository.create(entity)
-        return GetUserResponse(username=user.username)
+        user_id = self.repository.create(entity)
+        new_user = self.repository.get_by_id(user_id)
+        return UserMapper.get_entity_to_response(new_user)
 
     def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
         password_hash = UserMapper.password_to_hash(request.password)

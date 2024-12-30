@@ -6,7 +6,7 @@ from .schema import (
     Camera,
     Zone,
     EventCountTemp,
-    EventCountHourly,
+    EventCount,
     Empresa,
     UserRole,
     Usuario,

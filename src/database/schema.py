@@ -5,6 +5,7 @@ from sqlalchemy import (
     String,
     Boolean,
     DateTime,
+    Date,
     JSON,
     ForeignKey,
     Index,
@@ -90,10 +91,8 @@ class Camera(Base):
     zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
     status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
     zone = relationship("Zone", back_populates="camera")
-    eventos = relationship(
-        "EventCountTemp", backref="camera", cascade="all, delete-orphan"
-    )
-    event_count_hourly = relationship("EventCountHourly", backref="camera")
+    eventos = relationship("EventCountTemp", backref="camera")
+    event_count_hourly = relationship("EventCount", backref="camera")
 
 
 class EventCountTemp(Base):
@@ -110,20 +109,24 @@ class EventCountTemp(Base):
     channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
 
 
-class EventCountHourly(Base):
+class EventCount(Base):
     """
     Tabela histórica com eventos agregados por hora e câmera
     """
 
-    __tablename__ = "event_count_hourly"
+    __tablename__ = "event_count"
 
     event_id = Column(Integer, primary_key=True, autoincrement=True)
     channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
-    hour_timestamp = Column(DateTime, nullable=False)
+    date = Column(Date, nullable=False)
+    hour = Column(Integer, nullable=False)
     total_count_in = Column(Integer, default=0, nullable=False)
     total_count_out = Column(Integer, default=0, nullable=False)
+    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
+    zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
+    zone_name = Column(String, nullable=False)
 
-    __table_args__ = (
-        Index("idx_camera_hour", "channel_id", "hour_timestamp"),
-        UniqueConstraint("channel_id", "hour_timestamp", name="uq_camera_hour"),
-    )
+    filial = relationship("Filial", backref="event_count")
+    zone = relationship("Zone", backref="event_count")
+
+    __table_args__ = (Index("idx_camera_date", "channel_id", "date"),)

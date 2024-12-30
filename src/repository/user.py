@@ -42,3 +42,14 @@ class UserRepository(BaseRepository):
             except Exception as error:
                 db.rollback()
                 raise error
+
+    def get_by_id(self, user_id: int) -> Usuario:
+        with DBConnectionHandler() as db:
+            try:
+                user = db.query(Usuario).filter(Usuario.id == user_id).one_or_none()
+                return user
+            except NoResultFound:
+                raise RepositoryAuthExecption(f'User "{user_id}" not found')
+            except Exception as error:
+                db.rollback()
+                raise error

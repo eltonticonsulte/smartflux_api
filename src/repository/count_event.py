@@ -13,7 +13,7 @@ class CountEventRepository(BaseRepository):
     def __init__(self):
         pass
 
-    def add_all(self, events: List[EventCountTemp]):
+    def create_all(self, events: List[EventCountTemp]):
         with DBConnectionHandler() as db:
             try:
                 db.bulk_save_objects(events)

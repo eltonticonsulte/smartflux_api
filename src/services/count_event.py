@@ -23,7 +23,7 @@ class CountEventServices(InterfaceEventCountService):
                 CountEventMapper.create_event_request_to_entity(data)
                 for data in data_success
             ]
-            self.repository.add_all(entity_data)
+            self.repository.create_all(entity_data)
         for data in data_success:
             result.append(
                 EventCountResponse(

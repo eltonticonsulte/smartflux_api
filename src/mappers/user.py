@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import hashlib
 from ..database import Usuario
-from ..dto import CreateUserRequest, AuthUserResponse
+from ..dto import CreateUserRequest, AuthUserResponse, GetUserResponse
 
 
 class UserMapper:
@@ -22,6 +22,10 @@ class UserMapper:
             role=user.role,
             is_active=True,
         )
+
+    @staticmethod
+    def get_entity_to_response(user: Usuario) -> int:
+        return GetUserResponse(username=user.username, role=user.role)
 
     @staticmethod
     def password_to_hash(password: str) -> str:

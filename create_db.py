@@ -4,13 +4,16 @@ from src.database.schema import Usuario, UserRole
 from src.services import UserServices
 from src.repository import UserRepository
 from src.dto import CreateUserRequest
-from src.mappers import UserMapper
 from core.config import get_settings
 
 
 def create_user_admin():
     auth_services = UserServices(UserRepository())
     user = CreateUserRequest(username="admin", password="admin123", role=UserRole.ADMIN)
+    user3 = CreateUserRequest(
+        username="admin3", password="admin123", role=UserRole.ADMIN
+    )
+    auth_services.create(user3)
 
     return auth_services.create(user)
 
