@@ -27,6 +27,7 @@ from .camera import (
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
+    UpdateCameraRequest,
 )
 
 from .event_count import EventCountRequest, EventCountResponse

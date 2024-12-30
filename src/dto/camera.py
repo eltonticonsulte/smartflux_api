@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from uuid import UUID
+from typing import Optional
 from pydantic import BaseModel
 
 
@@ -8,11 +10,18 @@ class CreateCameraRequest(BaseModel):
 
 
 class CreateCameraResponse(BaseModel):
-    camera_id: int
+    channel_id: UUID
     name: str
 
 
 class GetCameraResponse(BaseModel):
-    camera_id: int
+    channel_id: UUID
     name: str
+    status: bool
     zone_id: int
+
+
+class UpdateCameraRequest(BaseModel):
+    name: Optional[str] = None
+    status: Optional[bool] = None
+    metadate: Optional[dict] = None

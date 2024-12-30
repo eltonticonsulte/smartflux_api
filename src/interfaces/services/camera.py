@@ -1,7 +1,13 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+from uuid import UUID
 from typing import List
-from src.dto import CreateCameraRequest, CreateCameraResponse, GetCameraResponse
+from src.dto import (
+    CreateCameraRequest,
+    CreateCameraResponse,
+    GetCameraResponse,
+    UpdateCameraRequest,
+)
 
 
 class InterfaceCameraService(ABC):
@@ -22,4 +28,14 @@ class InterfaceCameraService(ABC):
 
     @abstractmethod
     def validate_token(self, token: str):
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def update(
+        self, channel_id: UUID, request: UpdateCameraRequest
+    ) -> GetCameraResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def delete(self, channel_id: UUID) -> None:
         raise NotImplementedError("Method not implemented")

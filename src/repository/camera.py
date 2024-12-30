@@ -16,13 +16,13 @@ class CameraRepository(BaseRepository):
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
-    def create(self, camera: Camera) -> int:
+    def create(self, camera: Camera) -> uuid.UUID:
         self.log.debug(f"create {camera}")
         with DBConnectionHandler() as session:
             try:
                 session.add(camera)
                 session.commit()
-                return camera.camera_id
+                return camera.channel_id
             except IntegrityError:
                 raise RepositoryCameraExeption(f"Camera {camera.name} already exists")
             except Exception as error:
@@ -50,3 +50,13 @@ class CameraRepository(BaseRepository):
         with DBConnectionHandler() as session:
             session.query(Camera).filter(Camera.channel_id == channel_id).delete()
             session.commit()
+
+    def update(self, camera: Camera):
+        with DBConnectionHandler() as session:
+            try:
+                session.merge(camera)
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                self.log.error(error)
+                raise error

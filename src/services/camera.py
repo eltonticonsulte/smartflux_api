@@ -7,6 +7,7 @@ from ..dto import (
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
+    UpdateCameraRequest,
 )
 from ..mappers import CameraMapper
 
@@ -18,8 +19,8 @@ class CameraServices:
 
     def create(self, request: CreateCameraRequest) -> CreateCameraResponse:
         new_camera = CameraMapper.create_request_to_entity(request)
-        camera_id = self.repository.create(new_camera)
-        return CreateCameraResponse(camera_id=camera_id, name=new_camera.name)
+        channel_id = self.repository.create(new_camera)
+        return CreateCameraResponse(channel_id=channel_id, name=new_camera.name)
 
     def get_all(self) -> List[GetCameraResponse]:
         datas = self.repository.get_all()
@@ -31,10 +32,20 @@ class CameraServices:
         result = [camera.channel_id for camera in datas]
         return result
 
-    def delete(self, channel_id: str):
+    def delete(self, channel_id: uuid.UUID):
         self.log.debug(f"delete {channel_id}")
-        self.repository.delete(uuid.UUID(channel_id))
+        self.repository.delete(channel_id)
 
     def validate_channel_id(self, channel_id: uuid.UUID):
         self.log.debug(f"validate_channel_id {channel_id}")
         self.repository.get_by_channel_id(channel_id)
+
+    def update(
+        self, channel_id: uuid.UUID, request: UpdateCameraRequest
+    ) -> GetCameraResponse:
+
+        camera = CameraMapper.update_request_to_entity(channel_id, request)
+        self.repository.update(camera)
+        camera_updated = self.repository.get_by_channel_id(channel_id)
+        self.log.debug(f"updated {camera_updated}")
+        return CameraMapper.get_entity_to_response(camera_updated)

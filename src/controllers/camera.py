@@ -9,6 +9,7 @@ from src.dto import (
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
+    UpdateCameraRequest,
 )
 
 router = APIRouter()
@@ -64,9 +65,28 @@ async def get_all(
         raise HTTPException(500, detail=str(error))
 
 
+@router.put("/update/{channel_id}", status_code=200, response_model=GetCameraResponse)
+async def update(
+    channel_id: uuid.UUID,
+    request: UpdateCameraRequest,
+    token: str = Depends(auth2_admin),
+    auth: InterfaceUserService = Depends(get_service_user),
+    service: InterfaceCameraService = Depends(get_service_camera),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        result: GetCameraResponse = service.update(channel_id, request)
+        return result
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
 @router.delete("/delete/{channel_id}", status_code=200)
 async def delete(
-    channel_id: str,
+    channel_id: uuid.UUID,
     token: str = Depends(auth2_admin),
     auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceCameraService = Depends(get_service_camera),
