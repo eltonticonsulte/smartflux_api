@@ -55,3 +55,12 @@ class ZoneRepository(BaseRepository):
             except Exception as error:
                 session.rollback()
                 raise error
+
+    def delete(self, zone_id: int) -> None:
+        with DBConnectionHandler() as session:
+            try:
+                session.query(Zone).filter(Zone.zone_id == zone_id).delete()
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                raise error

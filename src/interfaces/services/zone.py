@@ -21,3 +21,7 @@ class InterfaceZoneService(ABC):
     @abstractmethod
     def update(self, id: int, request: UpdateZoneRequest) -> GetZoneResponse:
         raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def delete(self, id: int) -> None:
+        raise NotImplementedError("Method not implemented")

@@ -11,10 +11,11 @@ from ..dto import (
     GetZoneResponse,
     UpdateZoneRequest,
 )
+from ..interfaces import InterfaceZoneService
 from ..mappers import ZoneMapper
 
 
-class ZoneServices:
+class ZoneServices(InterfaceZoneService):
     def __init__(self, repository: ZoneRepository):
         self.repository = repository
         self.log = logging.getLogger(__name__)
@@ -35,3 +36,6 @@ class ZoneServices:
         self.repository.update(zone)
         result = self.repository.get_by_id(id)
         return ZoneMapper.get_entity_to_response(result)
+
+    def delete(self, id: int) -> None:
+        self.repository.delete(id)
