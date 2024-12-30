@@ -47,6 +47,9 @@ class Empresa(Base):
 
     filiais = relationship("Filial", back_populates="empresa")
 
+    def __repr__(self):
+        return f"Empresa(empresa_id={self.empresa_id}, name={self.name}, token_api={self.token_api}, is_active={self.is_active}, description={self.description}, data_criacao={self.data_criacao})"
+
 
 class Filial(Base):
     __tablename__ = "filiais"

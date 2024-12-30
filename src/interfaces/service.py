@@ -41,6 +41,14 @@ class InterfaceEmpresaService(ABC):
     def get_all(self) -> List[GetEmpresaResponse]:
         raise NotImplementedError("Method not implemented")
 
+    @abstractmethod
+    def get_by_id(self, id: int) -> GetEmpresaResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def update(self, id: int, empresa: CreateEmpresaRequest) -> GetEmpresaResponse:
+        raise NotImplementedError("Method not implemented")
+
 
 class InterfaceFilialService(ABC):
     @abstractmethod

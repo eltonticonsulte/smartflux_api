@@ -65,3 +65,12 @@ class EmpresaRepository(BaseRepository):
         except Exception as error:
             db.rollback()
             raise error
+
+    def update(self, empresa: Empresa) -> None:
+        with DBConnectionHandler() as db:
+            try:
+                db.merge(empresa)
+                db.commit()
+            except Exception as error:
+                db.rollback()
+                raise error

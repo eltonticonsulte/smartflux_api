@@ -60,21 +60,15 @@ class UserServices(InterfaceUserService):
 
     @staticmethod
     def current_user(token: str):
-
-        credentials_exception = HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
         try:
             payload = jwt.decode(
                 token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
             )
             username: str = payload.get("sub")
             if username is None:
-                raise credentials_exception
-        except JWTError:
-            raise credentials_exception
+                raise ServiceUserExecption("User Invalid")
+        except JWTError as erros:
+            raise ServiceUserExecption(f"JWT Error: {erros}")
         return username
 
     @staticmethod

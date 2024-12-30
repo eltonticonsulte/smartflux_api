@@ -9,6 +9,7 @@ from .empresa import (
     CreateEmpresaRequest,
     CreateEmpresaResponse,
     GetEmpresaResponse,
+    UpdateEmpresaRequest,
 )
 from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
 from .zone import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
