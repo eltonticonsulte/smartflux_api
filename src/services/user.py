@@ -8,7 +8,12 @@ from jose import JWTError, jwt
 from core import get_settings
 from ..repository import UserRepository
 from ..database import Usuario
-from ..dto import AuthUserResponse, CreateUserRequest, CreateUserResponse
+from ..dto import (
+    AuthUserResponse,
+    CreateUserRequest,
+    CreateUserResponse,
+    AuthUserRequest,
+)
 from ..mappers import UserMapper
 from ..interfaces import InterfaceUserService
 
@@ -30,9 +35,9 @@ class UserServices(InterfaceUserService):
         self.repository.create(entity)
         return CreateUserResponse(username=user.username)
 
-    def auth_user(self, user_name: str, password: str) -> AuthUserResponse:
-        password_hash = UserMapper.password_to_hash(password)
-        user: Usuario = self.repository.get_user_by_name(user_name)
+    def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
+        password_hash = UserMapper.password_to_hash(request.password)
+        user: Usuario = self.repository.get_user_by_name(request.username)
         self.log.debug(f"auth_user {user}")
         if not user:
             raise ServiceUserExecption("User not found")
@@ -41,7 +46,7 @@ class UserServices(InterfaceUserService):
         if not user.is_active:
             raise ServiceUserExecption("Inactive user")
 
-        new_token = UserServices.create_access_token(user_name)
+        new_token = UserServices.create_access_token(request.username)
 
         return AuthUserResponse(
             username=user.username,

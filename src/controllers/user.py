@@ -15,11 +15,13 @@ router = APIRouter()
 
 @router.post("/login", response_model=AuthUserResponse, status_code=200)
 async def get_login(
-    auth: Annotated[AuthUserRequest, Depends()],
+    auth: Annotated[OAuth2PasswordRequestForm, Depends()],
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
-        result: AuthUserResponse = service.auth_user(auth.username, auth.password)
+        result: AuthUserResponse = service.auth_user(
+            AuthUserRequest(username=auth.username, password=auth.password)
+        )
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

@@ -4,6 +4,7 @@ from typing import List
 from uuid import UUID
 from ..dto import (
     AuthUserResponse,
+    AuthUserRequest,
     CreateCameraRequest,
     CreateCameraResponse,
     GetCameraResponse,
@@ -23,7 +24,7 @@ from ..dto import (
 
 class InterfaceUserService(ABC):
     @abstractmethod
-    def auth_user(self, name: str, password: str) -> AuthUserResponse:
+    def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

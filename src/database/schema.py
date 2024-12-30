@@ -45,9 +45,7 @@ class Empresa(Base):
     description = Column(String, nullable=True)
     data_criacao = Column(DateTime, default=func.now())
 
-    filiais = relationship(
-        "Filial", back_populates="empresa", cascade="all, delete-orphan"
-    )
+    filiais = relationship("Filial", back_populates="empresa")
 
 
 class Filial(Base):
@@ -65,7 +63,7 @@ class Filial(Base):
     description = Column(String, nullable=True)
     empresa_id = Column(Integer, ForeignKey("empresas.empresa_id"), nullable=False)
     empresa = relationship("Empresa", back_populates="filiais")
-    zones = relationship("Zone", back_populates="filial", cascade="all, delete-orphan")
+    zones = relationship("Zone", back_populates="filial")
 
 
 class Zone(Base):
@@ -75,7 +73,7 @@ class Zone(Base):
     name = Column(String, nullable=False)
     filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
     filial = relationship("Filial", back_populates="zones")
-    camera = relationship("Camera", back_populates="zone", cascade="all, delete-orphan")
+    camera = relationship("Camera", back_populates="zone")
 
 
 class Camera(Base):
@@ -92,9 +90,7 @@ class Camera(Base):
     eventos = relationship(
         "EventCountTemp", backref="camera", cascade="all, delete-orphan"
     )
-    event_count_hourly = relationship(
-        "EventCountHourly", backref="camera", cascade="all, delete-orphan"
-    )
+    event_count_hourly = relationship("EventCountHourly", backref="camera")
 
 
 class EventCountTemp(Base):
