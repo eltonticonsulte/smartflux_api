@@ -86,3 +86,23 @@ async def update(
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
+
+
+@router.delete("/delete/{id}", status_code=200)
+async def delete(
+    id: int,
+    token: str = Depends(auth2_admin),
+    auth: InterfaceUserService = Depends(get_service_user),
+    service: InterfaceEmpresaService = Depends(get_service_empresa),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(
+            401, detail=f"Unauthorized: {error}", headers={"WWW-Authenticate": "Bearer"}
+        )
+    try:
+        result: GetEmpresaResponse = service.delete(id)
+        return result
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))

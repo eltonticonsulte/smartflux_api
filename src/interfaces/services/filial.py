@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+from abc import ABC, abstractmethod
+from typing import List
+from src.dto import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
+
+
+class InterfaceFilialService(ABC):
+    @abstractmethod
+    def create(self, resquest: CreateFilialRequest) -> CreateFilialResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def validate_token(self, token: str):
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_all(self) -> List[GetFilialResponse]:
+        raise NotImplementedError("Method not implemented")
