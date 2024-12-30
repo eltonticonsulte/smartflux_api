@@ -35,7 +35,23 @@ class ZoneRepository(BaseRepository):
                 raise RepositoryZoneExcption(f"Zone {name} not found")
             return zone
 
+    def get_by_id(self, zone_id: int) -> Zone:
+        with DBConnectionHandler() as session:
+            zone = session.query(Zone).filter(Zone.zone_id == zone_id).one_or_none()
+            if zone is None:
+                raise RepositoryZoneExcption(f"Zone {zone_id} not found")
+            return zone
+
     def get_all(self) -> List[Zone]:
         with DBConnectionHandler() as session:
             zonas = session.query(Zone).all()
             return zonas
+
+    def update(self, zone: Zone) -> None:
+        with DBConnectionHandler() as session:
+            try:
+                session.merge(zone)
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                raise error

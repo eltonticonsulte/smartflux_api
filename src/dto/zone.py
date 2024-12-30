@@ -16,3 +16,7 @@ class GetZoneResponse(BaseModel):
     zone_id: int
     name: str
     filial_id: int
+
+
+class UpdateZoneRequest(BaseModel):
+    name: str

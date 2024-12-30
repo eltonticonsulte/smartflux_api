@@ -17,7 +17,12 @@ from .filial import (
     GetFilialResponse,
     UpdateFilialRequest,
 )
-from .zone import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
+from .zone import (
+    CreateZoneRequest,
+    CreateZoneResponse,
+    GetZoneResponse,
+    UpdateZoneRequest,
+)
 from .camera import (
     CreateCameraRequest,
     CreateCameraResponse,

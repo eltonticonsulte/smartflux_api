@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 from ..database import Zone
-from ..dto import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
+from ..dto import (
+    CreateZoneRequest,
+    CreateZoneResponse,
+    GetZoneResponse,
+    UpdateZoneRequest,
+)
 
 
 class ZoneMapper:
@@ -17,3 +22,7 @@ class ZoneMapper:
         return GetZoneResponse(
             zone_id=entity.zone_id, name=entity.name, filial_id=entity.filial_id
         )
+
+    @staticmethod
+    def update_request_to_entity(zone_id: int, request: UpdateZoneRequest) -> Zone:
+        return Zone(zone_id=zone_id, name=request.name)

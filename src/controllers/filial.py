@@ -51,23 +51,6 @@ async def get_login(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/all", status_code=200, response_model=List[GetFilialResponse])
-async def get_all(
-    token: str = Depends(auth2_admin),
-    service: InterfaceFilialService = Depends(get_service_filial),
-    auth: InterfaceUserService = Depends(get_service_user),
-):
-    try:
-        auth.current_user(token)
-    except Exception as error:
-        raise HTTPException(401, detail=str(error))
-    try:
-        result: List[GetFilialResponse] = service.get_all()
-        return result
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
-
-
 @router.put("/update/{id}", status_code=200, response_model=GetFilialResponse)
 async def update(
     id: int,
@@ -101,6 +84,23 @@ async def delete(
     try:
         service.delete(id)
         return JSONResponse(status_code=200, content={"status": "ok"})
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/all", status_code=200, response_model=List[GetFilialResponse])
+async def get_all(
+    token: str = Depends(auth2_admin),
+    service: InterfaceFilialService = Depends(get_service_filial),
+    auth: InterfaceUserService = Depends(get_service_user),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        result: List[GetFilialResponse] = service.get_all()
+        return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 

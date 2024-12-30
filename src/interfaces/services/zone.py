@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 from typing import List
-from src.dto import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
+from src.dto import (
+    CreateZoneRequest,
+    CreateZoneResponse,
+    GetZoneResponse,
+    UpdateZoneRequest,
+)
 
 
 class InterfaceZoneService(ABC):
@@ -11,4 +16,8 @@ class InterfaceZoneService(ABC):
 
     @abstractmethod
     def get_all(self) -> List[GetZoneResponse]:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def update(self, id: int, request: UpdateZoneRequest) -> GetZoneResponse:
         raise NotImplementedError("Method not implemented")

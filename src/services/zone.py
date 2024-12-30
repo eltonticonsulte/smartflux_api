@@ -5,7 +5,12 @@ from fastapi import HTTPException, status, Depends
 from jose import JWTError, jwt
 from core import get_settings
 from ..repository import ZoneRepository
-from ..dto import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
+from ..dto import (
+    CreateZoneRequest,
+    CreateZoneResponse,
+    GetZoneResponse,
+    UpdateZoneRequest,
+)
 from ..mappers import ZoneMapper
 
 
@@ -24,3 +29,9 @@ class ZoneServices:
         zonas = self.repository.get_all()
         result = [ZoneMapper.get_entity_to_response(zone) for zone in zonas]
         return result
+
+    def update(self, id: int, request: UpdateZoneRequest) -> GetZoneResponse:
+        zone = ZoneMapper.update_request_to_entity(id, request)
+        self.repository.update(zone)
+        result = self.repository.get_by_id(id)
+        return ZoneMapper.get_entity_to_response(result)
