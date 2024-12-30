@@ -9,9 +9,10 @@ from ..dto import (
     UpdateCameraRequest,
 )
 from ..mappers import CameraMapper
+from ..interfaces import InterfaceCameraService
 
 
-class CameraServices:
+class CameraServices(InterfaceCameraService):
     def __init__(self, repository: CameraRepository):
         self.repository = repository
         self.log = logging.getLogger(__name__)
@@ -29,6 +30,11 @@ class CameraServices:
 
     def get_all_channels(self) -> List[uuid.UUID]:
         datas = self.repository.get_all()
+        result = [camera.channel_id for camera in datas]
+        return result
+
+    def get_channel_by_filial(self, filial_id: int) -> List[uuid.UUID]:
+        datas = self.repository.get_by_filial(filial_id)
         result = [camera.channel_id for camera in datas]
         return result
 

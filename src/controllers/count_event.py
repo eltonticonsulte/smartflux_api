@@ -27,13 +27,16 @@ async def insert_event(
     filial: InterfaceFilialService = Depends(get_service_filial),
     count_event: InterfaceEventCountService = Depends(get_service_count_event),
 ) -> List[EventCountResponse]:
+    current_filial = None
     try:
-        filial.validate_token(token)
+        current_filial = filial.get_by_token(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
 
     try:
-        channels_id: List[uuid.UUID] = camera.get_all_channels()
+        channels_id: List[uuid.UUID] = camera.get_channel_by_filial(
+            current_filial.filial_id
+        )
         result: List[EventCountResponse] = count_event.insert_pull(request, channels_id)
         return result
     except Exception as error:

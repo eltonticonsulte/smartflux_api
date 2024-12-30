@@ -41,6 +41,11 @@ class CameraRepository(BaseRepository):
             cameras = session.query(Camera).all()
             return cameras
 
+    def get_by_filial(self, filial_id: int) -> List[Camera]:
+        with DBConnectionHandler() as session:
+            cameras = session.query(Camera).filter(Camera.filial_id == filial_id).all()
+            return cameras
+
     def get_by_channel_id(self, channel_id: uuid.UUID) -> Camera:
         with DBConnectionHandler() as session:
             return session.query(Camera).filter(Camera.channel_id == channel_id).first()

@@ -13,7 +13,9 @@ class CountEventServices(InterfaceEventCountService):
         self.log = logging.getLogger(__name__)
         self.repository = repository
 
-    def insert_pull(self, request: List[EventCountRequest], channels: List[uuid.UUID]):
+    def insert_pull(
+        self, request: List[EventCountRequest], channels: List[uuid.UUID]
+    ) -> List[EventCountResponse]:
         data_success, data_fail = self.check_chennel(request, channels)
         result: List[EventCountResponse] = []
         if data_success:
@@ -32,7 +34,9 @@ class CountEventServices(InterfaceEventCountService):
         for data in data_fail:
             result.append(
                 EventCountResponse(
-                    event_id=data.event_id, status=False, description="Cannel not found"
+                    event_id=data.event_id,
+                    status=False,
+                    description="Channel not found in current filial",
                 )
             )
         return result

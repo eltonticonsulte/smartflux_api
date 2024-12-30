@@ -28,11 +28,12 @@ class FilialServices:
         result = [FilialMapper.get_entity_to_response(filial) for filial in datas]
         return result
 
-    def validate_token(self, token: UUID):
+    def get_by_token(self, token: UUID) -> GetFilialResponse:
         self.log.debug(f"validate_token {token}")
         filial = self.repository.get_by_token(token)
         if filial is None:
             raise ValueError("Token filial é inválido")
+        return FilialMapper.get_entity_to_response(filial)
 
     def auth(self, name: str, password: str) -> None:
         filial: Filial = self.repository.get_by_name(name)

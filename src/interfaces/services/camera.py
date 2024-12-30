@@ -26,6 +26,10 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def get_channel_by_filial(self, filial_id: int) -> List[UUID]:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def validate_token(self, token: str):
         raise NotImplementedError("Method not implemented")
 

@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+from uuid import UUID
 from typing import List
 from src.dto import (
     CreateFilialRequest,
@@ -14,7 +15,7 @@ class InterfaceFilialService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def validate_token(self, token: str):
+    def get_by_token(self, token: UUID) -> GetFilialResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
@@ -22,7 +23,7 @@ class InterfaceFilialService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_by_id(self, id: int) -> GetFilialResponse:
+    def get_by_id(self, filial_id: int) -> GetFilialResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
