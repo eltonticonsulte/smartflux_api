@@ -87,6 +87,24 @@ async def update(
         raise HTTPException(500, detail=str(error))
 
 
+@router.delete("/delete/{id}", status_code=200)
+async def delete(
+    id: int,
+    token: str = Depends(auth2_admin),
+    service: InterfaceFilialService = Depends(get_service_filial),
+    auth: InterfaceUserService = Depends(get_service_user),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        service.delete(id)
+        return JSONResponse(status_code=200, content={"status": "ok"})
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
 @router.get("/data/{day}")
 async def get_data_day(
     token: str = Header(...),

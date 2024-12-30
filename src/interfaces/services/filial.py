@@ -29,3 +29,7 @@ class InterfaceFilialService(ABC):
     @abstractmethod
     def update(self, filial_id: int, request: UpdateFilialRequest) -> GetFilialResponse:
         raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def delete(self, id: int) -> None:
+        raise NotImplementedError("Method not implemented")

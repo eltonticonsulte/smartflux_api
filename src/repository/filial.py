@@ -65,3 +65,12 @@ class FilialRepository(BaseRepository):
             except Exception as error:
                 session.rollback()
                 raise error
+
+    def delete(self, filial_id: int) -> None:
+        with DBConnectionHandler() as session:
+            try:
+                session.query(Filial).filter(Filial.filial_id == filial_id).delete()
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                raise error

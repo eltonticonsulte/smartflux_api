@@ -47,3 +47,6 @@ class FilialServices:
         self.repository.update(entity)
         result = self.repository.get_by_id(filial_id)
         return FilialMapper.get_entity_to_response(result)
+
+    def delete(self, id: int) -> None:
+        self.repository.delete(id)
