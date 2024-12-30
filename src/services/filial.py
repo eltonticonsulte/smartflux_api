@@ -3,7 +3,12 @@ import logging
 from typing import List
 from uuid import UUID
 from ..repository import FilialRepository
-from ..dto import CreateFilialRequest, CreateFilialResponse
+from ..dto import (
+    CreateFilialRequest,
+    CreateFilialResponse,
+    UpdateFilialRequest,
+    GetFilialResponse,
+)
 from ..mappers import FilialMapper
 from ..database import Filial
 
@@ -36,3 +41,9 @@ class FilialServices:
             raise ValueError("Senha inválida")
         if not filial.is_active:
             raise ValueError("Usuário inativo")
+
+    def update(self, filial_id: int, request: UpdateFilialRequest) -> GetFilialResponse:
+        entity = FilialMapper.update_request_to_entity(filial_id, request)
+        self.repository.update(entity)
+        result = self.repository.get_by_id(filial_id)
+        return FilialMapper.get_entity_to_response(result)

@@ -22,5 +22,5 @@ class InterfaceEmpresaService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def delete(self, id: int):
+    def delete(self, id: int) -> None:
         raise NotImplementedError("Method not implemented")

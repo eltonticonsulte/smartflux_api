@@ -1,6 +1,11 @@
 # -*- coding: utf-8 -*-
 from ..database import Filial
-from ..dto import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
+from ..dto import (
+    CreateFilialRequest,
+    CreateFilialResponse,
+    GetFilialResponse,
+    UpdateFilialRequest,
+)
 
 
 class FilialMapper:
@@ -25,3 +30,18 @@ class FilialMapper:
             is_active=filial.is_active,
             empresa_id=filial.empresa_id,
         )
+
+    @staticmethod
+    def update_request_to_entity(filial_id: int, filial: UpdateFilialRequest) -> Filial:
+        up_filial = Filial(filial_id=filial_id)
+
+        if filial.name is not None:
+            up_filial.name = filial.name
+
+        if filial.cnpj is not None:
+            up_filial.cnpj = filial.cnpj
+
+        if filial.is_active is not None:
+            up_filial.is_active = filial.is_active
+
+        return up_filial

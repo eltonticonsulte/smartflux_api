@@ -74,3 +74,12 @@ class EmpresaRepository(BaseRepository):
             except Exception as error:
                 db.rollback()
                 raise error
+
+    def delete(self, empresa_id: int) -> None:
+        with DBConnectionHandler() as db:
+            try:
+                db.query(Empresa).filter(Empresa.empresa_id == empresa_id).delete()
+                db.commit()
+            except Exception as error:
+                db.rollback()
+                raise error

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List
 from fastapi import APIRouter, HTTPException, Depends
+from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceEmpresaService, InterfaceUserService
 from .core import auth2_admin, get_service_user, get_service_empresa
 from ..dto import (
@@ -102,7 +103,7 @@ async def delete(
             401, detail=f"Unauthorized: {error}", headers={"WWW-Authenticate": "Bearer"}
         )
     try:
-        result: GetEmpresaResponse = service.delete(id)
-        return result
+        service.delete(id)
+        return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

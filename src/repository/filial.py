@@ -45,3 +45,23 @@ class FilialRepository(BaseRepository):
             if filial is None:
                 raise RepositoryFilialExecption(f"Filial {name} not found")
         return filial
+
+    def get_by_id(self, filial_id: int) -> Filial:
+        with DBConnectionHandler() as session:
+            filial = (
+                session.query(Filial)
+                .filter(Filial.filial_id == filial_id)
+                .one_or_none()
+            )
+            if filial is None:
+                raise RepositoryFilialExecption(f"Filial {filial_id} not found")
+        return filial
+
+    def update(self, filial: Filial) -> None:
+        with DBConnectionHandler() as session:
+            try:
+                session.merge(filial)
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                raise error

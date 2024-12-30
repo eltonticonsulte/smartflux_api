@@ -11,7 +11,12 @@ from .empresa import (
     GetEmpresaResponse,
     UpdateEmpresaRequest,
 )
-from .filial import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
+from .filial import (
+    CreateFilialRequest,
+    CreateFilialResponse,
+    GetFilialResponse,
+    UpdateFilialRequest,
+)
 from .zone import CreateZoneRequest, CreateZoneResponse, GetZoneResponse
 from .camera import (
     CreateCameraRequest,

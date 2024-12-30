@@ -36,3 +36,6 @@ class EmpresaServices:
         empresa_updated = self.repository.get_by_id(id)
         self.log.debug(f"updated {empresa_updated}")
         return EmpresaMapper.get_entity_to_response(empresa_updated)
+
+    def delete(self, id: int):
+        self.repository.delete(id)

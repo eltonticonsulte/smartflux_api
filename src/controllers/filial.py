@@ -5,7 +5,12 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
 from .core import auth2_admin, get_service_user, get_service_filial
-from ..dto import CreateFilialRequest, CreateFilialResponse, GetFilialResponse
+from ..dto import (
+    CreateFilialRequest,
+    CreateFilialResponse,
+    GetFilialResponse,
+    UpdateFilialRequest,
+)
 
 router = APIRouter()
 
@@ -58,6 +63,25 @@ async def get_all(
         raise HTTPException(401, detail=str(error))
     try:
         result: List[GetFilialResponse] = service.get_all()
+        return result
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.put("/update/{id}", status_code=200, response_model=GetFilialResponse)
+async def update(
+    id: int,
+    request: UpdateFilialRequest,
+    token: str = Depends(auth2_admin),
+    service: InterfaceFilialService = Depends(get_service_filial),
+    auth: InterfaceUserService = Depends(get_service_user),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        result: GetFilialResponse = service.update(id, request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

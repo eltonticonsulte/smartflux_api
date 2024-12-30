@@ -42,7 +42,7 @@ class Empresa(Base):
         UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     is_active = Column(Boolean, default=True)
-    description = Column(String, nullable=True)
+    description = Column(String, nullable=True, default="")
     data_criacao = Column(DateTime, default=func.now())
 
     filiais = relationship("Filial", back_populates="empresa")

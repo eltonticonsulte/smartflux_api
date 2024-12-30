@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from pydantic import BaseModel
+from typing import Optional
 
 
 class CreateFilialRequest(BaseModel):
@@ -19,3 +20,9 @@ class GetFilialResponse(BaseModel):
     cnpj: str
     is_active: bool
     empresa_id: int
+
+
+class UpdateFilialRequest(BaseModel):
+    name: Optional[str] = None
+    cnpj: Optional[str] = None
+    is_active: Optional[bool] = None
