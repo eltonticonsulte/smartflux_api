@@ -2,7 +2,6 @@
 from ..database import Empresa
 from ..dto import (
     CreateEmpresaRequest,
-    CreateEmpresaResponse,
     GetEmpresaResponse,
     UpdateEmpresaRequest,
 )
@@ -18,10 +17,6 @@ class EmpresaMapper:
             description=empresa.description,
             data_criacao=empresa.data_criacao,
         )
-
-    @staticmethod
-    def create_entity_to_response(empresa: Empresa) -> CreateEmpresaResponse:
-        return CreateEmpresaResponse(empresa_id=empresa.empresa_id)
 
     @staticmethod
     def create_request_to_entity(new_empresa: CreateEmpresaRequest) -> Empresa:

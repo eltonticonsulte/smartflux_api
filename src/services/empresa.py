@@ -2,11 +2,7 @@
 import logging
 from typing import List
 from ..repository import EmpresaRepository
-from ..dto import (
-    CreateEmpresaRequest,
-    CreateEmpresaResponse,
-    GetEmpresaResponse,
-)
+from ..dto import CreateEmpresaRequest, GetEmpresaResponse, UpdateEmpresaRequest
 from ..mappers import EmpresaMapper
 
 
@@ -15,10 +11,11 @@ class EmpresaServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, request: CreateEmpresaRequest) -> CreateEmpresaResponse:
+    def create(self, request: CreateEmpresaRequest) -> GetEmpresaResponse:
         empresa = EmpresaMapper.create_request_to_entity(request)
         new_id = self.repository.create(empresa)
-        return CreateEmpresaResponse(empresa_id=new_id, name=request.name)
+        new_empresa = self.repository.get_by_id(new_id)
+        return EmpresaMapper.get_entity_to_response(new_empresa)
 
     def get_all(self) -> List[GetEmpresaResponse]:
         empresas = self.repository.get_all()
@@ -29,7 +26,7 @@ class EmpresaServices:
         empresa = self.repository.get_by_id(id)
         return EmpresaMapper.get_entity_to_response(empresa)
 
-    def update(self, id: int, empresa: CreateEmpresaRequest) -> GetEmpresaResponse:
+    def update(self, id: int, empresa: UpdateEmpresaRequest) -> GetEmpresaResponse:
         self.log.debug(f"update {empresa}")
         empresa = EmpresaMapper.update_request_to_entity(id, empresa)
         self.repository.update(empresa)

@@ -2,7 +2,6 @@
 from ..database import Filial
 from ..dto import (
     CreateFilialRequest,
-    CreateFilialResponse,
     GetFilialResponse,
     UpdateFilialRequest,
 )
@@ -16,10 +15,6 @@ class FilialMapper:
             cnpj=new_filial.cnpj,
             empresa_id=new_filial.empresa_id,
         )
-
-    @staticmethod
-    def create_entity_to_response(filial: Filial) -> CreateFilialResponse:
-        return CreateFilialResponse(filial_id=filial.filial_id, name_filial=filial.name)
 
     @staticmethod
     def get_entity_to_response(filial: Filial) -> GetFilialResponse:

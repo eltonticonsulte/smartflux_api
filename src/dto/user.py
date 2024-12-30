@@ -21,5 +21,6 @@ class CreateUserRequest(BaseModel):
     role: UserRole
 
 
-class CreateUserResponse(BaseModel):
+class GetUserResponse(BaseModel):
     username: str
+    role: UserRole

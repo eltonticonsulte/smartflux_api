@@ -7,7 +7,6 @@ from src.interfaces import InterfaceUserService, InterfaceZoneService
 from .core import auth2_admin, get_service_user, get_service_zone
 from ..dto import (
     CreateZoneRequest,
-    CreateZoneResponse,
     GetZoneResponse,
     UpdateZoneRequest,
 )
@@ -15,7 +14,7 @@ from ..dto import (
 router = APIRouter()
 
 
-@router.post("/create", status_code=201, response_model=CreateZoneResponse)
+@router.post("/create", status_code=201, response_model=GetZoneResponse)
 async def create(
     request: CreateZoneRequest,
     token: str = Depends(auth2_admin),
@@ -28,7 +27,7 @@ async def create(
         raise HTTPException(401, detail=str(error))
 
     try:
-        result: CreateZoneResponse = service.create(request)
+        result: GetZoneResponse = service.create(request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

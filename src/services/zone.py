@@ -7,7 +7,6 @@ from core import get_settings
 from ..repository import ZoneRepository
 from ..dto import (
     CreateZoneRequest,
-    CreateZoneResponse,
     GetZoneResponse,
     UpdateZoneRequest,
 )
@@ -20,11 +19,12 @@ class ZoneServices(InterfaceZoneService):
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, request: CreateZoneRequest) -> bool:
+    def create(self, request: CreateZoneRequest) -> GetZoneResponse:
         self.log.debug(f"create_zone {request.name}")
         zone = ZoneMapper.create_request_to_entity(request)
         zone_id = self.repository.create(zone)
-        return CreateZoneResponse(zone_id=zone_id, name=zone.name)
+        entity = self.repository.get_by_id(zone_id)
+        return ZoneMapper.get_entity_to_response(entity)
 
     def get_all(self) -> List[GetZoneResponse]:
         zonas = self.repository.get_all()

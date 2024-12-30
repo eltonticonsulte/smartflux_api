@@ -6,7 +6,6 @@ from src.interfaces import InterfaceEmpresaService, InterfaceUserService
 from .core import auth2_admin, get_service_user, get_service_empresa
 from ..dto import (
     CreateEmpresaRequest,
-    CreateEmpresaResponse,
     GetEmpresaResponse,
     UpdateEmpresaRequest,
 )
@@ -14,7 +13,7 @@ from ..dto import (
 router = APIRouter()
 
 
-@router.post("/create", status_code=201, response_model=CreateEmpresaResponse)
+@router.post("/create", status_code=201, response_model=GetEmpresaResponse)
 async def create(
     request: CreateEmpresaRequest,
     token: str = Depends(auth2_admin),
@@ -25,7 +24,7 @@ async def create(
     if not user:
         raise HTTPException(401, detail="Unauthorized")
     try:
-        result: CreateEmpresaResponse = service.create(request)
+        result: GetEmpresaResponse = service.create(request)
         return result
     except Exception as error:
         raise HTTPException(422, detail=str(error))

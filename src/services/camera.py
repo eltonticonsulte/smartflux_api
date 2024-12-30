@@ -5,7 +5,6 @@ from typing import List
 from ..repository import CameraRepository
 from ..dto import (
     CreateCameraRequest,
-    CreateCameraResponse,
     GetCameraResponse,
     UpdateCameraRequest,
 )
@@ -17,10 +16,11 @@ class CameraServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, request: CreateCameraRequest) -> CreateCameraResponse:
+    def create(self, request: CreateCameraRequest) -> GetCameraResponse:
         new_camera = CameraMapper.create_request_to_entity(request)
         channel_id = self.repository.create(new_camera)
-        return CreateCameraResponse(channel_id=channel_id, name=new_camera.name)
+        entity = self.repository.get_by_channel_id(channel_id)
+        return CameraMapper.get_entity_to_response(entity)
 
     def get_all(self) -> List[GetCameraResponse]:
         datas = self.repository.get_all()

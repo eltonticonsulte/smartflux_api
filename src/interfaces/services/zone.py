@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from typing import List
 from src.dto import (
     CreateZoneRequest,
-    CreateZoneResponse,
     GetZoneResponse,
     UpdateZoneRequest,
 )
@@ -11,7 +10,7 @@ from src.dto import (
 
 class InterfaceZoneService(ABC):
     @abstractmethod
-    def create(self, request: CreateZoneRequest) -> CreateZoneResponse:
+    def create(self, request: CreateZoneRequest) -> GetZoneResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

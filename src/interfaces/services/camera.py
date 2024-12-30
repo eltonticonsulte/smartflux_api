@@ -4,7 +4,6 @@ from uuid import UUID
 from typing import List
 from src.dto import (
     CreateCameraRequest,
-    CreateCameraResponse,
     GetCameraResponse,
     UpdateCameraRequest,
 )
@@ -12,7 +11,7 @@ from src.dto import (
 
 class InterfaceCameraService(ABC):
     @abstractmethod
-    def create(self, request: CreateCameraRequest) -> CreateCameraResponse:
+    def create(self, request: CreateCameraRequest) -> GetCameraResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

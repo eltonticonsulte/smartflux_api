@@ -3,7 +3,6 @@ from abc import ABC, abstractmethod
 from typing import List
 from src.dto import (
     CreateFilialRequest,
-    CreateFilialResponse,
     GetFilialResponse,
     UpdateFilialRequest,
 )
@@ -11,7 +10,7 @@ from src.dto import (
 
 class InterfaceFilialService(ABC):
     @abstractmethod
-    def create(self, resquest: CreateFilialRequest) -> CreateFilialResponse:
+    def create(self, resquest: CreateFilialRequest) -> GetFilialResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

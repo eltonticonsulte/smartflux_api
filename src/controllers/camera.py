@@ -7,7 +7,6 @@ from src.interfaces import InterfaceCameraService, InterfaceUserService
 from .core import auth2_admin, get_service_camera, get_service_user
 from src.dto import (
     CreateCameraRequest,
-    CreateCameraResponse,
     GetCameraResponse,
     UpdateCameraRequest,
 )
@@ -17,7 +16,7 @@ router = APIRouter()
 from typing import List
 
 
-@router.post("/create", status_code=201, response_model=CreateCameraResponse)
+@router.post("/create", status_code=201, response_model=GetCameraResponse)
 async def create(
     request: CreateCameraRequest,
     token: uuid.UUID = Depends(auth2_admin),
@@ -29,7 +28,7 @@ async def create(
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        result: CreateCameraResponse = service.create(request)
+        result: GetCameraResponse = service.create(request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

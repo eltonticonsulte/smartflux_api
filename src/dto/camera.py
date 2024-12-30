@@ -9,11 +9,6 @@ class CreateCameraRequest(BaseModel):
     zone_id: int
 
 
-class CreateCameraResponse(BaseModel):
-    channel_id: UUID
-    name: str
-
-
 class GetCameraResponse(BaseModel):
     channel_id: UUID
     name: str

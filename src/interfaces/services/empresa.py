@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 from typing import List
-from src.dto import CreateEmpresaRequest, CreateEmpresaResponse, GetEmpresaResponse
+from src.dto import CreateEmpresaRequest, GetEmpresaResponse
 
 
 class InterfaceEmpresaService(ABC):
     @abstractmethod
-    def create(self, empresa: CreateEmpresaRequest) -> CreateEmpresaResponse:
+    def create(self, empresa: CreateEmpresaRequest) -> GetEmpresaResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

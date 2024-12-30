@@ -7,11 +7,6 @@ class CreateZoneRequest(BaseModel):
     filial_id: int
 
 
-class CreateZoneResponse(BaseModel):
-    name: str
-    zone_id: int
-
-
 class GetZoneResponse(BaseModel):
     zone_id: int
     name: str

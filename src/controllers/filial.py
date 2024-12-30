@@ -7,7 +7,6 @@ from src.interfaces import InterfaceUserService, InterfaceFilialService
 from .core import auth2_admin, get_service_user, get_service_filial
 from ..dto import (
     CreateFilialRequest,
-    CreateFilialResponse,
     GetFilialResponse,
     UpdateFilialRequest,
 )
@@ -15,7 +14,7 @@ from ..dto import (
 router = APIRouter()
 
 
-@router.post("/create", status_code=201, response_model=CreateFilialResponse)
+@router.post("/create", status_code=201, response_model=GetFilialResponse)
 async def create(
     request: CreateFilialRequest,
     token: str = Depends(auth2_admin),
@@ -27,7 +26,7 @@ async def create(
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        result: CreateFilialResponse = service.create(request)
+        result: GetFilialResponse = service.create(request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

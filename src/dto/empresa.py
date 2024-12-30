@@ -8,11 +8,6 @@ class CreateEmpresaRequest(BaseModel):
     name: str
 
 
-class CreateEmpresaResponse(BaseModel):
-    name: str
-    empresa_id: int
-
-
 class GetEmpresaResponse(BaseModel):
     empresa_id: int
     name: str

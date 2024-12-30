@@ -5,7 +5,6 @@ from uuid import UUID
 from ..repository import FilialRepository
 from ..dto import (
     CreateFilialRequest,
-    CreateFilialResponse,
     UpdateFilialRequest,
     GetFilialResponse,
 )
@@ -18,12 +17,13 @@ class FilialServices:
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, resquest: CreateFilialRequest) -> int:
+    def create(self, resquest: CreateFilialRequest) -> GetFilialResponse:
         filial = FilialMapper.create_request_to_entity(resquest)
         filial_id = self.repository.create(filial)
-        return CreateFilialResponse(filial_id=filial_id, name_filial=filial.name)
+        entity = self.repository.get_by_id(filial_id)
+        return FilialMapper.get_entity_to_response(entity)
 
-    def get_all(self) -> List[CreateFilialResponse]:
+    def get_all(self) -> List[GetFilialResponse]:
         datas: List[Filial] = self.repository.get_all()
         result = [FilialMapper.get_entity_to_response(filial) for filial in datas]
         return result

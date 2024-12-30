@@ -11,7 +11,7 @@ from ..database import Usuario
 from ..dto import (
     AuthUserResponse,
     CreateUserRequest,
-    CreateUserResponse,
+    GetUserResponse,
     AuthUserRequest,
 )
 from ..mappers import UserMapper
@@ -33,7 +33,7 @@ class UserServices(InterfaceUserService):
     def create(self, user: CreateUserRequest) -> int:
         entity = UserMapper.create_user_to_entity(user)
         self.repository.create(entity)
-        return CreateUserResponse(username=user.username)
+        return GetUserResponse(username=user.username)
 
     def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
         password_hash = UserMapper.password_to_hash(request.password)

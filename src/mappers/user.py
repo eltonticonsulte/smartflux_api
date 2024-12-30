@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import hashlib
-from ..database import UserRole, Usuario
+from ..database import Usuario
 from ..dto import CreateUserRequest, AuthUserResponse
 
 

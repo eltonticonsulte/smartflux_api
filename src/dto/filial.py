@@ -9,11 +9,6 @@ class CreateFilialRequest(BaseModel):
     cnpj: str
 
 
-class CreateFilialResponse(BaseModel):
-    filial_id: int
-    name_filial: str
-
-
 class GetFilialResponse(BaseModel):
     filial_id: int
     name: str

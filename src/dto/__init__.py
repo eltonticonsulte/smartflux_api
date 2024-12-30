@@ -3,29 +3,25 @@ from .user import (
     AuthUserResponse,
     CreateUserRequest,
     AuthUserRequest,
-    CreateUserResponse,
+    GetUserResponse,
 )
 from .empresa import (
     CreateEmpresaRequest,
-    CreateEmpresaResponse,
     GetEmpresaResponse,
     UpdateEmpresaRequest,
 )
 from .filial import (
     CreateFilialRequest,
-    CreateFilialResponse,
     GetFilialResponse,
     UpdateFilialRequest,
 )
 from .zone import (
     CreateZoneRequest,
-    CreateZoneResponse,
     GetZoneResponse,
     UpdateZoneRequest,
 )
 from .camera import (
     CreateCameraRequest,
-    CreateCameraResponse,
     GetCameraResponse,
     UpdateCameraRequest,
 )
