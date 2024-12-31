@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List
+from datetime import datetime
 from sqlalchemy import func
 from ..database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
 from .base_repository import BaseRepository
@@ -96,7 +97,7 @@ class CountEventRepository(BaseRepository):
                 )
                 return [
                     TotalCountGrupHour(
-                        hour=str(count.hour_timestamp),
+                        hour=datetime.strftime(count.hour_timestamp, "%H:%M"),
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
                     )

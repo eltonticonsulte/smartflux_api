@@ -135,7 +135,7 @@ def pouplar_evento_day(total: int = 100):
             event_count_temp = EventCountTemp(
                 channel_id=camera.channel_id,
                 event_time=datetime.now() + timedelta(minutes=i),
-                count_out=1,
+                count_out=2,
                 count_in=1,
             )
             list_data.append(event_count_temp)
@@ -156,6 +156,6 @@ if __name__ == "__main__":
     clear_all()
     popular_banco()
     start = time.time()
-    pouplar_evento_day(100)
+    pouplar_evento_day(10000)
     end = time.time()
     print("timer", end - start)
