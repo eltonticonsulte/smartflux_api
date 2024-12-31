@@ -17,3 +17,8 @@ class EventCountRequest(BaseModel):
     event_time: datetime
     count_in: int
     count_out: int
+
+
+class TotalCount(BaseModel):
+    total_count_in: int
+    total_count_out: int

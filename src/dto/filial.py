@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from uuid import UUID
 from pydantic import BaseModel
 from typing import Optional
 
@@ -11,6 +12,7 @@ class CreateFilialRequest(BaseModel):
 
 class GetFilialResponse(BaseModel):
     filial_id: int
+    token: UUID
     name: str
     cnpj: str
     is_active: bool

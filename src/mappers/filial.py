@@ -20,6 +20,7 @@ class FilialMapper:
     def get_entity_to_response(filial: Filial) -> GetFilialResponse:
         return GetFilialResponse(
             filial_id=filial.filial_id,
+            token=filial.token_api,
             name=filial.name,
             cnpj=filial.cnpj,
             is_active=filial.is_active,
