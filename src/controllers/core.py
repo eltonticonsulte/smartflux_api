@@ -8,6 +8,7 @@ from src.interfaces import (
     InterfaceFilialService,
     InterfaceZoneService,
     InterfaceEventCountService,
+    InterfaceEventCountStorageService,
 )
 from ..compose import FactoryService
 
@@ -42,3 +43,8 @@ def get_service_zone() -> InterfaceZoneService:
 @lru_cache()
 def get_service_count_event() -> InterfaceEventCountService:
     return FactoryService().create_count_event()
+
+
+@lru_cache()
+def get_service_count_event_storage() -> InterfaceEventCountStorageService:
+    return FactoryService().create_count_event_storage()

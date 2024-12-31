@@ -29,8 +29,8 @@ class CountEventRepository(BaseRepository):
             try:
                 count = (
                     db.query(
-                        func.count(EventCountTemp.count_in).label("total_count_in"),
-                        func.count(EventCountTemp.count_out).label("total_count_out"),
+                        func.sum(EventCountTemp.count_in).label("total_count_in"),
+                        func.sum(EventCountTemp.count_out).label("total_count_out"),
                     )
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
                     .join(Zone, Camera.zona_id == Zone.zone_id)

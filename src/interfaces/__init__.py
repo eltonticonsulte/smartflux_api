@@ -6,4 +6,5 @@ from .services import (
     InterfaceFilialService,
     InterfaceZoneService,
     InterfaceEventCountService,
+    InterfaceEventCountStorageService,
 )

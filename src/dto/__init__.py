@@ -27,3 +27,4 @@ from .camera import (
 )
 
 from .event_count import EventCountRequest, EventCountResponse, TotalCount
+from .event_count_storage import TotalCountGrupZone

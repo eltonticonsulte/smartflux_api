@@ -7,3 +7,4 @@ from .user import UserRepository, RepositoryAuthExecption
 from .zone import ZoneRepository
 from .camera import CameraRepository
 from .count_event import CountEventRepository
+from .count_event_storage import CountEventStorageRepository

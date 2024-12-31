@@ -6,6 +6,7 @@ from src.repository import (
     FilialRepository,
     ZoneRepository,
     CountEventRepository,
+    CountEventStorageRepository,
 )
 from src.services import (
     CameraServices,
@@ -14,6 +15,7 @@ from src.services import (
     FilialServices,
     ZoneServices,
     CountEventServices,
+    CountEventStorageServices,
 )
 
 from src.interfaces import (
@@ -23,6 +25,7 @@ from src.interfaces import (
     InterfaceFilialService,
     InterfaceZoneService,
     InterfaceEventCountService,
+    InterfaceEventCountStorageService,
 )
 
 
@@ -47,3 +50,6 @@ class FactoryService:
 
     def create_count_event(self) -> InterfaceEventCountService:
         return CountEventServices(CountEventRepository())
+
+    def create_count_event_storage(self) -> InterfaceEventCountStorageService:
+        return CountEventStorageServices(CountEventStorageRepository())

@@ -5,3 +5,4 @@ from .user import UserServices
 from .camera import CameraServices
 from .zone import ZoneServices
 from .count_event import CountEventServices
+from .count_event_storage import CountEventStorageServices
