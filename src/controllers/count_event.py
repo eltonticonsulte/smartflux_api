@@ -9,7 +9,12 @@ from src.interfaces import (
     InterfaceEventCountService,
 )
 from .core import get_service_filial, get_service_camera, get_service_count_event
-from src.dto import EventCountRequest, EventCountResponse, TotalCount
+from src.dto import (
+    EventCountRequest,
+    EventCountResponse,
+    TotalCount,
+    TotalCountGrupZone,
+)
 
 router = APIRouter()
 
@@ -40,7 +45,7 @@ async def insert_event(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/data/current-today", status_code=201, response_model=TotalCount)
+@router.get("/total/current-today", status_code=200, response_model=TotalCount)
 async def get_data_day(
     token: uuid.UUID = Header(...),
     filial: InterfaceFilialService = Depends(get_service_filial),
@@ -54,5 +59,25 @@ async def get_data_day(
 
     try:
         return count_event.get_count_by_filial(current_filial.filial_id)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get(
+    "/total/grup-zone", status_code=200, response_model=List[TotalCountGrupZone]
+)
+async def get_data_filial_grup_zone(
+    token: uuid.UUID = Header(...),
+    filial: InterfaceFilialService = Depends(get_service_filial),
+    count_event: InterfaceEventCountService = Depends(get_service_count_event),
+) -> List[TotalCountGrupZone]:
+    current_filial = None
+    try:
+        current_filial = filial.get_by_token(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+
+    try:
+        return count_event.get_count_by_filial_count_grup_zone(current_filial.filial_id)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import func
 from ..database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
 from .base_repository import BaseRepository
-from ..dto import TotalCount
+from ..dto import TotalCount, TotalCountGrupZone
 
 
 class RepositoryCountEventException(Exception):
@@ -41,6 +41,37 @@ class CountEventRepository(BaseRepository):
                     total_count_in=count.total_count_in,
                     total_count_out=count.total_count_out,
                 )
+            except Exception as error:
+                db.rollback()
+                raise error
+
+    def count_by_filial_count_grup_zone(
+        self, filial_id: int
+    ) -> List[TotalCountGrupZone]:
+        with DBConnectionHandler() as db:
+            try:
+                counts = (
+                    db.query(
+                        func.sum(EventCountTemp.count_in).label("total_count_in"),
+                        func.sum(EventCountTemp.count_out).label("total_count_out"),
+                        Zone.zone_id,
+                        Zone.name.label("zone_name"),
+                    )
+                    .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                    .join(Zone, Camera.zona_id == Zone.zone_id)
+                    .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .filter(Filial.filial_id == filial_id)
+                    .group_by(Zone.zone_id, Zone.name)
+                    .all()
+                )
+                return [
+                    TotalCountGrupZone(
+                        zone_name=count.zone_name,
+                        total_count_in=count.total_count_in,
+                        total_count_out=count.total_count_out,
+                    )
+                    for count in counts
+                ]
             except Exception as error:
                 db.rollback()
                 raise error
