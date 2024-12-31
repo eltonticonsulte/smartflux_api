@@ -102,15 +102,3 @@ async def get_all(
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
-
-
-@router.get("/data/{day}")
-async def get_data_day(
-    token: str = Header(...),
-    service: InterfaceFilialService = Depends(get_service_filial),
-):
-    try:
-        result = service.get_data_day(token)
-        return JSONResponse(status_code=200, content=result)
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
