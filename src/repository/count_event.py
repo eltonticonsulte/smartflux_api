@@ -35,6 +35,7 @@ class CountEventRepository:
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
                     .join(Zone, Camera.zona_id == Zone.zone_id)
                     .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .filter(Filial.filial_id == filial_id)
                     .one()
                 )
                 return TotalCount(

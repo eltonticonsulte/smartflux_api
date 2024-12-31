@@ -19,7 +19,7 @@ class CountEventStorageRepository:
         pass
 
     def get_count_by_filial_count_grup_zone(
-        self, filial_id: int, date: date
+        self, filial_id: int, current_date: date
     ) -> List[TotalCountGrupZone]:
         with DBConnectionHandler() as session:
             try:
@@ -30,7 +30,7 @@ class CountEventStorageRepository:
                         EventCount.zone_name,
                     )
                     .filter(EventCount.filial_id == filial_id)
-                    .filter(EventCount.date == date)
+                    .filter(EventCount.date == current_date)
                     .group_by(EventCount.zona_id, EventCount.zone_name)
                     .all()
                 )
