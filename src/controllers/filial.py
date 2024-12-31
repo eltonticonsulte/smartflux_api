@@ -32,22 +32,20 @@ async def create(
         raise HTTPException(500, detail=str(error))
 
 
-@router.post("/Auth")
+@router.post("/auth", status_code=200, response_model=GetFilialResponse)
 async def get_login(
+    name_filial: str = Header(...),
     token: str = Header(...),
-    service: InterfaceUserService = Depends(get_service_user),
+    service: InterfaceFilialService = Depends(get_service_filial),
 ):
+    current_filial = None
     try:
-        service.auth(token)
+        current_filial = service.get_by_token(token)
+        if current_filial.name != name_filial:
+            raise Exception("Nome de filial inválido")
+        return current_filial
     except Exception as error:
         raise HTTPException(401, detail=str(error))
-    try:
-        return JSONResponse(
-            status_code=200,
-            content={"access_token": token, "token_type": "bearer"},
-        )
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
 
 
 @router.get("/all", status_code=200, response_model=List[GetFilialResponse])

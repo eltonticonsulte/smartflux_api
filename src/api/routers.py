@@ -8,6 +8,7 @@ from ..controllers.zone import router as zone_route
 from ..controllers.camera import router as camera_route
 from ..controllers.count_event import router as count_event
 from ..controllers.count_event_storage import router as count_event_storage
+from ..controllers.aplication import router as router_aplication
 
 base_ruter = APIRouter()
 base_ruter.include_router(user_route, prefix="/user", tags=["Usuario"])
@@ -22,3 +23,4 @@ base_ruter.include_router(count_event, prefix="/event", tags=["Eventos"])
 base_ruter.include_router(
     count_event_storage, prefix="/storage", tags=["Eventos Storage"]
 )
+base_ruter.include_router(router_aplication, prefix="/aplication", tags=["Aplication"])

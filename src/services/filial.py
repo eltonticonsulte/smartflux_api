@@ -33,6 +33,8 @@ class FilialServices:
         filial = self.repository.get_by_token(token)
         if filial is None:
             raise ValueError("Token filial é inválido")
+        if not filial.is_active:
+            raise ValueError("Filial inativa")
         return FilialMapper.get_entity_to_response(filial)
 
     def auth(self, name: str, password: str) -> None:
