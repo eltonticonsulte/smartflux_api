@@ -49,9 +49,9 @@ async def get_all(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/get/{id}", status_code=200, response_model=GetEmpresaResponse)
+@router.get("/get/{empresa_id}", status_code=200, response_model=GetEmpresaResponse)
 async def get_by_id(
-    id: int,
+    empresa_id: int,
     token: str = Depends(auth2_admin),
     auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
@@ -61,15 +61,15 @@ async def get_by_id(
     except Exception:
         raise HTTPException(401, detail="Unauthorized")
     try:
-        result: GetEmpresaResponse = service.get_by_id(id)
+        result: GetEmpresaResponse = service.get_by_id(empresa_id)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
 
-@router.put("/update/{id}", status_code=200, response_model=GetEmpresaResponse)
+@router.put("/update/{empresa_id}", status_code=200, response_model=GetEmpresaResponse)
 async def update(
-    id: int,
+    empresa_id: int,
     request: UpdateEmpresaRequest,
     token: str = Depends(auth2_admin),
     auth: InterfaceUserService = Depends(get_service_user),
@@ -82,15 +82,15 @@ async def update(
             401, detail=f"Unauthorized: {error}", headers={"WWW-Authenticate": "Bearer"}
         )
     try:
-        result: GetEmpresaResponse = service.update(id, request)
+        result: GetEmpresaResponse = service.update(empresa_id, request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
 
-@router.delete("/delete/{id}", status_code=200)
+@router.delete("/delete/{empresa_id}", status_code=200)
 async def delete(
-    id: int,
+    empresa_id: int,
     token: str = Depends(auth2_admin),
     auth: InterfaceUserService = Depends(get_service_user),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
@@ -102,7 +102,7 @@ async def delete(
             401, detail=f"Unauthorized: {error}", headers={"WWW-Authenticate": "Bearer"}
         )
     try:
-        service.delete(id)
+        service.delete(empresa_id)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

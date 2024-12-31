@@ -423,7 +423,9 @@ disable=raw-checker-failed,
         W0703, # disable general eception
         missing-function-docstring,
         missing-class-docstring,
-        not-callable
+        not-callable,
+        R0801, # duplicate-code
+        W0707, # disable general eception
 
 # Enable the message, report, category or checker with the given id(s). You can
 # either give multiple identifier separated by comma (,) or put this option

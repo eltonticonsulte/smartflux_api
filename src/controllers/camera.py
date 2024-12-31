@@ -1,19 +1,17 @@
 # -*- coding: utf-8 -*-
 import uuid
-from fastapi import APIRouter, Header
+from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceCameraService, InterfaceUserService
-from .core import auth2_admin, get_service_camera, get_service_user
 from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
     UpdateCameraRequest,
 )
+from .core import auth2_admin, get_service_camera, get_service_user
 
 router = APIRouter()
-
-from typing import List
 
 
 @router.post("/create", status_code=201, response_model=GetCameraResponse)

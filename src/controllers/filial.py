@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List
-from fastapi import APIRouter, Header
-from fastapi import APIRouter, HTTPException, Depends
+from fastapi import APIRouter, Header, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
 from .core import auth2_admin, get_service_user, get_service_filial
@@ -65,9 +64,9 @@ async def get_all(
         raise HTTPException(500, detail=str(error))
 
 
-@router.put("/update/{id}", status_code=200, response_model=GetFilialResponse)
+@router.put("/update/{filial_id}", status_code=200, response_model=GetFilialResponse)
 async def update(
-    id: int,
+    filial_id: int,
     request: UpdateFilialRequest,
     token: str = Depends(auth2_admin),
     service: InterfaceFilialService = Depends(get_service_filial),
@@ -78,15 +77,15 @@ async def update(
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        result: GetFilialResponse = service.update(id, request)
+        result: GetFilialResponse = service.update(filial_id, request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
 
-@router.delete("/delete/{id}", status_code=200)
+@router.delete("/delete/{filial_id}", status_code=200)
 async def delete(
-    id: int,
+    filial_id: int,
     token: str = Depends(auth2_admin),
     service: InterfaceFilialService = Depends(get_service_filial),
     auth: InterfaceUserService = Depends(get_service_user),
@@ -96,7 +95,7 @@ async def delete(
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:
-        service.delete(id)
+        service.delete(filial_id)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         raise HTTPException(500, detail=str(error))

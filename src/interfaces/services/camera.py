@@ -30,10 +30,6 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def validate_token(self, token: str):
-        raise NotImplementedError("Method not implemented")
-
-    @abstractmethod
     def update(
         self, channel_id: UUID, request: UpdateCameraRequest
     ) -> GetCameraResponse:

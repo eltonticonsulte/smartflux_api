@@ -1,15 +1,9 @@
 # -*- coding: utf-8 -*-
 import uuid
-from fastapi import APIRouter
-from typing_extensions import Annotated, Doc
-from fastapi import Form, Header
-from fastapi.security import OAuth2PasswordRequestForm
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from typing_extensions import Annotated
 from src.interfaces import InterfaceUserService
-from .core import auth2_admin, get_service_user
-from src.dto import AuthUserResponse, CreateUserRequest, AuthUserRequest
+from .core import get_service_user
 
 router = APIRouter()
 

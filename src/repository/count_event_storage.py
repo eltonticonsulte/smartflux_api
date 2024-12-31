@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from sqlalchemy import func
 from typing import List
 from datetime import date
+from sqlalchemy import func
 from ..database import (
     DBConnectionHandler,
     EventCount,

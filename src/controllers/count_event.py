@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
+from typing import List
 import uuid
-from fastapi import APIRouter, Header
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException
 
 from src.interfaces import (
     InterfaceFilialService,
     InterfaceCameraService,
     InterfaceEventCountService,
 )
-from .core import get_service_filial, get_service_camera, get_service_count_event
+
 from src.dto import (
     EventCountRequest,
     EventCountResponse,
@@ -16,10 +16,9 @@ from src.dto import (
     TotalCountGrupZone,
     TotalCountGrupHour,
 )
+from .core import get_service_filial, get_service_camera, get_service_count_event
 
 router = APIRouter()
-
-from typing import List
 
 
 @router.post("/count", status_code=201, response_model=List[EventCountResponse])

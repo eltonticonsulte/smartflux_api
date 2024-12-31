@@ -2,12 +2,12 @@
 from typing import List
 import uuid
 import datetime
-from fastapi import APIRouter, Header
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException
 
 from src.interfaces import InterfaceFilialService, InterfaceEventCountStorageService
-from .core import get_service_filial, get_service_count_event_storage
 from src.dto import TotalCountGrupZone
+from .core import get_service_filial, get_service_count_event_storage
+
 
 router = APIRouter()
 
