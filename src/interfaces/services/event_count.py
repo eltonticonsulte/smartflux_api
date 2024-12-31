@@ -6,6 +6,7 @@ from src.dto import (
     EventCountResponse,
     TotalCount,
     TotalCountGrupZone,
+    TotalCountGrupHour,
 )
 from uuid import UUID
 
@@ -25,4 +26,8 @@ class InterfaceEventCountService(ABC):
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int
     ) -> List[TotalCountGrupZone]:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
         raise NotImplementedError("Method not implemented")

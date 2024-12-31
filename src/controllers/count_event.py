@@ -14,6 +14,7 @@ from src.dto import (
     EventCountResponse,
     TotalCount,
     TotalCountGrupZone,
+    TotalCountGrupHour,
 )
 
 router = APIRouter()
@@ -79,5 +80,25 @@ async def get_data_filial_grup_zone(
 
     try:
         return count_event.get_count_by_filial_count_grup_zone(current_filial.filial_id)
+    except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get(
+    "/total/grup-hour", status_code=200, response_model=List[TotalCountGrupHour]
+)
+async def get_data_filial_grup_hour(
+    token: uuid.UUID = Header(...),
+    filial: InterfaceFilialService = Depends(get_service_filial),
+    count_event: InterfaceEventCountService = Depends(get_service_count_event),
+) -> List[TotalCountGrupHour]:
+    current_filial = None
+    try:
+        current_filial = filial.get_by_token(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+
+    try:
+        return count_event.get_count_by_filial_grup_hour(current_filial.filial_id)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

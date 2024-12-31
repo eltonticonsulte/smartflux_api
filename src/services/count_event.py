@@ -3,7 +3,13 @@ from typing import List
 import uuid
 import logging
 from ..interfaces import InterfaceEventCountService
-from ..dto import EventCountRequest, EventCountResponse, TotalCount, TotalCountGrupZone
+from ..dto import (
+    EventCountRequest,
+    EventCountResponse,
+    TotalCount,
+    TotalCountGrupZone,
+    TotalCountGrupHour,
+)
 from ..mappers import CountEventMapper
 from ..repository import CountEventRepository
 
@@ -61,3 +67,6 @@ class CountEventServices(InterfaceEventCountService):
         self, filial_id: int
     ) -> List[TotalCountGrupZone]:
         return self.repository.count_by_filial_count_grup_zone(filial_id)
+
+    def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
+        return self.repository.count_by_filial_grup_hour(filial_id)
