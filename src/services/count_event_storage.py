@@ -2,8 +2,7 @@
 import logging
 from datetime import date
 from ..interfaces import InterfaceEventCountStorageService
-from ..dto import EventCountRequest, EventCountResponse, TotalCountGrupZone
-from ..mappers import CountEventMapper
+from ..dto import TotalCountGrupZone
 from ..repository import CountEventStorageRepository
 
 

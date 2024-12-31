@@ -2,7 +2,7 @@
 import logging
 from uuid import UUID
 from typing import List
-from .base_repository import BaseRepository
+
 from ..database import Filial, DBConnectionHandler, IntegrityError
 
 
@@ -11,7 +11,7 @@ class RepositoryFilialExecption(Exception):
         super().__init__(message)
 
 
-class FilialRepository(BaseRepository):
+class FilialRepository:
     def __init__(self):
         self.log = logging.getLogger(__name__)
 

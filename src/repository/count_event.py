@@ -3,7 +3,6 @@ from typing import List
 from datetime import datetime
 from sqlalchemy import func
 from ..database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
-from .base_repository import BaseRepository
 from ..dto import TotalCount, TotalCountGrupZone, TotalCountGrupHour
 
 
@@ -12,24 +11,24 @@ class RepositoryCountEventException(Exception):
         super().__init__(message)
 
 
-class CountEventRepository(BaseRepository):
+class CountEventRepository:
     def __init__(self):
         pass
 
     def create_all(self, events: List[EventCountTemp]):
-        with DBConnectionHandler() as db:
+        with DBConnectionHandler() as session:
             try:
-                db.bulk_save_objects(events)
-                db.commit()
+                session.bulk_save_objects(events)
+                session.commit()
             except Exception as error:
-                db.rollback()
+                session.rollback()
                 raise error
 
     def count_by_filial(self, filial_id: int) -> TotalCount:
-        with DBConnectionHandler() as db:
+        with DBConnectionHandler() as session:
             try:
                 count = (
-                    db.query(
+                    session.query(
                         func.sum(EventCountTemp.count_in).label("total_count_in"),
                         func.sum(EventCountTemp.count_out).label("total_count_out"),
                     )
@@ -43,16 +42,16 @@ class CountEventRepository(BaseRepository):
                     total_count_out=count.total_count_out,
                 )
             except Exception as error:
-                db.rollback()
+                session.rollback()
                 raise error
 
     def count_by_filial_count_grup_zone(
         self, filial_id: int
     ) -> List[TotalCountGrupZone]:
-        with DBConnectionHandler() as db:
+        with DBConnectionHandler() as session:
             try:
                 counts = (
-                    db.query(
+                    session.query(
                         func.sum(EventCountTemp.count_in).label("total_count_in"),
                         func.sum(EventCountTemp.count_out).label("total_count_out"),
                         Zone.zone_id,
@@ -74,14 +73,14 @@ class CountEventRepository(BaseRepository):
                     for count in counts
                 ]
             except Exception as error:
-                db.rollback()
+                session.rollback()
                 raise error
 
     def count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
-        with DBConnectionHandler() as db:
+        with DBConnectionHandler() as session:
             try:
                 counts = (
-                    db.query(
+                    session.query(
                         func.sum(EventCountTemp.count_in).label("total_count_in"),
                         func.sum(EventCountTemp.count_out).label("total_count_out"),
                         func.date_trunc("hour", EventCountTemp.event_time).label(
@@ -104,5 +103,5 @@ class CountEventRepository(BaseRepository):
                     for count in counts
                 ]
             except Exception as error:
-                db.rollback()
+                session.rollback()
                 raise error

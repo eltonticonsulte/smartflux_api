@@ -4,13 +4,8 @@ from typing import List
 from datetime import date
 from ..database import (
     DBConnectionHandler,
-    EventCountTemp,
-    Camera,
-    Zone,
-    Filial,
     EventCount,
 )
-from .base_repository import BaseRepository
 from ..dto import TotalCountGrupZone
 
 
@@ -19,17 +14,17 @@ class RepositoryCountEventStorageException(Exception):
         super().__init__(message)
 
 
-class CountEventStorageRepository(BaseRepository):
+class CountEventStorageRepository:
     def __init__(self):
         pass
 
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int, date: date
     ) -> List[TotalCountGrupZone]:
-        with DBConnectionHandler() as db:
+        with DBConnectionHandler() as session:
             try:
                 counts = (
-                    db.query(
+                    session.query(
                         func.sum(EventCount.total_count_in).label("total_count_in"),
                         func.sum(EventCount.total_count_out).label("total_count_out"),
                         EventCount.zone_name,
@@ -48,5 +43,5 @@ class CountEventStorageRepository(BaseRepository):
                     for count in counts
                 ]
             except Exception as error:
-                db.rollback()
+                session.rollback()
                 raise error

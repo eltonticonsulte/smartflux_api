@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
 from typing import List
-from fastapi import HTTPException, status, Depends
-from jose import JWTError, jwt
-from core import get_settings
 from ..repository import ZoneRepository
 from ..dto import (
     CreateZoneRequest,

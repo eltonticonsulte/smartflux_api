@@ -3,7 +3,6 @@ import logging
 import uuid
 from typing import List
 from ..database import Camera, DBConnectionHandler, IntegrityError
-from .base_repository import BaseRepository
 from ..mappers import CameraMapper
 
 
@@ -12,7 +11,7 @@ class RepositoryCameraExeption(Exception):
         super().__init__(message)
 
 
-class CameraRepository(BaseRepository):
+class CameraRepository:
     def __init__(self):
         self.log = logging.getLogger(__name__)
 

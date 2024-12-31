@@ -22,17 +22,19 @@ class EmpresaServices:
         result = [EmpresaMapper.get_entity_to_response(empresa) for empresa in empresas]
         return result
 
-    def get_by_id(self, id: int) -> GetEmpresaResponse:
-        empresa = self.repository.get_by_id(id)
+    def get_by_id(self, empresa_id: int) -> GetEmpresaResponse:
+        empresa = self.repository.get_by_id(empresa_id)
         return EmpresaMapper.get_entity_to_response(empresa)
 
-    def update(self, id: int, empresa: UpdateEmpresaRequest) -> GetEmpresaResponse:
+    def update(
+        self, empresa_id: int, empresa: UpdateEmpresaRequest
+    ) -> GetEmpresaResponse:
         self.log.debug(f"update {empresa}")
-        empresa = EmpresaMapper.update_request_to_entity(id, empresa)
+        empresa = EmpresaMapper.update_request_to_entity(empresa_id, empresa)
         self.repository.update(empresa)
-        empresa_updated = self.repository.get_by_id(id)
+        empresa_updated = self.repository.get_by_id(empresa_id)
         self.log.debug(f"updated {empresa_updated}")
         return EmpresaMapper.get_entity_to_response(empresa_updated)
 
-    def delete(self, id: int):
-        self.repository.delete(id)
+    def delete(self, empresa_id: int):
+        self.repository.delete(empresa_id)

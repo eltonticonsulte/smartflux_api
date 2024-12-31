@@ -2,7 +2,6 @@
 from datetime import datetime, timedelta
 import logging
 import hmac
-from fastapi import HTTPException, status, Depends
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
@@ -11,7 +10,6 @@ from ..database import Usuario
 from ..dto import (
     AuthUserResponse,
     CreateUserRequest,
-    GetUserResponse,
     AuthUserRequest,
 )
 from ..mappers import UserMapper

@@ -2,7 +2,6 @@
 import logging
 from typing import List
 from ..database import Zone, DBConnectionHandler, IntegrityError
-from .base_repository import BaseRepository
 
 
 class RepositoryZoneExcption(Exception):
@@ -10,7 +9,7 @@ class RepositoryZoneExcption(Exception):
         self.message = message
 
 
-class ZoneRepository(BaseRepository):
+class ZoneRepository:
     def __init__(self):
         self.log = logging.getLogger(__name__)
 
