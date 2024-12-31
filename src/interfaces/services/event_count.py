@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
+from uuid import UUID
 from typing import List
 from src.dto import (
     EventCountRequest,
@@ -8,7 +9,6 @@ from src.dto import (
     TotalCountGrupZone,
     TotalCountGrupHour,
 )
-from uuid import UUID
 
 
 class InterfaceEventCountService(ABC):

@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import uuid
 from sqlalchemy import (
     Column,
     Integer,
@@ -10,12 +11,14 @@ from sqlalchemy import (
     ForeignKey,
     Index,
 )
+
 from sqlalchemy import Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
-from sqlalchemy.dialects.postgresql import UUID
-import uuid
+
+from sqlalchemy.dialects.postgresql import UUID as PGUUID
+
 from ..common import UserRole, CameraState
 
 Base = declarative_base()
@@ -40,7 +43,7 @@ class Empresa(Base):
     empresa_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
     token_api = Column(
-        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+        PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True, default="")
@@ -58,10 +61,10 @@ class Filial(Base):
     name = Column(String, nullable=False, unique=True)
     cnpj = Column(String, nullable=False)
     password_hash = Column(
-        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+        PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     token_api = Column(
-        UUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
+        PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True)
@@ -83,7 +86,7 @@ class Zone(Base):
 class Camera(Base):
     __tablename__ = "cameras"
     channel_id = Column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, doc="UUID da camera"
+        PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4, doc="UUID da camera"
     )
     name = Column(String, nullable=False)
     metadate = Column(JSON, nullable=True)
@@ -106,7 +109,7 @@ class EventCountTemp(Base):
     event_time = Column(DateTime, default=func.now())
     count_in = Column(Integer, default=0)
     count_out = Column(Integer, default=0)
-    channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
+    channel_id = Column(PGUUID, ForeignKey("cameras.channel_id"), nullable=False)
 
 
 class EventCount(Base):
@@ -117,7 +120,7 @@ class EventCount(Base):
     __tablename__ = "event_count"
 
     event_id = Column(Integer, primary_key=True, autoincrement=True)
-    channel_id = Column(UUID, ForeignKey("cameras.channel_id"), nullable=False)
+    channel_id = Column(PGUUID, ForeignKey("cameras.channel_id"), nullable=False)
     date = Column(Date, nullable=False)
     hour = Column(Integer, nullable=False)
     total_count_in = Column(Integer, default=0, nullable=False)

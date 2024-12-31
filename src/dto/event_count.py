@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from datetime import datetime
-from pydantic import BaseModel
-from typing import Optional
 import uuid
+from typing import Optional
+from pydantic import BaseModel
 
 
 class EventCountResponse(BaseModel):

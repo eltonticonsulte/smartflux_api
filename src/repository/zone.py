@@ -22,7 +22,9 @@ class ZoneRepository:
                 return zone.zone_id
             except IntegrityError as error:
                 self.log.error(error, exc_info=error)
-                raise RepositoryZoneExcption(f"Zone {zone.name} already exists")
+                raise RepositoryZoneExcption(
+                    f"Zone {zone.name} already exists"
+                ) from error
             except Exception as error:
                 self.log.critical(error)
                 raise error

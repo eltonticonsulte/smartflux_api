@@ -14,13 +14,15 @@ class InterfaceEmpresaService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_by_id(self, id: int) -> GetEmpresaResponse:
+    def get_by_id(self, empresa_id: int) -> GetEmpresaResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def update(self, id: int, empresa: CreateEmpresaRequest) -> GetEmpresaResponse:
+    def update(
+        self, empresa_id: int, empresa: CreateEmpresaRequest
+    ) -> GetEmpresaResponse:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def delete(self, id: int) -> None:
+    def delete(self, empresa_id: int) -> None:
         raise NotImplementedError("Method not implemented")

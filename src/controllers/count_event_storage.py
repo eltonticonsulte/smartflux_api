@@ -16,7 +16,7 @@ router = APIRouter()
     "/data/filial/grup-zone", status_code=200, response_model=List[TotalCountGrupZone]
 )
 async def get_data_filial_grup_zone(
-    date: datetime.date,
+    current_date: datetime.date,
     token: uuid.UUID = Header(...),
     filial: InterfaceFilialService = Depends(get_service_filial),
     storage: InterfaceEventCountStorageService = Depends(
@@ -33,6 +33,6 @@ async def get_data_filial_grup_zone(
         raise HTTPException(401, detail=str(error))
     filial_id = current_filial.filial_id
     try:
-        return storage.get_count_by_filial_count_grup_zone(filial_id, date)
+        return storage.get_count_by_filial_count_grup_zone(filial_id, current_date)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

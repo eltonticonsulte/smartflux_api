@@ -21,8 +21,10 @@ class FilialRepository:
                 session.add(filial)
                 session.commit()
                 return filial.filial_id
-            except IntegrityError:
-                raise RepositoryFilialExecption(f"Filial {filial.name} already exists")
+            except IntegrityError as error:
+                raise RepositoryFilialExecption(
+                    f"Filial {filial.name} already exists"
+                ) from error
             except Exception as error:
                 self.log.critical(error)
                 raise error

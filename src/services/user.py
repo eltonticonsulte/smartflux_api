@@ -57,8 +57,7 @@ class UserServices(InterfaceUserService):
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
 
-    @staticmethod
-    def current_user(token: str):
+    def current_user(self, token: str):
         try:
             payload = jwt.decode(
                 token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
@@ -67,7 +66,7 @@ class UserServices(InterfaceUserService):
             if username is None:
                 raise ServiceUserExecption("User Invalid")
         except JWTError as erros:
-            raise ServiceUserExecption(f"JWT Error: {erros}")
+            raise ServiceUserExecption(f"JWT Error: {erros}") from erros
         return username
 
     @staticmethod

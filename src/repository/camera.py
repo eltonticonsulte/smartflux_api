@@ -22,8 +22,10 @@ class CameraRepository:
                 session.add(camera)
                 session.commit()
                 return camera.channel_id
-            except IntegrityError:
-                raise RepositoryCameraExeption(f"Camera {camera.name} already exists")
+            except IntegrityError as error:
+                raise RepositoryCameraExeption(
+                    f"Camera {camera.name} already exists"
+                ) from error
             except Exception as error:
                 self.log.error(error)
                 raise error

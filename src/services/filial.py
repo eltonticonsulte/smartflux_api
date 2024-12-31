@@ -51,5 +51,5 @@ class FilialServices:
         result = self.repository.get_by_id(filial_id)
         return FilialMapper.get_entity_to_response(result)
 
-    def delete(self, id: int) -> None:
-        self.repository.delete(id)
+    def delete(self, filial_id: int) -> None:
+        self.repository.delete(filial_id)

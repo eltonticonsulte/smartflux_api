@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from typing import Optional, Type, Any
+from contextlib import contextmanager
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import SQLAlchemyError
 from core import get_settings
-from contextlib import contextmanager
 
 
 class DBConnectionHandler:

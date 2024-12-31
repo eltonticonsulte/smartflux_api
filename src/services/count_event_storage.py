@@ -12,6 +12,8 @@ class CountEventStorageServices(InterfaceEventCountStorageService):
         self.repository = repository
 
     def get_count_by_filial_count_grup_zone(
-        self, filial_id: int, date: date
+        self, filial_id: int, current_date: date
     ) -> TotalCountGrupZone:
-        return self.repository.get_count_by_filial_count_grup_zone(filial_id, date)
+        return self.repository.get_count_by_filial_count_grup_zone(
+            filial_id, current_date
+        )

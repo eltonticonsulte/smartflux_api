@@ -28,11 +28,11 @@ class ZoneServices(InterfaceZoneService):
         result = [ZoneMapper.get_entity_to_response(zone) for zone in zonas]
         return result
 
-    def update(self, id: int, request: UpdateZoneRequest) -> GetZoneResponse:
-        zone = ZoneMapper.update_request_to_entity(id, request)
+    def update(self, zone_id: int, request: UpdateZoneRequest) -> GetZoneResponse:
+        zone = ZoneMapper.update_request_to_entity(zone_id, request)
         self.repository.update(zone)
-        result = self.repository.get_by_id(id)
+        result = self.repository.get_by_id(zone_id)
         return ZoneMapper.get_entity_to_response(result)
 
-    def delete(self, id: int) -> None:
-        self.repository.delete(id)
+    def delete(self, zone_id: int) -> None:
+        self.repository.delete(zone_id)

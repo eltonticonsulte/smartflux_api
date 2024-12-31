@@ -36,8 +36,8 @@ class UserRepository:
                     .one_or_none()
                 )
                 return user
-            except NoResultFound:
-                raise RepositoryAuthExecption(f'User "{username}" not found')
+            except NoResultFound as error:
+                raise RepositoryAuthExecption(f'User "{username}" not found') from error
             except Exception as error:
                 session.rollback()
                 raise error

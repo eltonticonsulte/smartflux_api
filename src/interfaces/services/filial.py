@@ -31,5 +31,5 @@ class InterfaceFilialService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def delete(self, id: int) -> None:
+    def delete(self, filial_id: int) -> None:
         raise NotImplementedError("Method not implemented")

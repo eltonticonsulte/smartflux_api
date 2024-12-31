@@ -23,8 +23,10 @@ class EmpresaRepository:
                 session.add(empresa)
                 session.commit()
                 return empresa.empresa_id
-            except IntegrityError:
-                raise RepositoryEmpresaExecption(f"Empresa {empresa} already exists")
+            except IntegrityError as error:
+                raise RepositoryEmpresaExecption(
+                    f"Empresa {empresa} already exists"
+                ) from error
             except Exception as error:
                 self.log.critical(error, exc_info=error)
                 session.rollback()
@@ -48,8 +50,10 @@ class EmpresaRepository:
                     .one_or_none()
                 )
                 return empresa
-            except NoResultFound:
-                raise RepositoryEmpresaExecption(f'User "{empresa_id}" not found')
+            except NoResultFound as error:
+                raise RepositoryEmpresaExecption(
+                    f'User "{empresa_id}" not found'
+                ) from error
             except Exception as error:
                 session.rollback()
                 raise error
@@ -61,8 +65,8 @@ class EmpresaRepository:
                     session.query(Empresa).filter(Empresa.name == name).one_or_none()
                 )
                 return empresa
-        except NoResultFound:
-            raise RepositoryEmpresaExecption(f'User "{name}" not found')
+        except NoResultFound as error:
+            raise RepositoryEmpresaExecption(f'User "{name}" not found') from error
         except Exception as error:
             session.rollback()
             raise error
