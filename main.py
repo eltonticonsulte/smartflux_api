@@ -27,25 +27,3 @@ log.info(f"smartflux_api version: {__version__}")
 @app.get("/")
 async def get():
     return {"status": True, "message": "SmartFlux API IA", "version": __version__}
-
-
-from fastapi import APIRouter, Header, Query, Body
-from pydantic import BaseModel
-
-
-class LoginData(BaseModel):
-    username: str
-    password: str
-
-
-@app.post("/login")
-async def login(
-    x_token: str = Header(...),
-    remember_me: bool = Query(False),
-    credentials: LoginData = Body(...),
-):
-    return {
-        "token": x_token,
-        "remember_me": remember_me,
-        "username": credentials.username,
-    }

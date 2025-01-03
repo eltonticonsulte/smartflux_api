@@ -7,7 +7,7 @@ services:
         container_name: smartflux_api
         hostname: smartflux_api
         ports:
-            - 8501:8000
+            - 8501:8002
         volumes:
             - ./log:/app/log
         networks:
