@@ -4,7 +4,6 @@ from src.mappers.empresa import EmpresaMapper
 from src.database import Empresa
 from src.dto import (
     CreateEmpresaRequest,
-    CreateEmpresaResponse,
     GetEmpresaResponse,
     UpdateEmpresaRequest,
 )

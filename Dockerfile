@@ -11,7 +11,6 @@ COPY utils utils
 COPY core core
 COPY src src
 COPY main.py main.py
-COPY .env .env
 RUN chmod -R 777 /app
 EXPOSE 8002
 HEALTHCHECK CMD curl --fail http://localhost:8002/_stcore/health
