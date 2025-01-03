@@ -6,7 +6,7 @@ from utils import LoggerConfig
 from src import base_ruter
 
 
-__version__ = "0.0.0"
+__version__ = "0.0.1"
 os.environ["__VERSION__"] = __version__
 
 LoggerConfig()
