@@ -36,6 +36,9 @@ class Usuario(Base):
     data_criacao = Column(DateTime, default=func.now())
     ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
+    def __repr__(self):
+        return f"Usuario(id={self.id}, username={self.username}, is_active={self.is_active}, role={self.role}, data_criacao={self.data_criacao}, ultima_modificacao={self.ultima_modificacao})"
+
 
 class Empresa(Base):
     __tablename__ = "empresas"

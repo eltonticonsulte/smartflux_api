@@ -2,7 +2,7 @@
 
 import logging
 from logging import handlers
-from colorlog import ColoredFormatter
+
 import os
 from os import path, mkdir
 
@@ -42,7 +42,7 @@ class LoggerConfig:
             backupCount=4,
             encoding="utf-8",
         )
-        formatter = ColoredFormatter(
+        formatter = logging.Formatter(
             "%(levelname)s | %(asctime)s | %(name)s | %(pathname)s:%(lineno)d | %(message)s "
         )
         file_handler.setLevel(self.file_level)
@@ -52,12 +52,12 @@ class LoggerConfig:
     def __configure_console(self):
         """log configuration for console, this format creates jump link to log location"""
 
-        # formatter = logging.Formatter(
-        #    "%(levelname)s: %(asctime)s: %(pathname)s:%(lineno)d  %(message)s"
-        # )
-        formatter = ColoredFormatter(
-            "%(log_color)s%(levelname)-8s%(reset)s | %(log_color)s%(asctime)s%(reset)s  | %(log_color)s%(name)s%(reset)s | %(log_color)s%(pathname)s:%(log_color)s%(lineno)d%(reset)s | %(log_color)s%(message)s%(reset)s"
+        formatter = logging.Formatter(
+            "%(levelname)s: %(asctime)s: %(name)s: %(pathname)s:%(lineno)d  %(message)s"
         )
+        # formatter = ColoredFormatter(
+        #    "%(log_color)s%(levelname)-8s%(reset)s | %(log_color)s%(asctime)s%(reset)s  | %(log_color)s%(name)s%(reset)s | %(log_color)s%(pathname)s:%(log_color)s%(lineno)d%(reset)s | %(log_color)s%(message)s%(reset)s"
+        # )
         stream_handler = logging.StreamHandler()
         stream_handler.addFilter(PackagePathFilter())
         stream_handler.setLevel(self.console_level)
