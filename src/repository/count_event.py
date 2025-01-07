@@ -4,7 +4,7 @@ from uuid import UUID
 from datetime import datetime
 from sqlalchemy import func
 from ..database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
-from ..dto import TotalCount, TotalCountGrupZone, TotalCountGrupHour
+from ..dto import TotalCountGrupZone, TotalCountGrupHour
 
 
 class RepositoryCountEventException(Exception):
@@ -36,7 +36,7 @@ class CountEventRepository:
                 session.rollback()
                 raise error
 
-    def count_by_filial(self, filial_id: int) -> TotalCount:
+    def count_by_filial(self, filial_id: int) -> dict:
         with DBConnectionHandler() as session:
             try:
                 count = (
@@ -50,10 +50,11 @@ class CountEventRepository:
                     .filter(Filial.filial_id == filial_id)
                     .one()
                 )
-                return TotalCount(
-                    total_count_in=count.total_count_in,
-                    total_count_out=count.total_count_out,
-                )
+                return {
+                    "total_count_in": count.total_count_in,
+                    "total_count_out": count.total_count_out,
+                }
+
             except Exception as error:
                 session.rollback()
                 raise error

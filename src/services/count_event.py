@@ -61,7 +61,14 @@ class CountEventServices(InterfaceEventCountService):
         return data_success, datas_fail
 
     def get_count_by_filial(self, filial_id: int) -> TotalCount:
-        return self.repository.count_by_filial(filial_id)
+        data = self.repository.count_by_filial(filial_id)
+        count_in = data.get("total_count_in", 0)
+        count_out = data.get("total_count_out", 0)
+
+        return TotalCount(
+            total_count_in=count_in if count_in is not None else 0,
+            total_count_out=count_out if count_out is not None else 0,
+        )
 
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int
