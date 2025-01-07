@@ -7,4 +7,5 @@ from .services import (
     InterfaceZoneService,
     InterfaceEventCountService,
     InterfaceEventCountStorageService,
+    InterfaceTaskUpdateViewService,
 )

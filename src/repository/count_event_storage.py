@@ -18,6 +18,15 @@ class CountEventStorageRepository:
     def __init__(self):
         pass
 
+    def create_all(self, events: List[EventCount]):
+        with DBConnectionHandler() as session:
+            try:
+                session.bulk_save_objects(events)
+                session.commit()
+            except Exception as error:
+                session.rollback()
+                raise error
+
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int, current_date: date
     ) -> List[TotalCountGrupZone]:

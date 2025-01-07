@@ -7,3 +7,4 @@ from .filial import InterfaceFilialService
 from .user import InterfaceUserService
 from .zone import InterfaceZoneService
 from .event_count_storage import InterfaceEventCountStorageService
+from .task_update_view import InterfaceTaskUpdateViewService

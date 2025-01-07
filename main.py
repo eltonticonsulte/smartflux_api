@@ -3,9 +3,9 @@ import logging
 import os
 from fastapi import FastAPI
 from utils import LoggerConfig
-from src import base_ruter
 from core import get_settings
 from src.database import DBConnectionHandler
+from src.compose import create_app
 
 __version__ = "0.0.1"
 os.environ["__VERSION__"] = __version__
@@ -17,14 +17,10 @@ log = logging.getLogger("smartflux_api")
 logging.getLogger("urllib3").setLevel(logging.ERROR)
 logging.getLogger("python_multipart").setLevel(logging.ERROR)
 
+app = create_app(log, __version__)
 
-app = FastAPI(title=get_settings().PROJECT_NAME, version=__version__)
-app.include_router(base_ruter, prefix="/api")
 
 log.info(f"smartflux_api version: {__version__}")
-
-with DBConnectionHandler() as session:
-    log.info(f"Connected to database: {get_settings().view_connection}")
 
 
 @app.get("/")
