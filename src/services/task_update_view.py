@@ -20,7 +20,7 @@ class TaskUpdateViewService(InterfaceTaskUpdateViewService):
         self.repo_event = repo_event
 
     def update_view(self):
-        agregates = self.repo_view._query_aggregate()
+        agregates = self.repo_view.fetch_aggregate()
         result_channel_ids = [agre.channel_id for agre in agregates]
 
         event_counts = [
