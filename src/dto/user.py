@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from pydantic import BaseModel
-from ..common import UserRole
+from ..enums import UserRole
 
 
 class AuthUserResponse(BaseModel):

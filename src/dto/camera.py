@@ -2,7 +2,7 @@
 from uuid import UUID
 from typing import Optional
 from pydantic import BaseModel
-from ..common import CameraState
+from ..enums import CameraState
 
 
 class CreateCameraRequest(BaseModel):
