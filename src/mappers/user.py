@@ -24,7 +24,7 @@ class UserMapper:
         )
 
     @staticmethod
-    def get_entity_to_response(user: Usuario) -> int:
+    def get_entity_to_response(user: Usuario) -> GetUserResponse:
         return GetUserResponse(username=user.username, role=user.role)
 
     @staticmethod

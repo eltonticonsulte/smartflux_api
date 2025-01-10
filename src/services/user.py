@@ -8,11 +8,7 @@ from core import get_settings
 from ..repository import UserRepository, PermissaoRepository
 from ..database import Usuario
 from ..enums import UserRole
-from ..dto import (
-    AuthUserResponse,
-    CreateUserRequest,
-    AuthUserRequest,
-)
+from ..dto import AuthUserResponse, CreateUserRequest, AuthUserRequest, GetUserResponse
 from ..mappers import UserMapper
 from ..interfaces import InterfaceUserService
 
@@ -31,6 +27,7 @@ class UserServices(InterfaceUserService):
         self.log = logging.getLogger(__name__)
 
     def create(self, user: CreateUserRequest) -> int:
+        self.log.debug(f"create_user {user}")
         entity = UserMapper.create_user_to_entity(user)
         user_id = self.repo_user.create(entity)
         new_user = self.repo_user.get_by_id(user_id)
@@ -40,6 +37,7 @@ class UserServices(InterfaceUserService):
         password_hash = UserMapper.password_to_hash(request.password)
         user: Usuario = self.repo_user.get_user_by_name(request.username)
         self.log.debug(f"auth_user {user}")
+
         if not user:
             raise ServiceUserExecption("User not found")
         if not self.__compare_hash(user.password_hash, password_hash):
@@ -47,19 +45,21 @@ class UserServices(InterfaceUserService):
         if not user.is_active:
             raise ServiceUserExecption("Inactive user")
 
-        new_token = UserServices.create_access_token(request.username)
-
-        return AuthUserResponse(
+        user_result = AuthUserResponse(
             username=user.username,
-            access_token=new_token,
+            access_token="gdfff",
             token_type="bearer",
             role=user.role,
         )
+        self.log.critical(user_result)
+        UserServices.create_access_token(user_result)
+
+        return user_result
 
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
 
-    def current_user(self, token: str):
+    def current_user(self, token: str) -> GetUserResponse:
         try:
             payload = jwt.decode(
                 token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
@@ -67,21 +67,23 @@ class UserServices(InterfaceUserService):
             username: str = payload.get("sub")
             if username is None:
                 raise ServiceUserExecption("User Invalid")
+            user = self.repo_user.get_user_by_name(username)
+            return UserMapper.get_entity_to_response(user)
         except JWTError as erros:
             raise ServiceUserExecption(f"JWT Error: {erros}") from erros
-        return username
 
     @staticmethod
-    def create_access_token(user_name: str) -> str:
-        to_encode = {"sub": user_name}
+    def create_access_token(user: AuthUserRequest) -> None:
+        to_encode = {"sub": user.username}
         expire = datetime.utcnow() + timedelta(
             minutes=get_settings().ACCESS_TOKEN_EXPIRE_MINUTES
         )
 
         to_encode.update({"exp": expire})
-        return jwt.encode(
+        result_token = jwt.encode(
             to_encode, get_settings().SECRET_KEY, algorithm=get_settings().ALGORITHM
         )
+        user.access_token = result_token
 
     def verificar_acesso(usuario, filial_id=None, empresa_id=None):
         if usuario.role == UserRole.ADMIN:

@@ -24,3 +24,12 @@ class CreateUserRequest(BaseModel):
 class GetUserResponse(BaseModel):
     username: str
     role: UserRole
+
+    def is_admin(self):
+        return self.role == UserRole.ADMIN
+
+    def is_empresa(self):
+        return self.role == UserRole.USER_EMPRESA
+
+    def is_filial(self):
+        return self.role == UserRole.USER_FILIAL

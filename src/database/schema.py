@@ -31,7 +31,7 @@ class Usuario(Base):
     username = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    role = Column(Enum(UserRole, name="user_role"), default=UserRole.USER_FILIAL)
+    role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)
 
     data_criacao = Column(DateTime, default=func.now())
     ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())

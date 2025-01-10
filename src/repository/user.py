@@ -21,7 +21,7 @@ class UserRepository:
             try:
                 session.add(entity)
                 session.commit()
-                return entity.id
+                return entity.user_id
             except Exception as error:
                 session.rollback()
                 raise error
@@ -46,7 +46,9 @@ class UserRepository:
         with DBConnectionHandler() as session:
             try:
                 user = (
-                    session.query(Usuario).filter(Usuario.id == user_id).one_or_none()
+                    session.query(Usuario)
+                    .filter(Usuario.user_id == user_id)
+                    .one_or_none()
                 )
                 return user
             except NoResultFound:

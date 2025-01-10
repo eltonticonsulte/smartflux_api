@@ -2,7 +2,7 @@
 from enum import Enum
 
 
-class UserRole(Enum):
+class UserRole(str, Enum):
     ADMIN = "admin"
-    USER_EMPRESA = "empresa"
-    USER_FILIAL = "filial"
+    EMPRESA = "empresa"
+    FILIAL = "filial"

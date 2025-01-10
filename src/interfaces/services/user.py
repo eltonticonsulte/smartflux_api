@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from src.dto import AuthUserRequest, AuthUserResponse
+from src.dto import AuthUserRequest, AuthUserResponse, CreateUserRequest
 
 
 class InterfaceUserService(ABC):
@@ -9,5 +9,9 @@ class InterfaceUserService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def current_user(self, token: str):
+    def current_user(self, token: str) -> AuthUserResponse:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def create(self, request: CreateUserRequest) -> AuthUserResponse:
         raise NotImplementedError("Method not implemented")
