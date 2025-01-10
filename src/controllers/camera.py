@@ -10,6 +10,7 @@ from src.dto import (
     UpdateCameraRequest,
 )
 from .core import auth2_admin, get_service_camera, get_service_user
+from ..enums import UserRole
 
 router = APIRouter()
 
@@ -23,6 +24,7 @@ async def create(
 ):
     try:
         auth.current_user(token)
+        auth.premissao(UserRole.ADMIN)
     except Exception as error:
         raise HTTPException(401, detail=str(error))
     try:

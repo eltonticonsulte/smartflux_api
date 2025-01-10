@@ -21,7 +21,7 @@ def create_user_admin():
 if __name__ == "__main__":
 
     print("Criando tabelas...", get_settings().DATABASE_URL)
-    engine = DBConnectionHandler.get_engine(get_settings().DATABASE_URL)
-    Usuario.metadata.create_all(engine)
+    # engine = DBConnectionHandler.get_engine(get_settings().DATABASE_URL)
+    # Usuario.metadata.create_all(engine)
     print("Tabelas criadas com sucesso!")
-    print("Admin criado com sucesso!", create_user_admin())
+    # print("Admin criado com sucesso!", create_user_admin())

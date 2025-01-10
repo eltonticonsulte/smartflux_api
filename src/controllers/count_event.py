@@ -7,6 +7,7 @@ from src.interfaces import (
     InterfaceFilialService,
     InterfaceCameraService,
     InterfaceEventCountService,
+    InterfaceUserService,
 )
 
 from src.dto import (
@@ -16,7 +17,13 @@ from src.dto import (
     TotalCountGrupZone,
     TotalCountGrupHour,
 )
-from .core import get_service_filial, get_service_camera, get_service_count_event
+from .core import (
+    get_service_filial,
+    get_service_camera,
+    get_service_count_event,
+    auth2_admin,
+    get_service_user,
+)
 
 router = APIRouter()
 
@@ -87,12 +94,14 @@ async def get_data_filial_grup_zone(
     "/total/grup-hour", status_code=200, response_model=List[TotalCountGrupHour]
 )
 async def get_data_filial_grup_hour(
-    token: uuid.UUID = Header(...),
+    token: uuid.UUID = Depends(auth2_admin),
+    auth: InterfaceUserService = Depends(get_service_user),
     filial: InterfaceFilialService = Depends(get_service_filial),
     count_event: InterfaceEventCountService = Depends(get_service_count_event),
 ) -> List[TotalCountGrupHour]:
     current_filial = None
     try:
+        auth.current_user(token)
         current_filial = filial.get_by_token(token)
     except Exception as error:
         raise HTTPException(401, detail=str(error))

@@ -10,4 +10,5 @@ from .schema import (
     Empresa,
     UserRole,
     Usuario,
+    PermissaoAcesso,
 )

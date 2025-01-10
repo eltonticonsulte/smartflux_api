@@ -38,7 +38,8 @@ def create_app(log, version):
     app = FastAPI(title=get_settings().PROJECT_NAME, version=version, lifespan=lifespan)
     app.include_router(base_ruter, prefix="/api")
     trigger = CronTrigger(
-        minute="*",
+        hour=0,
+        minute=0,
     )
     scheduler.add_job(event, trigger, max_instances=1)
 

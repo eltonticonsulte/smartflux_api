@@ -19,7 +19,7 @@ from sqlalchemy.sql import func
 
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 
-from ..common import UserRole, CameraState
+from ..enums import UserRole, CameraState
 
 Base = declarative_base()
 
@@ -27,17 +27,36 @@ Base = declarative_base()
 class Usuario(Base):
     __tablename__ = "usuarios"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, primary_key=True, autoincrement=True)
     username = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)
+    role = Column(Enum(UserRole, name="user_role"), default=UserRole.USER_FILIAL)
 
     data_criacao = Column(DateTime, default=func.now())
     ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
 
     def __repr__(self):
-        return f"Usuario(id={self.id}, username={self.username}, is_active={self.is_active}, role={self.role}, data_criacao={self.data_criacao}, ultima_modificacao={self.ultima_modificacao})"
+        return f"Usuario(user_id={self.user_id}, username={self.username}, is_active={self.is_active}, role={self.role}, data_criacao={self.data_criacao}, ultima_modificacao={self.ultima_modificacao})"
+
+
+class PermissaoAcesso(Base):
+    __tablename__ = "permissoes_acesso"
+
+    permissao_id = Column(Integer, primary_key=True, autoincrement=True)
+    user_id = Column(Integer, ForeignKey("usuarios.user_id"), nullable=False)
+    empresa_id = Column(Integer, ForeignKey("empresas.empresa_id"), nullable=True)
+    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=True)
+
+    user = relationship("Usuario", backref="permissoes")
+    empresa = relationship("Empresa", backref="permissoes")
+    filial = relationship("Filial", backref="permissoes")
+
+    def __repr__(self):
+        return (
+            f"PermissaoAcesso(permissao_id={self.permissao_id}, user_id={self.user_id}, empresa_id={self.empresa_id}, "
+            f"filial_id={self.filial_id})"
+        )
 
 
 class Empresa(Base):
@@ -45,9 +64,6 @@ class Empresa(Base):
 
     empresa_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
-    token_api = Column(
-        PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
-    )
     is_active = Column(Boolean, default=True)
     description = Column(String, nullable=True, default="")
     data_criacao = Column(DateTime, default=func.now())
@@ -63,9 +79,6 @@ class Filial(Base):
     filial_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String, nullable=False, unique=True)
     cnpj = Column(String, nullable=False)
-    password_hash = Column(
-        PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
-    )
     token_api = Column(
         PGUUID(as_uuid=True), default=uuid.uuid4, unique=True, nullable=False
     )

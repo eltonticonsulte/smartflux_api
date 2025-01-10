@@ -5,8 +5,9 @@ import hmac
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
-from ..repository import UserRepository
+from ..repository import UserRepository, PermissaoRepository
 from ..database import Usuario
+from ..enums import UserRole
 from ..dto import (
     AuthUserResponse,
     CreateUserRequest,
@@ -24,19 +25,20 @@ class ServiceUserExecption(Exception):
 
 
 class UserServices(InterfaceUserService):
-    def __init__(self, repository: UserRepository):
-        self.repository = repository
+    def __init__(self, repo_user: UserRepository, repo_permissao: PermissaoRepository):
+        self.repo_user = repo_user
+        self.repo_permissao = repo_permissao
         self.log = logging.getLogger(__name__)
 
     def create(self, user: CreateUserRequest) -> int:
         entity = UserMapper.create_user_to_entity(user)
-        user_id = self.repository.create(entity)
-        new_user = self.repository.get_by_id(user_id)
+        user_id = self.repo_user.create(entity)
+        new_user = self.repo_user.get_by_id(user_id)
         return UserMapper.get_entity_to_response(new_user)
 
     def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
         password_hash = UserMapper.password_to_hash(request.password)
-        user: Usuario = self.repository.get_user_by_name(request.username)
+        user: Usuario = self.repo_user.get_user_by_name(request.username)
         self.log.debug(f"auth_user {user}")
         if not user:
             raise ServiceUserExecption("User not found")
@@ -80,3 +82,31 @@ class UserServices(InterfaceUserService):
         return jwt.encode(
             to_encode, get_settings().SECRET_KEY, algorithm=get_settings().ALGORITHM
         )
+
+    def verificar_acesso(usuario, filial_id=None, empresa_id=None):
+        if usuario.role == UserRole.ADMIN:
+            # Admin tem acesso total
+            return True
+
+        if usuario.role == UserRole.USER_EMPRESA:
+            self.repo_permissao.fetch_by
+            permissoes = (
+                session.query(PermissaoAcesso)
+                .filter_by(user_id=usuario.id, empresa_id=empresa_id)
+                .all()
+            )
+            if permissoes:
+                return True  # Acesso permitido às filiais da empresa
+            raise PermissionError("Usuário não tem acesso a esta empresa.")
+
+        if usuario.role == UserRole.USER_FILIAL:
+            permissoes = (
+                session.query(PermissaoAcesso)
+                .filter_by(user_id=usuario.id, filial_id=filial_id)
+                .first()
+            )
+            if permissoes:
+                return True  # Acesso permitido à filial específica
+            raise PermissionError("Usuário não tem acesso a esta filial.")
+
+        raise PermissionError("Permissão insuficiente.")

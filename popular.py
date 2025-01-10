@@ -153,9 +153,9 @@ def clear_all():
 
 
 if __name__ == "__main__":
-    clear_all()
-    popular_banco()
+    # clear_all()
+    # popular_banco()
     start = time.time()
-    pouplar_evento_day(10000)
+    pouplar_evento_day(10)
     end = time.time()
     print("timer", end - start)
