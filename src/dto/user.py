@@ -26,11 +26,12 @@ class GetUserResponse(BaseModel):
     username: str
     role: UserRule
 
-    def is_admin(self):
-        return self.role == UserRule.ADMIN
 
-    def is_empresa(self):
-        return self.role == UserRule.EMPRESA
-
-    def is_filial(self):
-        return self.role == UserRule.FILIAL
+class UserPermissionAccessDTO(BaseModel):
+    permission_id: int
+    empresa_id: int
+    filial_id: int
+    user_id: int
+    rule: UserRule
+    username: str
+    is_active: bool

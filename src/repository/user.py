@@ -2,10 +2,7 @@
 import logging
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
-from ..database import (
-    Usuario,
-    DBConnectionHandler,
-)
+from src.database import Usuario, DBConnectionHandler, PermissaoAcesso
 
 
 class RepositoryAuthExecption(Exception):
@@ -66,3 +63,11 @@ class UserRepository:
             except Exception as error:
                 session.rollback()
                 raise error
+
+    def fetch_permisso_by_user(self, user_id: int) -> PermissaoAcesso:
+        with DBConnectionHandler() as session:
+            return (
+                session.query(PermissaoAcesso)
+                .filter(PermissaoAcesso.user_id == user_id)
+                .first()
+            )

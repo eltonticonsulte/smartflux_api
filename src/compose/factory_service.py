@@ -8,7 +8,6 @@ from src.repository import (
     CountEventRepository,
     CountEventStorageRepository,
     TaskUpdateViewRepository,
-    PermissaoRepository,
 )
 from src.services import (
     CameraServices,
@@ -41,7 +40,7 @@ class FactoryService:
         return CameraServices(CameraRepository())
 
     def create_user(self) -> InterfaceUserService:
-        return UserServices(UserRepository(), PermissaoRepository())
+        return UserServices(UserRepository())
 
     def create_empresa(self) -> InterfaceEmpresaService:
         return EmpresaServices(EmpresaRepository())

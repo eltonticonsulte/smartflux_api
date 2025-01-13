@@ -9,7 +9,7 @@ from ..dto import (
     CreateEmpresaRequest,
     GetEmpresaResponse,
     UpdateEmpresaRequest,
-    AuthUserResponse,
+    UserPermissionAccessDTO,
 )
 
 router = APIRouter()
@@ -19,7 +19,7 @@ router = APIRouter()
 async def create(
     request: CreateEmpresaRequest,
     service: InterfaceEmpresaService = Depends(get_service_empresa),
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
 ):
     try:
         result: GetEmpresaResponse = service.create(request)
@@ -30,7 +30,7 @@ async def create(
 
 @router.get("/all", status_code=200, response_model=List[GetEmpresaResponse])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
 ):
 
@@ -44,7 +44,7 @@ async def get_all(
 @router.get("/get/{empresa_id}", status_code=200, response_model=GetEmpresaResponse)
 async def get_by_id(
     empresa_id: int,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
 ):
     try:
@@ -58,7 +58,7 @@ async def get_by_id(
 async def update(
     empresa_id: int,
     request: UpdateEmpresaRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
 ):
 
@@ -72,7 +72,7 @@ async def update(
 @router.delete("/delete/{empresa_id}", status_code=200)
 async def delete(
     empresa_id: int,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceEmpresaService = Depends(get_service_empresa),
 ):
     try:

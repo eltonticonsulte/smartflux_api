@@ -4,13 +4,13 @@ from typing import List
 from typing_extensions import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService
 from src.dto import (
     AuthUserResponse,
     AuthUserRequest,
     CreateUserRequest,
     GetUserResponse,
+    UserPermissionAccessDTO,
 )
 from src.enums import UserRule
 from .core import auth2_admin, get_service_user, rule_require
@@ -38,7 +38,7 @@ async def get_login(
 @router.post("/create", status_code=200)
 async def create(
     request: CreateUserRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
@@ -50,13 +50,15 @@ async def create(
 
 
 @router.get("/status", status_code=200, response_model=GetUserResponse)
-async def get_status(user: AuthUserResponse = Depends(rule_require(UserRule.FILIAL))):
+async def get_status(
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+):
     return user
 
 
 @router.get("/all", status_code=200, response_model=List[GetUserResponse])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:

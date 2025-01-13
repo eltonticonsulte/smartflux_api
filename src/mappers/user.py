@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 import hashlib
-from ..database import Usuario
-from ..dto import CreateUserRequest, AuthUserResponse, GetUserResponse
+from src.database import Usuario, PermissaoAcesso
+from src.dto import (
+    CreateUserRequest,
+    AuthUserResponse,
+    GetUserResponse,
+    UserPermissionAccessDTO,
+)
 
 
 class UserMapper:
@@ -33,3 +38,17 @@ class UserMapper:
         return hashlib.pbkdf2_hmac(
             "sha256", password.encode("utf-8"), salt.encode("utf-8"), 100000
         ).hex()
+
+    @staticmethod
+    def to_permissao(
+        user: Usuario, permissao: PermissaoAcesso
+    ) -> UserPermissionAccessDTO:
+        return UserPermissionAccessDTO(
+            permission_id=permissao.permissao_id,
+            user_id=permissao.user_id,
+            empresa_id=permissao.empresa_id,
+            filial_id=permissao.filial_id,
+            rule=user.role,
+            username=user.username,
+            is_active=user.is_active,
+        )

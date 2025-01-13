@@ -19,6 +19,10 @@ class InterfaceEventCountService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def get_filial_by_user_id(self, filial_id: int) -> int:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def get_count_by_filial(self, filial_id: int) -> TotalCount:
         raise NotImplementedError("Method not implemented")
 

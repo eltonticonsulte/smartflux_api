@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from typing import List
-import uuid
 import datetime
 from fastapi import APIRouter, Header, Depends, HTTPException
 
-from src.interfaces import InterfaceFilialService, InterfaceEventCountStorageService
-from src.dto import TotalCountGrupZone
-from .core import get_service_filial, get_service_count_event_storage
+from src.interfaces import InterfaceEventCountStorageService
+from src.dto import TotalCountGrupZone, UserPermissionAccessDTO
+from src.enums import UserRule
+from .core import get_service_count_event_storage, rule_require
 
 
 router = APIRouter()
@@ -17,8 +17,7 @@ router = APIRouter()
 )
 async def get_data_filial_grup_zone(
     current_date: datetime.date,
-    token: uuid.UUID = Header(...),
-    filial: InterfaceFilialService = Depends(get_service_filial),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceEventCountStorageService = Depends(
         get_service_count_event_storage
     ),
@@ -26,13 +25,8 @@ async def get_data_filial_grup_zone(
     """
     busca dados de uma filial agrupados port zona
     """
-    current_filial = None
+
     try:
-        current_filial = filial.get_by_token(token)
-    except Exception as error:
-        raise HTTPException(401, detail=str(error))
-    filial_id = current_filial.filial_id
-    try:
-        return storage.get_count_by_filial_count_grup_zone(filial_id, current_date)
+        return storage.get_count_by_filial_count_grup_zone(user.filial_id, current_date)
     except Exception as error:
         raise HTTPException(500, detail=str(error))

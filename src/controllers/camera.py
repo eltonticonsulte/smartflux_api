@@ -10,7 +10,7 @@ from src.dto import (
     UpdateCameraRequest,
     AuthUserResponse,
 )
-from .core import auth2_admin, get_service_camera, get_service_user, rule_require
+from .core import get_service_camera, rule_require
 from ..enums import UserRule
 
 router = APIRouter()

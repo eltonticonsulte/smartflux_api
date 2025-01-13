@@ -3,7 +3,7 @@ from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import APIRouter, Depends, HTTPException
 from src.enums import UserRule
-from src.dto import AuthUserResponse
+from src.dto import AuthUserResponse, UserPermissionAccessDTO
 from src.interfaces import (
     InterfaceUserService,
     InterfaceCameraService,
@@ -57,8 +57,8 @@ def rule_require(rule_min: UserRule):
     def dependency(
         token: str = Depends(auth2_admin),
         user_service: InterfaceUserService = Depends(get_service_user),
-    ):
-        user: AuthUserResponse = user_service.current_user(token)
+    ) -> UserPermissionAccessDTO:
+        user: UserPermissionAccessDTO = user_service.current_user(token)
         if user.role.value > rule_min.value:
             raise HTTPException(
                 401,

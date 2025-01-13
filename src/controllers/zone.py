@@ -2,14 +2,14 @@
 from typing import List
 from fastapi.responses import JSONResponse
 from fastapi import APIRouter, HTTPException, Depends
-from src.interfaces import InterfaceUserService, InterfaceZoneService
+from src.interfaces import InterfaceZoneService
 from src.enums import UserRule
-from .core import auth2_admin, get_service_user, get_service_zone, rule_require
+from .core import get_service_zone, rule_require
 from ..dto import (
     CreateZoneRequest,
     GetZoneResponse,
     UpdateZoneRequest,
-    AuthUserResponse,
+    UserPermissionAccessDTO,
 )
 
 router = APIRouter()
@@ -18,7 +18,7 @@ router = APIRouter()
 @router.post("/create", status_code=201, response_model=GetZoneResponse)
 async def create(
     request: CreateZoneRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceZoneService = Depends(get_service_zone),
 ):
     try:
@@ -30,7 +30,7 @@ async def create(
 
 @router.get("/all", status_code=200, response_model=List[GetZoneResponse])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceZoneService = Depends(get_service_zone),
 ):
 
@@ -45,7 +45,7 @@ async def get_all(
 async def update(
     zona_id: int,
     request: UpdateZoneRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceZoneService = Depends(get_service_zone),
 ):
 
@@ -59,7 +59,7 @@ async def update(
 @router.delete("/delete/{zona_id}", status_code=200)
 async def delete(
     zona_id: int,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceZoneService = Depends(get_service_zone),
 ):
 

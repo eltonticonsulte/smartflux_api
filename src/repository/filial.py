@@ -3,7 +3,7 @@ import logging
 from uuid import UUID
 from typing import List
 
-from ..database import Filial, DBConnectionHandler, IntegrityError
+from src.database import Filial, DBConnectionHandler, IntegrityError
 
 
 class RepositoryFilialExecption(Exception):

@@ -4,6 +4,7 @@ from .user import (
     CreateUserRequest,
     AuthUserRequest,
     GetUserResponse,
+    UserPermissionAccessDTO,
 )
 from .empresa import (
     CreateEmpresaRequest,

@@ -5,10 +5,16 @@ import hmac
 from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
-from ..repository import UserRepository, PermissaoRepository
-from ..database import Usuario
+from src.repository import UserRepository
+from src.database import Usuario, PermissaoAcesso
 from ..enums import UserRule
-from ..dto import AuthUserResponse, CreateUserRequest, AuthUserRequest, GetUserResponse
+from ..dto import (
+    AuthUserResponse,
+    CreateUserRequest,
+    AuthUserRequest,
+    GetUserResponse,
+    UserPermissionAccessDTO,
+)
 from ..mappers import UserMapper
 from ..interfaces import InterfaceUserService
 
@@ -21,9 +27,8 @@ class ServiceUserExecption(Exception):
 
 
 class UserServices(InterfaceUserService):
-    def __init__(self, repo_user: UserRepository, repo_permissao: PermissaoRepository):
+    def __init__(self, repo_user: UserRepository):
         self.repo_user = repo_user
-        self.repo_permissao = repo_permissao
         self.log = logging.getLogger(__name__)
 
     def create(self, user: CreateUserRequest) -> int:
@@ -60,7 +65,7 @@ class UserServices(InterfaceUserService):
     def __compare_hash(self, hash1: str, hash2: str) -> bool:
         return hmac.compare_digest(hash1.encode("utf-8"), hash2.encode("utf-8"))
 
-    def current_user(self, token: str) -> GetUserResponse:
+    def current_user(self, token: str) -> UserPermissionAccessDTO:
         try:
             payload = jwt.decode(
                 token, get_settings().SECRET_KEY, algorithms=[get_settings().ALGORITHM]
@@ -69,7 +74,8 @@ class UserServices(InterfaceUserService):
             if username is None:
                 raise ServiceUserExecption("User Invalid")
             user = self.repo_user.get_user_by_name(username)
-            return UserMapper.get_entity_to_response(user)
+            permission = self.repo_user.fetch_permisso_by_user(user.user_id)
+            return UserMapper.to_permissao(user, permission)
         except JWTError as erros:
             raise ServiceUserExecption(f"JWT Error: {erros}") from erros
 

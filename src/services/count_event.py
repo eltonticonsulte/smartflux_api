@@ -10,14 +10,14 @@ from ..dto import (
     TotalCountGrupZone,
     TotalCountGrupHour,
 )
-from ..mappers import CountEventMapper
-from ..repository import CountEventRepository
+from src.mappers import CountEventMapper
+from src.repository import CountEventRepository, UserRepository
 
 
 class CountEventServices(InterfaceEventCountService):
-    def __init__(self, repository: CountEventRepository):
+    def __init__(self, count_repo: CountEventRepository):
         self.log = logging.getLogger(__name__)
-        self.repository = repository
+        self.count_repo = count_repo
 
     def insert_pull(
         self, request: List[EventCountRequest], channels: List[uuid.UUID]
@@ -29,7 +29,7 @@ class CountEventServices(InterfaceEventCountService):
                 CountEventMapper.create_event_request_to_entity(data)
                 for data in data_success
             ]
-            self.repository.create_all(entity_data)
+            self.count_repo.create_all(entity_data)
         for data in data_success:
             result.append(
                 EventCountResponse(
@@ -61,7 +61,7 @@ class CountEventServices(InterfaceEventCountService):
         return data_success, datas_fail
 
     def get_count_by_filial(self, filial_id: int) -> TotalCount:
-        data = self.repository.count_by_filial(filial_id)
+        data = self.count_repo.count_by_filial(filial_id)
         count_in = data.get("total_count_in", 0)
         count_out = data.get("total_count_out", 0)
 
@@ -73,7 +73,7 @@ class CountEventServices(InterfaceEventCountService):
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int
     ) -> List[TotalCountGrupZone]:
-        return self.repository.count_by_filial_count_grup_zone(filial_id)
+        return self.count_repo.count_by_filial_count_grup_zone(filial_id)
 
     def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
-        return self.repository.count_by_filial_grup_hour(filial_id)
+        return self.count_repo.count_by_filial_grup_hour(filial_id)
