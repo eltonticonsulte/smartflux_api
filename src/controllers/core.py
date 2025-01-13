@@ -58,8 +58,7 @@ def rule_require(rule_min: UserRole):
         token: str = Depends(auth2_admin),
         user_service: InterfaceUserService = Depends(get_service_user),
     ):
-        user = user_service.current_user(token)
-        print(user)
+        user: AuthUserResponse = user_service.current_user(token)
         if user.role.value > rule_min.value:
             raise HTTPException(
                 401,

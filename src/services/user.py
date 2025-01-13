@@ -47,6 +47,7 @@ class UserServices(InterfaceUserService):
 
         user_result = AuthUserResponse(
             username=user.username,
+            user_id=user.user_id,
             access_token="gdfff",
             token_type="bearer",
             role=user.role,

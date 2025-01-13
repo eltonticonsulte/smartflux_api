@@ -5,6 +5,7 @@ from ..enums import UserRole
 
 class AuthUserResponse(BaseModel):
     username: str
+    user_id: int
     access_token: str
     token_type: str
     role: UserRole
