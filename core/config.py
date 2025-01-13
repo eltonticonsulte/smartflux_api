@@ -11,7 +11,7 @@ class Settings(BaseSettings):
     POSTGRES_USER: str = ""
     POSTGRES_PASSWORD: str = ""
     POSTGRES_SERVER: str = ""
-    POSTGRES_PORT: str = 5432
+    POSTGRES_PORT: str = str(5432)
     POSTGRES_DB: str = ""
     SECRET_KEY: str = "fddfacvdafersdffasddfaa"  # Change this in production
     ALGORITHM: str = "HS256"
