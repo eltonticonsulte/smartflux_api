@@ -8,7 +8,7 @@ from .schema import (
     EventCountTemp,
     EventCount,
     Empresa,
-    UserRole,
+    UserRule,
     Usuario,
     PermissaoAcesso,
 )

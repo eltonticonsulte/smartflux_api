@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
-from .user import UserRole
+from .user import UserRule
 from .camera import CameraState

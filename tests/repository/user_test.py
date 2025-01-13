@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from unittest.mock import Mock, patch, ANY
-from src.enums import UserRole
+from src.enums import UserRule
 from src.repository import UserRepository, RepositoryAuthExecption
 from src.database import DBConnectionHandler, Usuario
 
@@ -22,7 +22,7 @@ class TestAuthRepository(unittest.TestCase):
             user = Usuario(
                 username="test_username",
                 password_hash="test_hash_password",
-                role=UserRole.ADMIN,
+                role=UserRule.ADMIN,
                 is_active=True,
             )
 
@@ -41,7 +41,7 @@ class TestAuthRepository(unittest.TestCase):
             mock_filter.one_or_none.return_value = Usuario(
                 username="test_username",
                 password_hash="test_hash_password",
-                role=UserRole.ADMIN,
+                role=UserRule.ADMIN,
                 is_active=True,
             )
 
@@ -50,7 +50,7 @@ class TestAuthRepository(unittest.TestCase):
             mock_query.filter.assert_called_once_with(ANY)
             mock_filter.one_or_none.assert_called_once_with()
             assert user.username == "test_username"
-            assert user.role == UserRole.ADMIN
+            assert user.role == UserRule.ADMIN
 
 
 if __name__ == "__main__":

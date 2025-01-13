@@ -7,7 +7,7 @@ from jose import JWTError, jwt
 from core import get_settings
 from ..repository import UserRepository, PermissaoRepository
 from ..database import Usuario
-from ..enums import UserRole
+from ..enums import UserRule
 from ..dto import AuthUserResponse, CreateUserRequest, AuthUserRequest, GetUserResponse
 from ..mappers import UserMapper
 from ..interfaces import InterfaceUserService

@@ -2,7 +2,7 @@
 from enum import Enum
 
 
-class UserRole(str, Enum):
+class UserRule(str, Enum):
     ADMIN = 0
     EMPRESA = 1
     FILIAL = 2

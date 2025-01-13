@@ -11,7 +11,7 @@ from src.dto import (
     AuthUserResponse,
 )
 from .core import auth2_admin, get_service_camera, get_service_user, rule_require
-from ..enums import UserRole
+from ..enums import UserRule
 
 router = APIRouter()
 
@@ -19,7 +19,7 @@ router = APIRouter()
 @router.post("/create", status_code=201, response_model=GetCameraResponse)
 async def create(
     request: CreateCameraRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
@@ -32,7 +32,7 @@ async def create(
 
 @router.get("/all", status_code=200, response_model=List[GetCameraResponse])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
@@ -47,7 +47,7 @@ async def get_all(
 async def update(
     channel_id: uuid.UUID,
     request: UpdateCameraRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
@@ -61,7 +61,7 @@ async def update(
 @router.delete("/delete/{channel_id}", status_code=200)
 async def delete(
     channel_id: uuid.UUID,
-    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 

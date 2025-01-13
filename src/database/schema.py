@@ -19,7 +19,7 @@ from sqlalchemy.sql import func
 
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 
-from ..enums import UserRole, CameraState
+from ..enums import UserRule, CameraState
 
 Base = declarative_base()
 
@@ -31,7 +31,7 @@ class Usuario(Base):
     username = Column(String, nullable=False, unique=True)
     password_hash = Column(String, nullable=False)
     is_active = Column(Boolean, default=True)
-    role = Column(Enum(UserRole, name="user_role"), default=UserRole.FILIAL)
+    role = Column(Enum(UserRule, name="user_role"), default=UserRule.FILIAL)
 
     data_criacao = Column(DateTime, default=func.now())
     ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())

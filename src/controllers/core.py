@@ -2,7 +2,7 @@
 from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import APIRouter, Depends, HTTPException
-from src.enums import UserRole
+from src.enums import UserRule
 from src.dto import AuthUserResponse
 from src.interfaces import (
     InterfaceUserService,
@@ -53,7 +53,7 @@ def get_service_count_event_storage() -> InterfaceEventCountStorageService:
     return FactoryService().create_count_event_storage()
 
 
-def rule_require(rule_min: UserRole):
+def rule_require(rule_min: UserRule):
     def dependency(
         token: str = Depends(auth2_admin),
         user_service: InterfaceUserService = Depends(get_service_user),

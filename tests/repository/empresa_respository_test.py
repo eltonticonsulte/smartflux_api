@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from unittest.mock import Mock, patch
-from src.enums import UserRole
+from src.enums import UserRule
 from src.repository import EmpresaRepository, RepositoryEmpresaExecption
 from src.database import IntegrityError
 from src.database import DBConnectionHandler

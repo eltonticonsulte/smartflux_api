@@ -3,7 +3,7 @@ from typing import List
 from fastapi import APIRouter, Header, HTTPException, Depends
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
-from src.enums import UserRole
+from src.enums import UserRule
 from .core import auth2_admin, get_service_user, get_service_filial, rule_require
 from ..dto import (
     CreateFilialRequest,
@@ -18,7 +18,7 @@ router = APIRouter()
 @router.post("/create", status_code=201, response_model=GetFilialResponse)
 async def create(
     request: CreateFilialRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceFilialService = Depends(get_service_filial),
 ):
     try:
@@ -30,7 +30,7 @@ async def create(
 
 @router.get("/all", status_code=200, response_model=List[GetFilialResponse])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRole.EMPRESA)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.EMPRESA)),
     service: InterfaceFilialService = Depends(get_service_filial),
 ):
     try:
@@ -45,7 +45,7 @@ async def update(
     filial_id: int,
     request: UpdateFilialRequest,
     service: InterfaceFilialService = Depends(get_service_filial),
-    user: AuthUserResponse = Depends(rule_require(UserRole.EMPRESA)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.EMPRESA)),
 ):
     try:
         result: GetFilialResponse = service.update(filial_id, request)
@@ -58,7 +58,7 @@ async def update(
 async def delete(
     filial_id: int,
     service: InterfaceFilialService = Depends(get_service_filial),
-    user: AuthUserResponse = Depends(rule_require(UserRole.EMPRESA)),
+    user: AuthUserResponse = Depends(rule_require(UserRule.EMPRESA)),
 ):
     try:
         service.delete(filial_id)

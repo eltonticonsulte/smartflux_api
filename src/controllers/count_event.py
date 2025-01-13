@@ -2,7 +2,8 @@
 from typing import List
 import uuid
 from fastapi import APIRouter, Header, Depends, HTTPException
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect
+from src.enums import UserRule
 from src.interfaces import (
     InterfaceFilialService,
     InterfaceCameraService,
@@ -23,6 +24,7 @@ from .core import (
     get_service_count_event,
     auth2_admin,
     get_service_user,
+    rule_require,
 )
 
 router = APIRouter()
