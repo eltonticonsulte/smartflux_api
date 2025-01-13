@@ -59,7 +59,7 @@ def rule_require(rule_min: UserRule):
         user_service: InterfaceUserService = Depends(get_service_user),
     ) -> UserPermissionAccessDTO:
         user: UserPermissionAccessDTO = user_service.current_user(token)
-        if user.role.value > rule_min.value:
+        if user.rule.value > rule_min.value:
             raise HTTPException(
                 401,
                 detail=f"Unauthorized level {user.role} not allowed, min {rule_min}",

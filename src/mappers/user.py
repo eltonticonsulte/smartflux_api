@@ -43,6 +43,17 @@ class UserMapper:
     def to_permissao(
         user: Usuario, permissao: PermissaoAcesso
     ) -> UserPermissionAccessDTO:
+        if permissao is None:
+            return UserPermissionAccessDTO(
+                permission_id=None,
+                user_id=user.user_id,
+                empresa_id=None,
+                filial_id=None,
+                rule=user.role,
+                username=user.username,
+                is_active=user.is_active,
+            )
+
         return UserPermissionAccessDTO(
             permission_id=permissao.permissao_id,
             user_id=permissao.user_id,

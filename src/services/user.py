@@ -75,6 +75,7 @@ class UserServices(InterfaceUserService):
                 raise ServiceUserExecption("User Invalid")
             user = self.repo_user.get_user_by_name(username)
             permission = self.repo_user.fetch_permisso_by_user(user.user_id)
+
             return UserMapper.to_permissao(user, permission)
         except JWTError as erros:
             raise ServiceUserExecption(f"JWT Error: {erros}") from erros

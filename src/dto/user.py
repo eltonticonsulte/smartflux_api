@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+from typing import Optional
 from pydantic import BaseModel
-from ..enums import UserRule
+from src.enums import UserRule
 
 
 class AuthUserResponse(BaseModel):
@@ -28,9 +29,9 @@ class GetUserResponse(BaseModel):
 
 
 class UserPermissionAccessDTO(BaseModel):
-    permission_id: int
-    empresa_id: int
-    filial_id: int
+    permission_id: Optional[int] = None
+    empresa_id: Optional[int] = None
+    filial_id: Optional[int] = None
     user_id: int
     rule: UserRule
     username: str

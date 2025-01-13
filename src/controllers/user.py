@@ -49,7 +49,7 @@ async def create(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/status", status_code=200, response_model=GetUserResponse)
+@router.get("/status", status_code=200, response_model=UserPermissionAccessDTO)
 async def get_status(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
 ):
