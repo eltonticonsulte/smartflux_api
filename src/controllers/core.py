@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
+from fastapi import APIRouter, Depends, HTTPException
+from src.enums import UserRole
+from src.dto import AuthUserResponse
 from src.interfaces import (
     InterfaceUserService,
     InterfaceCameraService,
@@ -10,7 +13,7 @@ from src.interfaces import (
     InterfaceEventCountService,
     InterfaceEventCountStorageService,
 )
-from ..compose import FactoryService
+from src.compose import FactoryService
 
 auth2_admin = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
@@ -48,3 +51,20 @@ def get_service_count_event() -> InterfaceEventCountService:
 @lru_cache()
 def get_service_count_event_storage() -> InterfaceEventCountStorageService:
     return FactoryService().create_count_event_storage()
+
+
+def rule_require(rule_min: UserRole):
+    def dependency(
+        token: str = Depends(auth2_admin),
+        user_service: InterfaceUserService = Depends(get_service_user),
+    ):
+        user = user_service.current_user(token)
+        print(user)
+        if user.role.value > rule_min.value:
+            raise HTTPException(
+                401,
+                detail=f"Unauthorized level {user.role} not allowed, min {rule_min}",
+            )
+        return user
+
+    return dependency

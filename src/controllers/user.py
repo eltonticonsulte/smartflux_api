@@ -13,7 +13,7 @@ from src.dto import (
     GetUserResponse,
 )
 from src.enums import UserRole
-from .core import auth2_admin, get_service_user
+from .core import auth2_admin, get_service_user, rule_require
 
 
 router = APIRouter()
@@ -38,14 +38,10 @@ async def get_login(
 @router.post("/create", status_code=200)
 async def create(
     request: CreateUserRequest,
-    token: str = Depends(auth2_admin),
+    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
-        user: GetUserResponse = service.current_user(token)
-        if not user.is_admin():
-            raise HTTPException(401, detail="Unauthorized")
-        print(request.role, type(request.role))
         result: AuthUserResponse = service.create(request)
         return result
     except Exception as error:
@@ -54,28 +50,15 @@ async def create(
 
 
 @router.get("/status", status_code=200, response_model=GetUserResponse)
-async def get_status(
-    token: str = Depends(auth2_admin),
-    service: InterfaceUserService = Depends(get_service_user),
-):
-    try:
-        user = service.current_user(token)
-        return user
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(500, detail=str(error))
+async def get_status(user: AuthUserResponse = Depends(rule_require(UserRole.FILIAL))):
+    return user
 
 
 @router.get("/all", status_code=200, response_model=List[GetUserResponse])
 async def get_all(
-    token: str = Depends(auth2_admin),
-    auth: InterfaceUserService = Depends(get_service_user),
+    user: AuthUserResponse = Depends(rule_require(UserRole.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
-    try:
-        auth.current_user(token)
-    except Exception as error:
-        raise HTTPException(401, detail=str(error))
     try:
         result: List[GetUserResponse] = service.get_all()
         return result
