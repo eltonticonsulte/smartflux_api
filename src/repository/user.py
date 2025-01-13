@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from ..database import (
     Usuario,
@@ -53,6 +54,15 @@ class UserRepository:
                 return user
             except NoResultFound:
                 raise RepositoryAuthExecption(f'User "{user_id}" not found')
+            except Exception as error:
+                session.rollback()
+                raise error
+
+    def get_all(self) -> List[Usuario]:
+        with DBConnectionHandler() as session:
+            try:
+                users = session.query(Usuario).all()
+                return users
             except Exception as error:
                 session.rollback()
                 raise error

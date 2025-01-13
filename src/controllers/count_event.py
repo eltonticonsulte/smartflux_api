@@ -2,7 +2,7 @@
 from typing import List
 import uuid
 from fastapi import APIRouter, Header, Depends, HTTPException
-
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from src.interfaces import (
     InterfaceFilialService,
     InterfaceCameraService,
@@ -110,3 +110,19 @@ async def get_data_filial_grup_hour(
         return count_event.get_count_by_filial_grup_hour(current_filial.filial_id)
     except Exception as error:
         raise HTTPException(500, detail=str(error))
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    # Aceitar conexão do cliente
+    await websocket.accept()
+    try:
+        while True:
+            # Receber mensagem do cliente
+            data = await websocket.receive_text()
+            print(f"Mensagem recebida: {data}")
+
+            # Enviar resposta ao cliente
+            await websocket.send_text(f"Você disse: {data}")
+    except WebSocketDisconnect:
+        print("Conexão WebSocket encerrada")

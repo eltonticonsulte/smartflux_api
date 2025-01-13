@@ -85,30 +85,6 @@ class UserServices(InterfaceUserService):
         )
         user.access_token = result_token
 
-    def verificar_acesso(usuario, filial_id=None, empresa_id=None):
-        if usuario.role == UserRole.ADMIN:
-            # Admin tem acesso total
-            return True
-
-        if usuario.role == UserRole.USER_EMPRESA:
-            self.repo_permissao.fetch_by
-            permissoes = (
-                session.query(PermissaoAcesso)
-                .filter_by(user_id=usuario.id, empresa_id=empresa_id)
-                .all()
-            )
-            if permissoes:
-                return True  # Acesso permitido às filiais da empresa
-            raise PermissionError("Usuário não tem acesso a esta empresa.")
-
-        if usuario.role == UserRole.USER_FILIAL:
-            permissoes = (
-                session.query(PermissaoAcesso)
-                .filter_by(user_id=usuario.id, filial_id=filial_id)
-                .first()
-            )
-            if permissoes:
-                return True  # Acesso permitido à filial específica
-            raise PermissionError("Usuário não tem acesso a esta filial.")
-
-        raise PermissionError("Permissão insuficiente.")
+    def get_all(self):
+        all_users = self.repo_user.get_all()
+        return [UserMapper.get_entity_to_response(user) for user in all_users]

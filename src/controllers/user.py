@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
+from typing import List
 from typing_extensions import Annotated
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
@@ -62,4 +63,21 @@ async def get_status(
         return user
     except Exception as error:
         log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/all", status_code=200, response_model=List[GetUserResponse])
+async def get_all(
+    token: str = Depends(auth2_admin),
+    auth: InterfaceUserService = Depends(get_service_user),
+    service: InterfaceUserService = Depends(get_service_user),
+):
+    try:
+        auth.current_user(token)
+    except Exception as error:
+        raise HTTPException(401, detail=str(error))
+    try:
+        result: List[GetUserResponse] = service.get_all()
+        return result
+    except Exception as error:
         raise HTTPException(500, detail=str(error))

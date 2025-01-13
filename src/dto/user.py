@@ -29,7 +29,7 @@ class GetUserResponse(BaseModel):
         return self.role == UserRole.ADMIN
 
     def is_empresa(self):
-        return self.role == UserRole.USER_EMPRESA
+        return self.role == UserRole.EMPRESA
 
     def is_filial(self):
-        return self.role == UserRole.USER_FILIAL
+        return self.role == UserRole.FILIAL
