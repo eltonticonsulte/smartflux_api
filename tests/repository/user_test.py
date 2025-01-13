@@ -34,7 +34,6 @@ class TestAuthRepository(unittest.TestCase):
         with patch.object(DBConnectionHandler, "__enter__") as mock_session:
             mock_query = Mock()
             mock_filter = Mock()
-            Mock()
 
             mock_session.return_value.query.return_value = mock_query
             mock_query.filter.return_value = mock_filter
