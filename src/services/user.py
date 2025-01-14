@@ -7,6 +7,7 @@ from jose import JWTError, jwt
 from core import get_settings
 from src.repository import UserRepository
 from src.database import Usuario, PermissaoAcesso
+from src.exceptions import ServiceUserExecption, ServiceUserJwtExecption
 from ..enums import UserRule
 from ..dto import (
     AuthUserResponse,
@@ -19,11 +20,6 @@ from ..mappers import UserMapper
 from ..interfaces import InterfaceUserService
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
-
-
-class ServiceUserExecption(Exception):
-    def __init__(self, message):
-        self.message = message
 
 
 class UserServices(InterfaceUserService):
@@ -78,7 +74,7 @@ class UserServices(InterfaceUserService):
 
             return UserMapper.to_permissao(user, permission)
         except JWTError as erros:
-            raise ServiceUserExecption(f"JWT Error: {erros}") from erros
+            raise ServiceUserJwtExecption(f"JWT Error: {erros}") from erros
 
     @staticmethod
     def create_access_token(user: AuthUserRequest) -> None:

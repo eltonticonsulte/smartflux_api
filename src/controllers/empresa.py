@@ -24,11 +24,12 @@ async def create(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
 ):
     try:
+        log.info(f"create_empresa {request}")
         result: GetEmpresaResponse = service.create(request)
         return result
     except Exception as error:
         log.error("error", exc_info=error)
-        raise HTTPException(422, detail=str(error))
+        raise HTTPException(500, detail=str(error))
 
 
 @router.get("/all", status_code=200, response_model=List[GetEmpresaResponse])

@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import uuid
+import logging
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceCameraService, InterfaceUserService
+from src.exceptions import ServiceUserJwtExecption
 from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
@@ -14,6 +16,7 @@ from .core import get_service_camera, rule_require
 from ..enums import UserRule
 
 router = APIRouter()
+log = logging.getLogger("controller_camera")
 
 
 @router.post("/create", status_code=201, response_model=GetCameraResponse)
@@ -26,6 +29,9 @@ async def create(
     try:
         result: GetCameraResponse = service.create(request)
         return result
+    except ServiceUserJwtExecption as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(401, detail=str(error))
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
@@ -40,6 +46,7 @@ async def get_all(
         result: List[GetCameraResponse] = service.get_all()
         return result
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 

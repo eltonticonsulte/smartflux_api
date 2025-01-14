@@ -3,6 +3,7 @@ from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import APIRouter, Depends, HTTPException
 from src.enums import UserRule
+from src.exceptions import ServiceUserJwtExecption
 from src.dto import AuthUserResponse, UserPermissionAccessDTO
 from src.interfaces import (
     InterfaceUserService,
@@ -58,12 +59,17 @@ def rule_require(rule_min: UserRule):
         token: str = Depends(auth2_admin),
         user_service: InterfaceUserService = Depends(get_service_user),
     ) -> UserPermissionAccessDTO:
-        user: UserPermissionAccessDTO = user_service.current_user(token)
-        if user.rule.value > rule_min.value:
-            raise HTTPException(
-                401,
-                detail=f"Unauthorized level {user.role} not allowed, min {rule_min}",
-            )
+        try:
+            user: UserPermissionAccessDTO = user_service.current_user(token)
+            if not user.is_active:
+                raise HTTPException(401, detail="Usuário inativo")
+            if user.rule.value > rule_min.value:
+                raise HTTPException(
+                    401,
+                    detail=f"Unauthorized level {user.role} not allowed, min {rule_min}",
+                )
+        except ServiceUserJwtExecption as error:
+            raise HTTPException(401, detail=str(error))
         return user
 
     return dependency
