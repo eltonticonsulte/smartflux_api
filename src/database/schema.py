@@ -19,7 +19,7 @@ from sqlalchemy.sql import func
 
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 
-from ..enums import UserRule, CameraState
+from src.enums import UserRule, CameraState
 
 Base = declarative_base()
 

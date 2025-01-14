@@ -5,7 +5,8 @@ from .services import (
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
-    InterfaceEventCountService,
+    InterfaceTodayStorageService,
     InterfaceEventCountStorageService,
     InterfaceTaskUpdateViewService,
+    InterfaceEventService,
 )

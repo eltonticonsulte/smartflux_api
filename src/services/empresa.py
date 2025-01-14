@@ -12,6 +12,7 @@ class EmpresaServices:
         self.log = logging.getLogger(__name__)
 
     def create(self, request: CreateEmpresaRequest) -> GetEmpresaResponse:
+        self.log.debug(f"create_empresa {request}")
         empresa = EmpresaMapper.create_request_to_entity(request)
         new_id = self.repository.create(empresa)
         new_empresa = self.repository.get_by_id(new_id)

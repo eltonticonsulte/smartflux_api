@@ -2,11 +2,11 @@
 from typing import List
 from datetime import date
 from sqlalchemy import func
-from ..database import (
+from src.database import (
     DBConnectionHandler,
     EventCount,
 )
-from ..dto import TotalCountGrupZone
+from src.dto import TotalCountGrupZone
 
 
 class RepositoryCountEventStorageException(Exception):

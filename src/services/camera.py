@@ -2,14 +2,14 @@
 import logging
 import uuid
 from typing import List
-from ..repository import CameraRepository
-from ..dto import (
+from src.repository import CameraRepository
+from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
     UpdateCameraRequest,
 )
-from ..mappers import CameraMapper
-from ..interfaces import InterfaceCameraService
+from src.mappers import CameraMapper
+from src.interfaces import InterfaceCameraService
 
 
 class CameraServices(InterfaceCameraService):

@@ -4,7 +4,7 @@ from ..database import EventCount
 from ..repository import (
     TaskUpdateViewRepository,
     CountEventStorageRepository,
-    CountEventRepository,
+    TodayEstorageRepository,
 )
 
 
@@ -13,7 +13,7 @@ class TaskUpdateViewService(InterfaceTaskUpdateViewService):
         self,
         repo_view: TaskUpdateViewRepository,
         repo_storage: CountEventStorageRepository,
-        repo_event: CountEventRepository,
+        repo_event: TodayEstorageRepository,
     ):
         self.repo_view = repo_view
         self.repo_storage = repo_storage

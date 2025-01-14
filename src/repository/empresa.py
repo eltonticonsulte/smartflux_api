@@ -16,8 +16,6 @@ class EmpresaRepository:
         self.log = logging.getLogger(__name__)
 
     def create(self, empresa: Empresa) -> int:
-        self.log.debug(f"create_empresa {empresa}")
-
         with DBConnectionHandler() as session:
             try:
                 session.add(empresa)

@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 from src.repository import (
     TaskUpdateViewRepository,
     CountEventStorageRepository,
-    CountEventRepository,
+    TodayEstorageRepository,
 )
 
 
@@ -13,6 +13,6 @@ class InterfaceTaskUpdateViewService(ABC):
         self,
         repo_view: TaskUpdateViewRepository,
         repo_storage: CountEventStorageRepository,
-        repo_event: CountEventRepository,
+        repo_event: TodayEstorageRepository,
     ) -> None:
         raise NotImplementedError("Method not implemented")

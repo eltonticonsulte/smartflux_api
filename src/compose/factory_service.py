@@ -5,7 +5,7 @@ from src.repository import (
     EmpresaRepository,
     FilialRepository,
     ZoneRepository,
-    CountEventRepository,
+    TodayEstorageRepository,
     CountEventStorageRepository,
     TaskUpdateViewRepository,
 )
@@ -15,7 +15,7 @@ from src.services import (
     EmpresaServices,
     FilialServices,
     ZoneServices,
-    CountEventServices,
+    TodayStorageServices,
     CountEventStorageServices,
     TaskUpdateViewService,
 )
@@ -26,7 +26,7 @@ from src.interfaces import (
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
-    InterfaceEventCountService,
+    InterfaceTodayStorageService,
     InterfaceEventCountStorageService,
     InterfaceTaskUpdateViewService,
 )
@@ -51,8 +51,8 @@ class FactoryService:
     def create_zone(self) -> InterfaceZoneService:
         return ZoneServices(ZoneRepository())
 
-    def create_count_event(self) -> InterfaceEventCountService:
-        return CountEventServices(CountEventRepository())
+    def create_count_event(self) -> InterfaceTodayStorageService:
+        return TodayStorageServices(TodayEstorageRepository())
 
     def create_count_event_storage(self) -> InterfaceEventCountStorageService:
         return CountEventStorageServices(CountEventStorageRepository())
@@ -61,5 +61,5 @@ class FactoryService:
         return TaskUpdateViewService(
             TaskUpdateViewRepository(),
             CountEventStorageRepository(),
-            CountEventRepository(),
+            TodayEstorageRepository(),
         )
