@@ -16,7 +16,6 @@ class CameraRepository:
         self.log = logging.getLogger(__name__)
 
     def create(self, camera: Camera) -> uuid.UUID:
-        self.log.debug(f"create {camera}")
         with DBConnectionHandler() as session:
             try:
                 session.add(camera)
@@ -24,7 +23,7 @@ class CameraRepository:
                 return camera.channel_id
             except IntegrityError as error:
                 raise RepositoryCameraExeption(
-                    f"Camera {camera.name} already exists"
+                    f"Camera {camera.name} already exists {error}"
                 ) from error
             except Exception as error:
                 self.log.error(error)

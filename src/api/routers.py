@@ -9,9 +9,13 @@ from ..controllers.camera import router as camera_route
 from ..controllers.count_event import router as count_event
 from ..controllers.count_event_storage import router as count_event_storage
 from ..controllers.aplication import router as router_aplication
+from src.controllers.permission import router as router_permission
 
 base_ruter = APIRouter()
 base_ruter.include_router(user_route, prefix="/user", tags=["Usuario"])
+base_ruter.include_router(
+    router_permission, prefix="/permission", tags=["Permissão de usuário"]
+)
 base_ruter.include_router(empresa_route, prefix="/empresa", tags=["Empresa"])
 base_ruter.include_router(filial_route, prefix="/filial", tags=["Filial"])
 

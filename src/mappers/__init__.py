@@ -5,3 +5,4 @@ from .filial import FilialMapper
 from .count_even_mapper import CountEventMapper
 from .zone import ZoneMapper
 from .camera import CameraMapper
+from .permission import MapperPermission

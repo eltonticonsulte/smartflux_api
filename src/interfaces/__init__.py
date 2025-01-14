@@ -9,4 +9,5 @@ from .services import (
     InterfaceEventCountStorageService,
     InterfaceTaskUpdateViewService,
     InterfaceEventService,
+    InterfacePermissionService,
 )

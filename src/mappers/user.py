@@ -30,7 +30,9 @@ class UserMapper:
 
     @staticmethod
     def get_entity_to_response(user: Usuario) -> GetUserResponse:
-        return GetUserResponse(username=user.username, role=user.role)
+        return GetUserResponse(
+            user_id=user.user_id, username=user.username, role=user.role
+        )
 
     @staticmethod
     def password_to_hash(password: str) -> str:

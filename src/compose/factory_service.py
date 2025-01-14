@@ -8,6 +8,7 @@ from src.repository import (
     TodayEstorageRepository,
     CountEventStorageRepository,
     TaskUpdateViewRepository,
+    PermissionRepository,
 )
 from src.services import (
     CameraServices,
@@ -18,6 +19,7 @@ from src.services import (
     TodayStorageServices,
     CountEventStorageServices,
     TaskUpdateViewService,
+    PermissionService,
 )
 
 from src.interfaces import (
@@ -29,6 +31,7 @@ from src.interfaces import (
     InterfaceTodayStorageService,
     InterfaceEventCountStorageService,
     InterfaceTaskUpdateViewService,
+    InterfacePermissionService,
 )
 
 
@@ -63,3 +66,6 @@ class FactoryService:
             CountEventStorageRepository(),
             TodayEstorageRepository(),
         )
+
+    def create_permission(self) -> InterfacePermissionService:
+        return PermissionService(PermissionRepository())

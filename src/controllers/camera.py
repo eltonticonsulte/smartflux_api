@@ -33,6 +33,7 @@ async def create(
         log.error("error", exc_info=error)
         raise HTTPException(401, detail=str(error))
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 

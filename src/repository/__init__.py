@@ -10,3 +10,4 @@ from .storage_today import TodayEstorageRepository
 from .storage import CountEventStorageRepository
 from .task_update_view import TaskUpdateViewRepository
 from .count_event import CountEventRepository
+from .permission import PermissionRepository

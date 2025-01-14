@@ -13,6 +13,7 @@ from src.interfaces import (
     InterfaceZoneService,
     InterfaceTodayStorageService,
     InterfaceEventCountStorageService,
+    InterfacePermissionService,
 )
 from src.compose import FactoryService
 
@@ -52,6 +53,11 @@ def get_service_count_event() -> InterfaceTodayStorageService:
 @lru_cache()
 def get_service_count_event_storage() -> InterfaceEventCountStorageService:
     return FactoryService().create_count_event_storage()
+
+
+@lru_cache()
+def get_service_permission() -> InterfacePermissionService:
+    return FactoryService().create_permission()
 
 
 def rule_require(rule_min: UserRule):

@@ -24,6 +24,7 @@ class CreateUserRequest(BaseModel):
 
 
 class GetUserResponse(BaseModel):
+    user_id: int
     username: str
     role: UserRule
 

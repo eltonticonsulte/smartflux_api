@@ -1,0 +1,13 @@
+# -*- coding: utf-8 -*-
+from src.dto import PermissionResponse, CreatePermissionRequest
+from src.database import PermissaoAcesso
+
+
+class MapperPermission:
+    @staticmethod
+    def create_to_entity(permission: CreatePermissionRequest) -> PermissaoAcesso:
+        return PermissaoAcesso(
+            user_id=permission.user_id,
+            empresa_id=permission.empresa_id,
+            filial_id=permission.filial_id,
+        )

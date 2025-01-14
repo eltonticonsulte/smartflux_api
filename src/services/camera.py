@@ -18,6 +18,7 @@ class CameraServices(InterfaceCameraService):
         self.log = logging.getLogger(__name__)
 
     def create(self, request: CreateCameraRequest) -> GetCameraResponse:
+        self.log.debug(f"create_camera {request}")
         new_camera = CameraMapper.create_request_to_entity(request)
         channel_id = self.repository.create(new_camera)
         entity = self.repository.get_by_channel_id(channel_id)
