@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from logging import getLogger
 from typing import List
 from fastapi import APIRouter, Header, Depends, HTTPException
 from fastapi import WebSocket, WebSocketDisconnect
@@ -19,6 +20,7 @@ from .core import (
 )
 
 router = APIRouter()
+log = getLogger("controller_count_event")
 
 
 @router.post("/count", status_code=201, response_model=List[EventCountResponse])
@@ -32,12 +34,14 @@ async def insert_event(
             401, detail=f"Apenas Filiar pode registrar eventos vc é {user.rule}"
         )
     if user.filial_id is None:
+
         raise HTTPException(401, detail="O usuário não possui filial")
     try:
-
+        log.info(f"insert_event {request}")
         result: List[EventCountResponse] = count_event.process_event(request, user)
         return result
     except Exception as error:
+        log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 

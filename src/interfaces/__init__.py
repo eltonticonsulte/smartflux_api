@@ -11,3 +11,4 @@ from .services import (
     InterfaceEventService,
     InterfacePermissionService,
 )
+from .observes import InterfaceObserver

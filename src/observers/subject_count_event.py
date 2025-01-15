@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List
 from src.dto import EventCountRequest
-from .base_observer import InterfaceObserver
+from ..interfaces.observes.base_observer import InterfaceObserver
 
 
 class SubjectEventCount:

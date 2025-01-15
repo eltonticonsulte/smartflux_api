@@ -2,7 +2,7 @@
 import logging
 import uuid
 from typing import List
-from ..database import Camera, DBConnectionHandler, IntegrityError
+from ..database import Camera, DBConnectionHandler, IntegrityError, Zone, Filial
 from ..mappers import CameraMapper
 
 
@@ -43,7 +43,13 @@ class CameraRepository:
 
     def get_by_filial(self, filial_id: int) -> List[Camera]:
         with DBConnectionHandler() as session:
-            cameras = session.query(Camera).filter(Camera.filial_id == filial_id).all()
+            cameras = (
+                session.query(Camera)
+                .join(Zone, Camera.zona_id == Zone.zone_id)
+                .join(Filial, Zone.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .all()
+            )
             return cameras
 
     def get_by_channel_id(self, channel_id: uuid.UUID) -> Camera:

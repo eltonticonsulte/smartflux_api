@@ -8,16 +8,16 @@ from core import get_settings
 from src.repository import UserRepository
 from src.database import Usuario, PermissaoAcesso
 from src.exceptions import ServiceUserExecption, ServiceUserJwtExecption
-from ..enums import UserRule
-from ..dto import (
+from src.enums import UserRule
+from src.dto import (
     AuthUserResponse,
     CreateUserRequest,
     AuthUserRequest,
     GetUserResponse,
     UserPermissionAccessDTO,
 )
-from ..mappers import UserMapper
-from ..interfaces import InterfaceUserService
+from src.mappers import UserMapper
+from src.interfaces import InterfaceUserService
 
 auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
@@ -49,11 +49,10 @@ class UserServices(InterfaceUserService):
         user_result = AuthUserResponse(
             username=user.username,
             user_id=user.user_id,
-            access_token="gdfff",
+            access_token="",
             token_type="bearer",
             role=user.role,
         )
-        self.log.critical(user_result)
         UserServices.create_access_token(user_result)
 
         return user_result
@@ -71,6 +70,7 @@ class UserServices(InterfaceUserService):
                 raise ServiceUserExecption("User Invalid")
             user = self.repo_user.get_user_by_name(username)
             permission = self.repo_user.fetch_permisso_by_user(user.user_id)
+            self.log.debug(f"current_user {user} {permission}")
 
             return UserMapper.to_permissao(user, permission)
         except JWTError as erros:

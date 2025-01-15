@@ -2,7 +2,7 @@
 
 
 from fastapi.websockets import WebSocket
-from .base_observer import InterfaceObserver
+from src.interfaces import InterfaceObserver
 
 
 class WebSocketNotifier(InterfaceObserver):

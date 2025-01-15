@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from logging import getLogger
 from typing import List
 from fastapi import APIRouter, Header, HTTPException, Depends
 from fastapi.responses import JSONResponse
@@ -13,6 +14,7 @@ from ..dto import (
 )
 
 router = APIRouter()
+log = getLogger("controller Filial")
 
 
 @router.post("/create", status_code=201, response_model=GetFilialResponse)
@@ -25,6 +27,7 @@ async def create(
         result: GetFilialResponse = service.create(request)
         return result
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
