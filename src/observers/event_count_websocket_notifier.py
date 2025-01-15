@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-
-
 from fastapi.websockets import WebSocket
 from src.interfaces import InterfaceObserver
 
 
-class WebSocketNotifier(InterfaceObserver):
+class DataEventWebSocketNotifier(InterfaceObserver):
     def __init__(self):
         self.connections = {}
 

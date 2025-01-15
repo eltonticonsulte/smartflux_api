@@ -83,12 +83,11 @@ async def get_data_filial_grup_hour(
         raise HTTPException(500, detail=str(error))
 
 
-@router.websocket("/ws/{filial_id}")
-async def websocket_endpoint(websocket: WebSocket, filial_id: int):
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
     await websocket.accept()
     try:
         while True:
-            # Receber mensagem do cliente
             data = await websocket.receive_text()
             print(f"Mensagem recebida: {data}")
             await websocket.send_text(f"Você disse: {data}")

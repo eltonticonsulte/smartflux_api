@@ -6,7 +6,7 @@ from src.interfaces import InterfaceEventService
 from src.observers import SubjectEventCount
 from src.repository import CountEventRepository, CameraRepository
 from src.database import EventCountTemp
-from src.observers.event_count_websocket_notifier import WebSocketNotifier
+from src.observers.event_count_websocket_notifier import DataEventWebSocketNotifier
 from src.dto import EventCountRequest, UserPermissionAccessDTO, EventCountResponse
 from src.mappers import CountEventMapper
 

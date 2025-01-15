@@ -37,7 +37,11 @@ from src.interfaces import (
     InterfaceEventService,
     InterfaceObserver,
 )
-from src.observers import SubjectEventCount, DataEventCountSave
+from src.observers import (
+    SubjectEventCount,
+    DataEventCountSave,
+    DataEventWebSocketNotifier,
+)
 
 
 class FactoryService:
@@ -62,6 +66,7 @@ class FactoryService:
     def create_count_event(self) -> InterfaceEventService:
         subject = SubjectEventCount()
         subject.register_observer(DataEventCountSave(CountEventRepository()))
+        subject.register_observer(DataEventWebSocketNotifier())
         return EventService(CameraRepository(), subject)
 
     def create_count_event_storage(self) -> InterfaceEventCountStorageService:
