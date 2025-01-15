@@ -7,7 +7,7 @@ from core import get_settings
 from src.database import DBConnectionHandler
 from src.compose import create_app
 
-__version__ = "0.0.2"
+__version__ = "0.0.3"
 os.environ["__VERSION__"] = __version__
 
 LoggerConfig()

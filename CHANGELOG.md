@@ -1,3 +1,22 @@
+## 0.0.3 (2025-01-15)
+
+### Fix
+
+- add websoket
+- websocket
+- send event
+- add create permission
+- update
+- event_refactor
+- erro port test
+- aauth
+- update
+
+### Refactor
+
+- auth
+- **enum**: user rolo
+
 ## 0.0.2 (2025-01-13)
 
 ### Fix
