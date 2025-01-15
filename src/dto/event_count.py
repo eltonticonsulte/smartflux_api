@@ -18,6 +18,15 @@ class EventCountRequest(BaseModel):
     count_in: int
     count_out: int
 
+    def to_dict(self):
+        return {
+            "event_id": self.event_id,
+            "channel_id": str(self.channel_id),
+            "event_time": self.event_time.isoformat(),
+            "count_in": self.count_in,
+            "count_out": self.count_out,
+        }
+
 
 class TotalCount(BaseModel):
     total_count_in: int

@@ -46,7 +46,10 @@ from src.observers import (
 
 class FactoryService:
     def __init__(self):
-        pass
+        self.stactic_count_event_websocket = DataEventWebSocketNotifier()
+
+    def get_stactic_count_event_websocket(self) -> InterfaceObserver:
+        return self.stactic_count_event_websocket
 
     def create_camera(self) -> InterfaceCameraService:
         return CameraServices(CameraRepository())
@@ -66,7 +69,7 @@ class FactoryService:
     def create_count_event(self) -> InterfaceEventService:
         subject = SubjectEventCount()
         subject.register_observer(DataEventCountSave(CountEventRepository()))
-        subject.register_observer(DataEventWebSocketNotifier())
+        subject.register_observer(self.get_stactic_count_event_websocket())
         return EventService(CameraRepository(), subject)
 
     def create_count_event_storage(self) -> InterfaceEventCountStorageService:

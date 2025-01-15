@@ -21,7 +21,7 @@ class EventService(InterfaceEventService):
         self.subject = observer
         self.camera_repository = camera_repository
 
-    def process_event(
+    async def process_event(
         self, event: List[EventCountRequest], user: UserPermissionAccessDTO
     ) -> None:
         cameras = self.camera_repository.get_by_filial(user.filial_id)
@@ -33,7 +33,7 @@ class EventService(InterfaceEventService):
                 CountEventMapper.create_event_request_to_entity(data)
                 for data in data_success
             ]
-            self.subject.notify_observers(data_success, entity_data)
+            await self.subject.notify_observers(data_success, user.filial_id)
 
         for data in data_success:
             result.append(

@@ -15,20 +15,22 @@ from src.interfaces import (
     InterfaceEventCountStorageService,
     InterfacePermissionService,
     InterfaceEventService,
+    InterfaceObserver,
 )
 from src.compose import FactoryService
 
 auth2_admin = OAuth2PasswordBearer(tokenUrl="api/user/login")
+factor_service = FactoryService()
 
 
 @lru_cache()
 def get_service_user() -> InterfaceUserService:
-    return FactoryService().create_user()
+    return factor_service.create_user()
 
 
 @lru_cache()
 def get_service_camera() -> InterfaceCameraService:
-    return FactoryService().create_camera()
+    return factor_service.create_camera()
 
 
 @lru_cache()
@@ -48,7 +50,12 @@ def get_service_zone() -> InterfaceZoneService:
 
 @lru_cache()
 def get_service_count_event() -> InterfaceEventService:
-    return FactoryService().create_count_event()
+    return factor_service.create_count_event()
+
+
+@lru_cache()
+def get_current_event_websocket() -> InterfaceObserver:
+    return factor_service.get_stactic_count_event_websocket()
 
 
 @lru_cache()

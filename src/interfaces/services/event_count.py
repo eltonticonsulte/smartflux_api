@@ -6,7 +6,7 @@ from src.dto import EventCountRequest, UserPermissionAccessDTO
 
 class InterfaceEventService(ABC):
     @abstractmethod
-    def process_event(
+    async def process_event(
         self, event: List[EventCountRequest], user: UserPermissionAccessDTO
     ) -> None:
         raise NotImplementedError("Method not implemented")

@@ -6,5 +6,5 @@ from src.dto import EventCountRequest
 
 class InterfaceObserver(ABC):
     @abstractmethod
-    def update(self, data: List[EventCountRequest], filial_id: int) -> None:
+    async def update(self, data: List[EventCountRequest], filial_id: int) -> None:
         raise NotImplementedError("Method not implemented")

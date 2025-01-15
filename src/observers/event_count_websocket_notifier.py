@@ -1,22 +1,38 @@
 # -*- coding: utf-8 -*-
-from fastapi.websockets import WebSocket
+from logging import getLogger
+from typing import List
+from fastapi import WebSocket
 from src.interfaces import InterfaceObserver
+from src.dto import EventCountRequest
 
 
 class DataEventWebSocketNotifier(InterfaceObserver):
     def __init__(self):
+        self.log = getLogger("DataEventWebSocketNotifier")
+        self.log.info(" start get_stactic_count_event_websocket")
         self.connections = {}
 
-    async def add_connection(self, websocket: WebSocket, client_id: str):
-        await websocket.accept()
-        self.connections[client_id] = websocket
+    async def add_connection(self, websocket: WebSocket, client_id: int):
+        self.connections[str(client_id)] = websocket
+        self.log.debug(f"add_connection {client_id}")
 
-    async def remove_connection(self, client_id: str):
+    async def remove_connection(self, client_id: int):
         if client_id in self.connections:
             await self.connections[client_id].close()
             del self.connections[client_id]
 
-    async def update(self, client_id: str, event_data: dict) -> None:
-        websocket = self.connections.get(client_id)
-        if websocket:
-            await websocket.send_json(event_data)
+    # def update(self, data, filial_id):
+    #    self.log.critical(f"update {data} {filial_id}")
+
+    async def update(self, datas: List[EventCountRequest], filial_id: int) -> None:
+        self.log.debug(f"update {datas} {filial_id}")
+        websocket = self.connections.get(str(filial_id))
+        if websocket is None:
+            self.log.error(f"WebSocket not found for client ID: {filial_id}")
+            return
+        try:
+            for data in datas:
+                await websocket.send_json(data.to_dict())
+        except Exception as error:
+            self.log.error(f"Erro ao enviar mensagem para o WebSocket: {error}")
+            self.remove_connection(str(filial_id))
