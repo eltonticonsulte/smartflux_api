@@ -3,8 +3,8 @@ from src.interfaces.services import InterfaceTaskUpdateViewService
 from ..database import EventCount
 from ..repository import (
     TaskUpdateViewRepository,
-    CountEventStorageRepository,
-    TodayEstorageRepository,
+    StorageRepository,
+    StorageTodayRepository,
 )
 
 
@@ -12,8 +12,8 @@ class TaskUpdateViewService(InterfaceTaskUpdateViewService):
     def __init__(
         self,
         repo_view: TaskUpdateViewRepository,
-        repo_storage: CountEventStorageRepository,
-        repo_event: TodayEstorageRepository,
+        repo_storage: StorageRepository,
+        repo_event: StorageTodayRepository,
     ):
         self.repo_view = repo_view
         self.repo_storage = repo_storage
