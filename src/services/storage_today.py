@@ -6,6 +6,7 @@ from src.dto import (
     TotalCount,
     TotalCountGrupZone,
     TotalCountGrupHour,
+    TotalCountGrupCamera,
 )
 from src.repository import StorageTodayRepository
 
@@ -32,3 +33,8 @@ class StorageTodayServices(InterfaceStorageTodayService):
 
     def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
         return self.repo.count_by_filial_grup_hour(filial_id)
+
+    def get_count_by_camera_grup_hour(
+        self, filial_id: int
+    ) -> List[TotalCountGrupCamera]:
+        return self.repo.get_count_by_camera_grup_hour(filial_id)

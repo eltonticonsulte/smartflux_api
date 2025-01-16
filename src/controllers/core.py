@@ -65,7 +65,7 @@ def get_current_event_websocket() -> InterfaceObserver:
 
 
 @lru_cache()
-def get_service_count_event_storage() -> InterfaceStorageService:
+def get_service_storage() -> InterfaceStorageService:
     return FactoryService().create_storage()
 
 

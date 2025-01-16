@@ -5,28 +5,61 @@ import datetime
 from fastapi import APIRouter, Header, Depends, HTTPException
 
 from src.interfaces import InterfaceStorageService
-from src.dto import TotalCountGrupZone, UserPermissionAccessDTO
+from src.dto import TotalCountGrupZone, UserPermissionAccessDTO, TotalCountGroupDay
 from src.enums import UserRule
-from ..core import get_service_count_event_storage, rule_require
+from ..core import get_service_storage, rule_require
 
 
 router = APIRouter()
 log = getLogger("controller_count_event")
 
 
-@router.get(
-    "/data/filial/grup-zone", status_code=200, response_model=List[TotalCountGrupZone]
-)
+@router.get("/zone", status_code=200, response_model=List[TotalCountGrupZone])
 async def get_data_filial_grup_zone(
     current_date: datetime.date,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_count_event_storage),
+    storage: InterfaceStorageService = Depends(get_service_storage),
 ) -> List[TotalCountGrupZone]:
     """
-    busca dados de uma filial agrupados port zona
+    busca dados de uma filial agrupados port zona formato 2024-01-29
     """
 
     try:
         return storage.get_count_by_filial_count_grup_zone(user.filial_id, current_date)
     except Exception as error:
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/period", status_code=200, response_model=List[TotalCountGrupZone])
+async def get_periodo(
+    start_day: datetime.date,
+    end_day: datetime.date,
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+):
+
+    try:
+        return storage.get_count_by_filial_grup_zone_periodo(
+            user.filial_id, start_day, end_day
+        )
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get(
+    "/month-day/{year}/{month}",
+    status_code=200,
+    response_model=List[TotalCountGroupDay],
+)
+def get_storage_day(
+    year: int,
+    month: int,
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+) -> List[TotalCountGroupDay]:
+    try:
+        return storage.get_count_by_filial_group_day(user.filial_id, year, month)
+    except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

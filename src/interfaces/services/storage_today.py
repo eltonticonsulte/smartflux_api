@@ -7,6 +7,7 @@ from src.dto import (
     TotalCount,
     TotalCountGrupZone,
     TotalCountGrupHour,
+    TotalCountGrupCamera,
 )
 
 
@@ -24,3 +25,9 @@ class InterfaceStorageTodayService(ABC):
     @abstractmethod
     def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
         raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_count_by_camera_grup_hour(
+        self, filial_id: int
+    ) -> List[TotalCountGrupCamera]:
+        raise NotImplementedError("Method no implemented")

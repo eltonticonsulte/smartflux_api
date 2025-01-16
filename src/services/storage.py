@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
+from typing import List
 from datetime import date
-from ..interfaces import InterfaceStorageService
-from ..dto import TotalCountGrupZone
-from ..repository import StorageRepository
+from src.interfaces import InterfaceStorageService
+from src.dto import TotalCountGrupZone, TotalCountGroupDay
+from src.repository import StorageRepository
 
 
 class StorageServices(InterfaceStorageService):
@@ -17,3 +18,15 @@ class StorageServices(InterfaceStorageService):
         return self.repository.get_count_by_filial_count_grup_zone(
             filial_id, current_date
         )
+
+    def get_count_by_filial_grup_zone_periodo(
+        self, filial_id: int, start_day: date, end_day: date
+    ) -> List[TotalCountGrupZone]:
+        return self.repository.get_count_by_filial_grup_zone_periodo(
+            filial_id, start_day, end_day
+        )
+
+    def get_count_by_filial_group_day(
+        self, filial_id: int, year: int, month: int
+    ) -> List[TotalCountGroupDay]:
+        return self.repository.get_filial_month_group_day(filial_id, year, month)

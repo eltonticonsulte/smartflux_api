@@ -28,5 +28,10 @@ from .camera import (
 )
 
 from .event_count import EventCountRequest, EventCountResponse, TotalCount
-from .event_count_storage import TotalCountGrupZone, TotalCountGrupHour
+from .event_count_storage import (
+    TotalCountGrupZone,
+    TotalCountGrupHour,
+    TotalCountGrupCamera,
+    TotalCountGroupDay,
+)
 from .permission import CreatePermissionRequest, DataPermission, PermissionResponse
