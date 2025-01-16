@@ -2,17 +2,15 @@
 from src.database.connect import DBConnectionHandler
 from src.database.schema import Usuario, UserRule
 from src.services import UserServices
-from src.repository import UserRepository, PermissaoRepository
+from src.repository import UserRepository
 from src.dto import CreateUserRequest
 from core.config import get_settings
 
 
 def create_user_admin():
-    auth_services = UserServices(UserRepository(), PermissaoRepository())
+    auth_services = UserServices(UserRepository())
     user = CreateUserRequest(username="admin", password="admin123", role=UserRule.ADMIN)
-    user3 = CreateUserRequest(
-        username="admin3", password="admin123", role=UserRule.FILIAL
-    )
+    user3 = CreateUserRequest(username="Filial", password="123", role=UserRule.FILIAL)
     auth_services.create(user3)
 
     return auth_services.create(user)
