@@ -1,3 +1,16 @@
+## 0.0.4 (2025-01-16)
+
+### Fix
+
+- update
+- delete por merge data
+- delete insert viewa
+- script
+
+### Refactor
+
+- storage refactor
+
 ## 0.0.3 (2025-01-15)
 
 ### Fix
