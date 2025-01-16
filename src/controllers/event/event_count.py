@@ -5,7 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi import WebSocket, WebSocketDisconnect
 from src.enums import UserRule
 from src.interfaces import (
-    InterfaceTodayStorageService,
+    InterfaceStorageTodayService,
     InterfaceEventService,
     InterfaceUserService,
 )
@@ -18,7 +18,7 @@ from src.dto import (
     TotalCountGrupHour,
     UserPermissionAccessDTO,
 )
-from .core import (
+from ..core import (
     get_service_count_event,
     rule_require,
     get_service_user,
@@ -50,44 +50,6 @@ async def insert_event(
         return result
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
-        raise HTTPException(500, detail=str(error))
-
-
-@router.get("/total/current-today", status_code=200, response_model=TotalCount)
-async def get_data_day(
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    count_event: InterfaceTodayStorageService = Depends(get_service_count_event),
-) -> TotalCount:
-
-    try:
-        return count_event.get_count_by_filial(user.filial_id)
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
-
-
-@router.get(
-    "/total/grup-zone", status_code=200, response_model=List[TotalCountGrupZone]
-)
-async def get_data_filial_grup_zone(
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    count_event: InterfaceTodayStorageService = Depends(get_service_count_event),
-) -> List[TotalCountGrupZone]:
-    try:
-        return count_event.get_count_by_filial_count_grup_zone(user.filial_id)
-    except Exception as error:
-        raise HTTPException(500, detail=str(error))
-
-
-@router.get(
-    "/total/grup-hour", status_code=200, response_model=List[TotalCountGrupHour]
-)
-async def get_data_filial_grup_hour(
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    count_event: InterfaceTodayStorageService = Depends(get_service_count_event),
-) -> List[TotalCountGrupHour]:
-    try:
-        return count_event.get_count_by_filial_grup_hour(user.filial_id)
-    except Exception as error:
         raise HTTPException(500, detail=str(error))
 
 

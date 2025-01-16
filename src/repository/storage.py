@@ -14,7 +14,7 @@ class RepositoryCountEventStorageException(Exception):
         super().__init__(message)
 
 
-class CountEventStorageRepository:
+class StorageRepository:
     def __init__(self):
         pass
 

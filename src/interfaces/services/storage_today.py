@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from uuid import UUID
 from typing import List
 from src.dto import (
     EventCountRequest,
@@ -11,17 +10,7 @@ from src.dto import (
 )
 
 
-class InterfaceTodayStorageService(ABC):
-    @abstractmethod
-    def insert_pull(
-        self, request: List[EventCountRequest], channels: List[UUID]
-    ) -> List[EventCountResponse]:
-        raise NotImplementedError("Method not implemented")
-
-    @abstractmethod
-    def get_filial_by_user_id(self, filial_id: int) -> int:
-        raise NotImplementedError("Method not implemented")
-
+class InterfaceStorageTodayService(ABC):
     @abstractmethod
     def get_count_by_filial(self, filial_id: int) -> TotalCount:
         raise NotImplementedError("Method not implemented")

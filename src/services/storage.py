@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 import logging
 from datetime import date
-from ..interfaces import InterfaceEventCountStorageService
+from ..interfaces import InterfaceStorageService
 from ..dto import TotalCountGrupZone
-from ..repository import CountEventStorageRepository
+from ..repository import StorageRepository
 
 
-class CountEventStorageServices(InterfaceEventCountStorageService):
-    def __init__(self, repository: CountEventStorageRepository):
+class StorageServices(InterfaceStorageService):
+    def __init__(self, repository: StorageRepository):
         self.log = logging.getLogger(__name__)
         self.repository = repository
 

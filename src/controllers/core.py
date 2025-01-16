@@ -11,8 +11,8 @@ from src.interfaces import (
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
-    InterfaceTodayStorageService,
-    InterfaceEventCountStorageService,
+    InterfaceStorageTodayService,
+    InterfaceStorageService,
     InterfacePermissionService,
     InterfaceEventService,
     InterfaceObserver,
@@ -54,13 +54,18 @@ def get_service_count_event() -> InterfaceEventService:
 
 
 @lru_cache()
+def get_storage_today() -> InterfaceStorageTodayService:
+    return factor_service.create_storage_today()
+
+
+@lru_cache()
 def get_current_event_websocket() -> InterfaceObserver:
     return factor_service.get_stactic_count_event_websocket()
 
 
 @lru_cache()
-def get_service_count_event_storage() -> InterfaceEventCountStorageService:
-    return FactoryService().create_count_event_storage()
+def get_service_count_event_storage() -> InterfaceStorageService:
+    return FactoryService().create_storage()
 
 
 @lru_cache()

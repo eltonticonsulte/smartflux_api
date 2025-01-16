@@ -1,17 +1,17 @@
 # -*- coding: utf-8 -*-
 from typing import List
 import logging
-from src.interfaces import InterfaceTodayStorageService
+from src.interfaces import InterfaceStorageTodayService
 from src.dto import (
     TotalCount,
     TotalCountGrupZone,
     TotalCountGrupHour,
 )
-from src.repository import TodayEstorageRepository
+from src.repository import StorageTodayRepository
 
 
-class TodayStorageServices(InterfaceTodayStorageService):
-    def __init__(self, repo: TodayEstorageRepository):
+class StorageTodayServices(InterfaceStorageTodayService):
+    def __init__(self, repo: StorageTodayRepository):
         self.log = logging.getLogger(__name__)
         self.repo = repo
 

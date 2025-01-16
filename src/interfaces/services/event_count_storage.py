@@ -4,7 +4,7 @@ from datetime import date
 from src.dto import TotalCountGrupZone
 
 
-class InterfaceEventCountStorageService(ABC):
+class InterfaceStorageService(ABC):
     @abstractmethod
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int, current_date: date

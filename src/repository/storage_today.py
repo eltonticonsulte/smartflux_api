@@ -12,7 +12,7 @@ class RepositoryCountEventException(Exception):
         super().__init__(message)
 
 
-class TodayEstorageRepository:
+class StorageTodayRepository:
     def count_by_filial(self, filial_id: int) -> dict:
         with DBConnectionHandler() as session:
             try:

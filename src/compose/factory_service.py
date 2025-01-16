@@ -5,8 +5,8 @@ from src.repository import (
     EmpresaRepository,
     FilialRepository,
     ZoneRepository,
-    TodayEstorageRepository,
-    CountEventStorageRepository,
+    StorageTodayRepository,
+    StorageRepository,
     TaskUpdateViewRepository,
     PermissionRepository,
     CountEventRepository,
@@ -17,8 +17,8 @@ from src.services import (
     EmpresaServices,
     FilialServices,
     ZoneServices,
-    TodayStorageServices,
-    CountEventStorageServices,
+    StorageTodayServices,
+    StorageServices,
     TaskUpdateViewService,
     PermissionService,
     EventService,
@@ -30,8 +30,8 @@ from src.interfaces import (
     InterfaceEmpresaService,
     InterfaceFilialService,
     InterfaceZoneService,
-    InterfaceTodayStorageService,
-    InterfaceEventCountStorageService,
+    InterfaceStorageTodayService,
+    InterfaceStorageService,
     InterfaceTaskUpdateViewService,
     InterfacePermissionService,
     InterfaceEventService,
@@ -72,14 +72,17 @@ class FactoryService:
         subject.register_observer(self.get_stactic_count_event_websocket())
         return EventService(CameraRepository(), subject)
 
-    def create_count_event_storage(self) -> InterfaceEventCountStorageService:
-        return CountEventStorageServices(CountEventStorageRepository())
+    def create_storage(self) -> InterfaceStorageService:
+        return StorageServices(StorageRepository())
+
+    def create_storage_today(self) -> InterfaceStorageTodayService:
+        return StorageTodayServices(StorageTodayRepository())
 
     def create_task_update_view(self) -> InterfaceTaskUpdateViewService:
         return TaskUpdateViewService(
             TaskUpdateViewRepository(),
-            CountEventStorageRepository(),
-            TodayEstorageRepository(),
+            StorageRepository(),
+            StorageTodayRepository(),
         )
 
     def create_permission(self) -> InterfacePermissionService:

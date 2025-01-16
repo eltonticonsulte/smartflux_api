@@ -6,8 +6,8 @@ from .filial import FilialRepository
 from .user import UserRepository, RepositoryAuthExecption
 from .zone import ZoneRepository
 from .camera import CameraRepository
-from .storage_today import TodayEstorageRepository
-from .storage import CountEventStorageRepository
+from .storage_today import StorageTodayRepository
+from .storage import StorageRepository
 from .task_update_view import TaskUpdateViewRepository
 from .count_event import CountEventRepository
 from .permission import PermissionRepository
