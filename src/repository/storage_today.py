@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List
+from uuid import UUID
 from datetime import datetime
 from sqlalchemy import func
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
@@ -92,6 +93,17 @@ class TodayEstorageRepository:
                     )
                     for count in counts
                 ]
+            except Exception as error:
+                session.rollback()
+                raise error
+
+    def delete_by_channel_ids(self, channel_ids: List[UUID]):
+        with DBConnectionHandler() as session:
+            try:
+                session.query(EventCountTemp).filter(
+                    EventCountTemp.channel_id.in_(channel_ids)
+                ).delete()
+                session.commit()
             except Exception as error:
                 session.rollback()
                 raise error
