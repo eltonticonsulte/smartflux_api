@@ -1,3 +1,9 @@
+## 0.0.6 (2025-01-16)
+
+### Refactor
+
+- refactor websocket
+
 ## 0.0.5 (2025-01-16)
 
 ### Fix

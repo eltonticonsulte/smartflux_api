@@ -2,15 +2,18 @@
 import websocket
 import requests
 
+# server = "btm4q4irvg.us-east-1.awsapprunner.com"
+server = "localhost:8002"
+
 
 def login(user, password):
     data = {"username": user, "password": password}
-    response = requests.post("http://localhost:8002/v1/user/login", data=data)
+    response = requests.post(f"http://{server}/v1/user/login", data=data)
     return response.json()
 
 
 def connect_to_websocket():
-    uri = f"ws://localhost:8002/v1/event/ws"  # Substitua localhost:8002 pelo endereço correto do servidor
+    uri = f"ws://{server}/v1/event/ws"
 
     def on_message(ws, message):
         print(f"Mensagem recebida: {message}")
@@ -23,13 +26,15 @@ def connect_to_websocket():
 
     def on_open(ws):
         print(f"Conectado ao WebSocket")
-        ws.send("Olá, servidor!")  # Mensagem inicial para o servidor
+        ws.send("Olá, servidor!")
 
     name_filial = "Filial"
     password = "filial123"
-    headers = {
-        "Authorization": f"Bearer {login(name_filial, password)['access_token']}"
-    }
+    # password = "123"
+    user = login(name_filial, password)
+    print(user)
+
+    headers = {"Authorization": f"Bearer {user['access_token']}"}
     ws = websocket.WebSocketApp(
         uri, on_message=on_message, on_error=on_error, on_close=on_close, header=headers
     )
