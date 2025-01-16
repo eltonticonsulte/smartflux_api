@@ -60,11 +60,6 @@ def get_storage_today() -> InterfaceStorageTodayService:
 
 
 @lru_cache()
-def get_current_event_websocket() -> InterfaceObserver:
-    return factor_service.get_stactic_count_event_websocket()
-
-
-@lru_cache()
 def get_service_storage() -> InterfaceStorageService:
     return FactoryService().create_storage()
 

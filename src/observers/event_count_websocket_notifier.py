@@ -16,13 +16,10 @@ class DataEventWebSocketNotifier(InterfaceObserver):
         self.connections[str(client_id)] = websocket
         self.log.debug(f"add_connection {client_id}")
 
-    async def remove_connection(self, client_id: int):
-        if client_id in self.connections:
-            await self.connections[client_id].close()
-            del self.connections[client_id]
-
-    # def update(self, data, filial_id):
-    #    self.log.critical(f"update {data} {filial_id}")
+    async def remove_connection(self, filial_id: int):
+        if filial_id in self.connections:
+            await self.connections[str(filial_id)].close()
+            del self.connections[str(filial_id)]
 
     async def update(self, datas: List[EventCountRequest], filial_id: int) -> None:
         self.log.debug(f"update {datas} {filial_id}")

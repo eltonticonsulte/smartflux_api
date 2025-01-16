@@ -5,7 +5,6 @@ from fastapi import APIRouter, Depends, HTTPException
 from fastapi import WebSocket, WebSocketDisconnect
 from src.enums import UserRule
 from src.interfaces import (
-    InterfaceStorageTodayService,
     InterfaceEventService,
     InterfaceUserService,
 )
@@ -13,17 +12,9 @@ from src.observers import DataEventWebSocketNotifier
 from src.dto import (
     EventCountRequest,
     EventCountResponse,
-    TotalCount,
-    TotalCountGrupZone,
-    TotalCountGrupHour,
     UserPermissionAccessDTO,
 )
-from ..core import (
-    get_service_count_event,
-    rule_require,
-    get_service_user,
-    get_current_event_websocket,
-)
+from ..core import get_service_count_event, rule_require, get_service_user
 
 router = APIRouter()
 log = getLogger("controller_count_event")
@@ -68,6 +59,7 @@ async def websocket_endpoint(
     token = authorization.split(" ")[1]
     service: InterfaceUserService = get_service_user()
     user: UserPermissionAccessDTO = service.current_user(token)
+    event_count: InterfaceEventService = get_service_count_event()
 
     log.debug(user)
     if not user.is_active:
@@ -77,15 +69,11 @@ async def websocket_endpoint(
         websocket.close(code=400, reason="Apenas Filiar pode registrar eventos")
         return
     await websocket.accept()
-    # service_event :  InterfaceEventService = get_service_count_event()
-
-    static_websocket: DataEventWebSocketNotifier = get_current_event_websocket()
-    await static_websocket.add_connection(websocket, user.filial_id)
+    await event_count.add_websocket_connection(websocket, user.filial_id)
     while True:
         try:
             data = await websocket.receive_text()
             log.debug(f"Data received: {data}")
-            # await static_websocket.update([EventCountRequest(filial_id=user.filial_id)], user.filial_id)
         except WebSocketDisconnect:
-            await static_websocket.remove_connection(user.filial_id)
+            await event_count.remove_websocket_connection(user.filial_id)
             break

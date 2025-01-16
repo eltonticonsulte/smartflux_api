@@ -53,11 +53,16 @@ class EventService(InterfaceEventService):
 
         return result
 
-    async def add_websocket_connection(self, websocket):
-        await self.websocket_notifier.add_connection(websocket)
+    async def add_websocket_connection(self, websocket, filial_id):
+        data_notifi: DataEventWebSocketNotifier = self.subject.find_data_websoket()
+        if not data_notifi:
+            self.log.warning(f"Cannot add wesocket connect ")
+        await data_notifi.add_connection(websocket, filial_id)
 
-    async def remove_websocket_connection(self, websocket):
-        await self.websocket_notifier.remove_connection(websocket)
+    async def remove_websocket_connection(self, filial_id: int):
+        data_notifi: DataEventWebSocketNotifier = self.subject.find_data_websoket()
+        if data_notifi:
+            await data_notifi.remove_connection(filial_id)
 
     def check_chennel(
         self, datas: List[EventCountRequest], channels: List[uuid.UUID]
