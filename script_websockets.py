@@ -5,12 +5,12 @@ import requests
 
 def login(user, password):
     data = {"username": user, "password": password}
-    response = requests.post("http://localhost:8002/api/user/login", data=data)
+    response = requests.post("http://localhost:8002/v1/user/login", data=data)
     return response.json()
 
 
 def connect_to_websocket():
-    uri = f"ws://localhost:8002/api/event/ws"  # Substitua localhost:8002 pelo endereço correto do servidor
+    uri = f"ws://localhost:8002/v1/event/ws"  # Substitua localhost:8002 pelo endereço correto do servidor
 
     def on_message(ws, message):
         print(f"Mensagem recebida: {message}")

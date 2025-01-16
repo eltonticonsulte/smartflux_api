@@ -5,12 +5,12 @@ import time
 from random import randint
 
 endpoint = "http://localhost:8002"
-endpoint = "https://btm4q4irvg.us-east-1.awsapprunner.com"
+# endpoint = "https://btm4q4irvg.us-east-1.awsapprunner.com"
 
 
 def login(user, password):
     data = {"username": user, "password": password}
-    response = requests.post(f"{endpoint}/api/user/login", data=data)
+    response = requests.post(f"{endpoint}/v1/user/login", data=data)
     return response.json()
 
 
@@ -27,7 +27,7 @@ def create_event(channel_id: str):
 
 def sen_data(data: dict, token: str):
     headers = {"Authorization": f"Bearer {token}"}
-    response = requests.post(f"{endpoint}/api/event/count", headers=headers, json=data)
+    response = requests.post(f"{endpoint}/v1/event/count", headers=headers, json=data)
     return response
 
 
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     """
     name_filial = "Filial"
     password = "filial123"
-    password = "123"
+    # password = "123"
 
     print("login   ...")
     user = login(name_filial, password)
@@ -77,10 +77,10 @@ if __name__ == "__main__":
         "2802d434-1e59-46e3-b9c7-00553000a0ca",
         "f9b2cbc7-a426-45e2-b987-384196aa8c3f",
     ]
-    list_chennel = [
-        "5f7fc485-8b5d-4170-82ac-edb1cf3b8ab4",
-        "0eb1dcc6-fa4c-4f4e-8e12-b19e03267e94",
-    ]
+    # list_chennel = [
+    #    "5f7fc485-8b5d-4170-82ac-edb1cf3b8ab4",
+    #    "0eb1dcc6-fa4c-4f4e-8e12-b19e03267e94",
+    # ]
     while True:
         time.sleep(1)
         print("criando evento ...")

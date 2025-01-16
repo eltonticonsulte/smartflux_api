@@ -2,6 +2,7 @@
 from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
 from fastapi import APIRouter, Depends, HTTPException
+from core import get_settings
 from src.enums import UserRule
 from src.exceptions import ServiceUserJwtExecption
 from src.dto import AuthUserResponse, UserPermissionAccessDTO
@@ -19,7 +20,7 @@ from src.interfaces import (
 )
 from src.compose import FactoryService
 
-auth2_admin = OAuth2PasswordBearer(tokenUrl="api/user/login")
+auth2_admin = OAuth2PasswordBearer(tokenUrl=f"{get_settings().API_V1_STR}/user/login")
 factor_service = FactoryService()
 
 

@@ -36,7 +36,7 @@ def event():
 def create_app(log, version):
 
     app = FastAPI(title=get_settings().PROJECT_NAME, version=version, lifespan=lifespan)
-    app.include_router(base_ruter, prefix="/api")
+    app.include_router(base_ruter, prefix=get_settings().API_V1_STR)
     trigger = CronTrigger(
         hour=0,
         minute=0,
