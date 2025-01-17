@@ -82,10 +82,10 @@ async def websocket_endpoint(
 @router.post("/ws/connect")
 async def connect(request: Request):
     try:
-        body = await request.body()  # Captura o corpo bruto
-        print(f"Corpo recebido: {body}")
-        event = await request.json()  # Tenta parsear como JSON
-        print(f"Evento JSON: {event}")
+        print(request)
+        # body = await request.body()  # Captura o corpo bruto
+        headers = dict(request.headers)
+        print(headers)
     except Exception as e:
         print(f"Erro ao processar o payload: {e}")
         raise HTTPException(status_code=400, detail="Invalid payload")
