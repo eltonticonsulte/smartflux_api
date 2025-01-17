@@ -85,10 +85,16 @@ async def connect(request: Request):
         print(request)
         # body = await request.body()  # Captura o corpo bruto
         headers = dict(request.headers)
-        print(headers)
+        log.debug(headers)
     except Exception as e:
-        print(f"Erro ao processar o payload: {e}")
-        raise HTTPException(status_code=400, detail="Invalid payload")
+        log.error(f"Erro ao processar o payload: {e}")
+    try:
+
+        body = await request.body()  # Captura o corpo bruto
+        log.debug(body)
+    except Exception as e:
+        log.error(f"Erro ao processar o payload: {e}")
+
     return {"statusCode": 200}
 
 
@@ -118,7 +124,7 @@ async def default_message(request: Request):
         log.debug(f"Erro ao processar o payload: {e}")
     try:
 
-        body = await request.body()  # Captura o corpo bruto
+        body = await request.body()
         log.debug(body)
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
