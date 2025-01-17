@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import json
 from logging import getLogger
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
@@ -85,18 +86,18 @@ async def connect(request: Request):
         print(request)
         # body = await request.body()  # Captura o corpo bruto
         headers = dict(request.headers)
-        log.debug(headers)
+        log.debug(f"Connect: {headers}")
     except Exception as e:
         log.error(f"Erro ao processar o headers: {e}")
     try:
 
         body = await request.body()  # Captura o corpo bruto
-        log.debug(body)
+        log.debug(f"Connect: {body}")
     except Exception as e:
         log.error(f"Erro ao processar o body: {e}")
     try:
         data = await request.json()  # Captura o corpo bruto
-        log.debug(data)
+        log.debug(f"Connect: {data}")
     except Exception as e:
         log.error(f"Erro ao processar o json: {e}")
 
@@ -107,13 +108,13 @@ async def connect(request: Request):
 async def disconnect(request: Request):
     try:
         headers = dict(request.headers)
-        log.debug(headers)
+        log.debug(f"Disconnect: {headers}")
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
     try:
 
         body = await request.body()  # Captura o corpo bruto
-        log.debug(body)
+        log.debug(f"Disconnect: {body}")
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
 
@@ -124,13 +125,14 @@ async def disconnect(request: Request):
 async def default_message(request: Request):
     try:
         headers = dict(request.headers)
-        log.debug(headers)
+        log.debug(f"Default: {headers}")
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
     try:
 
         body = await request.body()
-        log.debug(body)
+        data = json.loads(body)
+        log.debug(f"Default: {data}")
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
 
@@ -139,9 +141,17 @@ async def default_message(request: Request):
 
 @router.post("/ws/EventCount")
 async def event_message(request: Request):
-    event = await request.json()
-    connection_id = event["requestContext"]["connectionId"]
-    body = event.get("body", {})
-    # Lógica para processar mensagens recebidas
-    print(f"Mensagem de {connection_id}: {body}")
+    try:
+        headers = dict(request.headers)
+        log.debug(f"EventCount: {headers}")
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+    try:
+
+        body = await request.body()
+        data = json.loads(body)
+        log.debug(f"EventCount: {data}")
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+
     return {"statusCode": 200}
