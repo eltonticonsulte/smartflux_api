@@ -101,7 +101,7 @@ async def connect(request: Request):
     except Exception as e:
         log.error(f"Erro ao processar o json: {e}")
 
-    return {"statusCode": 200}
+    return {"statusCode": 200, "body": json.dumps("Hello from connect!")}
 
 
 @router.post("/ws/disconnect")
@@ -118,7 +118,7 @@ async def disconnect(request: Request):
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
 
-    return {"statusCode": 200}
+    return {"statusCode": 200, "body": json.dumps("Hello from diconnect!")}
 
 
 @router.post("/ws/default")
@@ -136,7 +136,7 @@ async def default_message(request: Request):
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
 
-    return {"statusCode": 200}
+    return {"statusCode": 200, "body": json.dumps("Hello from default!")}
 
 
 @router.post("/ws/EventCount")
@@ -154,4 +154,4 @@ async def event_message(request: Request):
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
 
-    return {"statusCode": 200}
+    return {"statusCode": 200, "body": json.dumps("Hello from EventCount!")}
