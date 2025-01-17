@@ -96,28 +96,33 @@ async def connect(request: Request):
 async def disconnect(request: Request):
     try:
         headers = dict(request.headers)
+        log.debug(headers)
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
     try:
 
-        # body = await request.body()  # Captura o corpo bruto
-        headers = dict(request.headers)
-        log.debug(headers)
+        body = await request.body()  # Captura o corpo bruto
+        log.debug(body)
     except Exception as e:
         log.debug(f"Erro ao processar o payload: {e}")
-
-    # Lógica para desconectar o cliente
 
     return {"statusCode": 200}
 
 
 @router.post("/ws/default")
 async def default_message(request: Request):
-    event = await request.json()
-    connection_id = event["requestContext"]["connectionId"]
-    body = event.get("body", {})
-    # Lógica para processar mensagens recebidas
-    print(f"Mensagem de {connection_id}: {body}")
+    try:
+        headers = dict(request.headers)
+        log.debug(headers)
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+    try:
+
+        body = await request.body()  # Captura o corpo bruto
+        log.debug(body)
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+
     return {"statusCode": 200}
 
 
