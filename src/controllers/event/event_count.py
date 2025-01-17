@@ -94,10 +94,20 @@ async def connect(request: Request):
 
 @router.post("/ws/disconnect")
 async def disconnect(request: Request):
-    event = await request.json()
-    connection_id = event["requestContext"]["connectionId"]
+    try:
+        headers = dict(request.headers)
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+    try:
+
+        # body = await request.body()  # Captura o corpo bruto
+        headers = dict(request.headers)
+        log.debug(headers)
+    except Exception as e:
+        log.debug(f"Erro ao processar o payload: {e}")
+
     # Lógica para desconectar o cliente
-    print(f"Conexão encerrada: {connection_id}")
+
     return {"statusCode": 200}
 
 
