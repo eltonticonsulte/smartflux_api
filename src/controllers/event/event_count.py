@@ -87,13 +87,18 @@ async def connect(request: Request):
         headers = dict(request.headers)
         log.debug(headers)
     except Exception as e:
-        log.error(f"Erro ao processar o payload: {e}")
+        log.error(f"Erro ao processar o headers: {e}")
     try:
 
         body = await request.body()  # Captura o corpo bruto
         log.debug(body)
     except Exception as e:
-        log.error(f"Erro ao processar o payload: {e}")
+        log.error(f"Erro ao processar o body: {e}")
+    try:
+        data = await request.json()  # Captura o corpo bruto
+        log.debug(data)
+    except Exception as e:
+        log.error(f"Erro ao processar o json: {e}")
 
     return {"statusCode": 200}
 
