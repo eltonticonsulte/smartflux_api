@@ -4,14 +4,8 @@ from logging import getLogger
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from src.enums import UserRule
-from src.interfaces import (
-    InterfaceStorageTodayService,
-    InterfaceEventService,
-    InterfaceUserService,
-)
+from src.interfaces import InterfaceStorageTodayService
 from src.dto import (
-    EventCountRequest,
-    EventCountResponse,
     TotalCount,
     TotalCountGrupZone,
     TotalCountGrupHour,

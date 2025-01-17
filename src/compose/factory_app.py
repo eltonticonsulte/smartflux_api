@@ -20,10 +20,10 @@ async def lifespan(app: FastAPI):
     print("lifespan Iniciando scheduler...")
     with DBConnectionHandler() as db:
         print("Conexão ao banco de dados estabelecida.")
-    scheduler.start()
+    # scheduler.start()
 
     yield
-    scheduler.shutdown()
+    # scheduler.shutdown()
     print("Scheduler finalizado.")
 
 

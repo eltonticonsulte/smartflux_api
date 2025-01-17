@@ -2,13 +2,13 @@
 from logging import getLogger
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException
-from fastapi import WebSocket, WebSocketDisconnect
+from fastapi import WebSocket, WebSocketDisconnect, Request
 from src.enums import UserRule
 from src.interfaces import (
     InterfaceEventService,
     InterfaceUserService,
 )
-from src.observers import DataEventWebSocketNotifier
+
 from src.dto import (
     EventCountRequest,
     EventCountResponse,
@@ -77,3 +77,41 @@ async def websocket_endpoint(
         except WebSocketDisconnect:
             await event_count.remove_websocket_connection(user.filial_id)
             break
+
+
+@router.post("/ws/connect")
+async def connect(request: Request):
+    event = await request.json()
+    connection_id = event["requestContext"]["connectionId"]
+    # Lógica para conectar o cliente
+    print(f"Conexão estabelecida: {connection_id}")
+    return {"statusCode": 200}
+
+
+@router.post("/ws/disconnect")
+async def disconnect(request: Request):
+    event = await request.json()
+    connection_id = event["requestContext"]["connectionId"]
+    # Lógica para desconectar o cliente
+    print(f"Conexão encerrada: {connection_id}")
+    return {"statusCode": 200}
+
+
+@router.post("/ws/default")
+async def default_message(request: Request):
+    event = await request.json()
+    connection_id = event["requestContext"]["connectionId"]
+    body = event.get("body", {})
+    # Lógica para processar mensagens recebidas
+    print(f"Mensagem de {connection_id}: {body}")
+    return {"statusCode": 200}
+
+
+@router.post("/ws/EventCount")
+async def event_message(request: Request):
+    event = await request.json()
+    connection_id = event["requestContext"]["connectionId"]
+    body = event.get("body", {})
+    # Lógica para processar mensagens recebidas
+    print(f"Mensagem de {connection_id}: {body}")
+    return {"statusCode": 200}

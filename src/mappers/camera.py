@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import uuid
-from ..database import Camera
-from ..dto import (
+from src.database import Camera
+from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
     UpdateCameraRequest,
