@@ -22,6 +22,7 @@ from src.services import (
     TaskUpdateViewService,
     PermissionService,
     EventService,
+    WebSocketNotifierService,
 )
 
 from src.interfaces import (
@@ -35,21 +36,22 @@ from src.interfaces import (
     InterfaceTaskUpdateViewService,
     InterfacePermissionService,
     InterfaceEventService,
-    InterfaceObserver,
 )
 from src.observers import (
     SubjectEventCount,
     DataEventCountSave,
-    DataEventWebSocketNotifier,
 )
+from src.external import DataEventWebSocketNotifier
 
 
 class FactoryService:
     def __init__(self):
-        self.stactic_count_event_websocket = DataEventWebSocketNotifier()
+        pass
 
-    def get_stactic_count_event_websocket(self) -> InterfaceObserver:
-        return self.stactic_count_event_websocket
+    def create_websocket(self) -> WebSocketNotifierService:
+        return WebSocketNotifierService(
+            WebSocketNotifierService(), self.create_user(), DataEventWebSocketNotifier()
+        )
 
     def create_camera(self) -> InterfaceCameraService:
         return CameraServices(CameraRepository())
@@ -67,10 +69,7 @@ class FactoryService:
         return ZoneServices(ZoneRepository())
 
     def create_count_event(self) -> InterfaceEventService:
-        subject = SubjectEventCount()
-        subject.register_observer(DataEventCountSave(CountEventRepository()))
-        subject.register_observer(self.get_stactic_count_event_websocket())
-        return EventService(CameraRepository(), subject)
+        return EventService(CameraRepository(), CountEventRepository())
 
     def create_storage(self) -> InterfaceStorageService:
         return StorageServices(StorageRepository())

@@ -1,11 +1,12 @@
 # -*- coding: utf-8 -*-
 from functools import lru_cache
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import Depends, HTTPException
 from core import get_settings
 from src.enums import UserRule
 from src.exceptions import ServiceUserJwtExecption
-from src.dto import AuthUserResponse, UserPermissionAccessDTO
+from src.dto import UserPermissionAccessDTO
+from src.services import WebSocketNotifierService
 from src.interfaces import (
     InterfaceUserService,
     InterfaceCameraService,
@@ -22,6 +23,11 @@ from src.compose import FactoryService
 
 auth2_admin = OAuth2PasswordBearer(tokenUrl=f"{get_settings().API_V1_STR}/user/login")
 factor_service = FactoryService()
+
+
+@lru_cache()
+def get_service_websocket() -> WebSocketNotifierService:
+    return factor_service.create_websocket()
 
 
 @lru_cache()

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from src.database.connect import DBConnectionHandler
-from src.database.schema import Usuario, UserRule
+from src.database.schema import Usuario, UserRule, WebsocketNotification
 from src.services import UserServices
 from src.repository import UserRepository
 from src.dto import CreateUserRequest
@@ -20,6 +20,7 @@ if __name__ == "__main__":
 
     print("Criando tabelas...", get_settings().DATABASE_URL)
     engine = DBConnectionHandler.get_engine(get_settings().DATABASE_URL)
-    Usuario.metadata.create_all(engine)
+    # Usuario.metadata.create_all(engine)
+    WebsocketNotification.metadata.create_all(engine)
     print("Tabelas criadas com sucesso!")
-    print("Admin criado com sucesso!", create_user_admin())
+    # print("Admin criado com sucesso!", create_user_admin())

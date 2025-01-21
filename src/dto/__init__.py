@@ -27,7 +27,12 @@ from .camera import (
     UpdateCameraRequest,
 )
 
-from .event_count import EventCountRequest, EventCountResponse, TotalCount
+from .event_count import (
+    EventCountRequest,
+    EventCountResponse,
+    TotalCount,
+    EventCountDataValidate,
+)
 from .event_count_storage import (
     TotalCountGrupZone,
     TotalCountGrupHour,
@@ -35,3 +40,4 @@ from .event_count_storage import (
     TotalCountGroupDay,
 )
 from .permission import CreatePermissionRequest, DataPermission, PermissionResponse
+from .aws_websocket import EventCountSendWebsocket

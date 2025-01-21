@@ -9,3 +9,4 @@ from .storage import StorageServices
 from .task_update_view import TaskUpdateViewService
 from .permission import PermissionService
 from .event_sevices import EventService
+from .websocket_notity import WebSocketNotifierService

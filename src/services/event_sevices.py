@@ -1,13 +1,15 @@
 # -*- coding: utf-8 -*-
 from typing import List
 import logging
-import uuid
 from src.interfaces import InterfaceEventService
-from src.observers import SubjectEventCount
 from src.repository import CountEventRepository, CameraRepository
-from src.database import EventCountTemp
-from src.observers.event_count_websocket_notifier import DataEventWebSocketNotifier
-from src.dto import EventCountRequest, UserPermissionAccessDTO, EventCountResponse
+from src.database import EventCountTemp, Camera
+from src.dto import (
+    EventCountRequest,
+    UserPermissionAccessDTO,
+    EventCountResponse,
+    EventCountDataValidate,
+)
 from src.mappers import CountEventMapper
 
 
@@ -15,65 +17,36 @@ class EventService(InterfaceEventService):
     def __init__(
         self,
         camera_repository: CameraRepository,
-        observer: SubjectEventCount,
+        event_repository: CountEventRepository,
     ):
         self.log = logging.getLogger(__name__)
-        self.subject = observer
         self.camera_repository = camera_repository
+        self.event_repository = event_repository
 
     async def process_event(
-        self, event: List[EventCountRequest], user: UserPermissionAccessDTO
-    ) -> None:
-        cameras = self.camera_repository.get_by_filial(user.filial_id)
-        channels = [camera.channel_id for camera in cameras]
-        data_success, data_fail = self.check_chennel(event, channels)
-        result: List[EventCountResponse] = []
-        if data_success:
-            entity_data: List[EventCountTemp] = [
-                CountEventMapper.create_event_request_to_entity(data)
-                for data in data_success
-            ]
-            await self.subject.notify_observers(data_success, user.filial_id)
-
-        for data in data_success:
-            result.append(
-                EventCountResponse(
-                    event_id=data.event_id, status=True, description="Success"
-                )
+        self, events: List[EventCountRequest], user: UserPermissionAccessDTO
+    ) -> List[EventCountDataValidate]:
+        result_validate: List[EventCountDataValidate] = []
+        for event in events:
+            result_validate.append(
+                CountEventMapper.create_event_request_to_validate(event)
             )
 
-        for data in data_fail:
-            result.append(
-                EventCountResponse(
-                    event_id=data.event_id,
-                    status=False,
-                    description=f"Channel not found in current filial {user.filial_id} {data.channel_id}",
-                )
-            )
+        cameras: List[Camera] = self.camera_repository.get_by_filial(user.filial_id)
+        self.check_cameras(result_validate, cameras)
+        self.send_database(result_validate)
+        return result_validate
 
-        return result
+    def send_database(self, datas: List[EventCountDataValidate]):
+        entitys = [
+            CountEventMapper.create_event_validate_to_entity(data) for data in datas
+        ]
+        self.event_repository.create_all(entitys)
 
-    async def add_websocket_connection(self, websocket, filial_id):
-        data_notifi: DataEventWebSocketNotifier = self.subject.find_data_websoket()
-        if not data_notifi:
-            self.log.warning(f"Cannot add wesocket connect ")
-        await data_notifi.add_connection(websocket, filial_id)
-
-    async def remove_websocket_connection(self, filial_id: int):
-        data_notifi: DataEventWebSocketNotifier = self.subject.find_data_websoket()
-        if data_notifi:
-            await data_notifi.remove_connection(filial_id)
-
-    def check_chennel(
-        self, datas: List[EventCountRequest], channels: List[uuid.UUID]
-    ) -> List[EventCountRequest]:
-        datas_fail = []
-        data_success = []
-
+    def check_cameras(self, datas: List[EventCountDataValidate], cameras: List[Camera]):
         for data in datas:
-            if data.channel_id not in channels:
-                self.log.error(f"Channel not found {data.channel_id} {channels}")
-                datas_fail.append(data)
-            else:
-                data_success.append(data)
-        return data_success, datas_fail
+            for camera in cameras:
+                if camera.channel_id == data.channel_id:
+                    data.camera_name = camera.camera_name
+                    data.status = True
+                    break
