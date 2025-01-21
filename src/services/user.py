@@ -2,24 +2,19 @@
 from datetime import datetime, timedelta
 import logging
 import hmac
-from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from core import get_settings
 from src.repository import UserRepository
-from src.database import Usuario, PermissaoAcesso
+from src.database import Usuario
 from src.exceptions import ServiceUserExecption, ServiceUserJwtExecption
-from src.enums import UserRule
 from src.dto import (
     AuthUserResponse,
     CreateUserRequest,
     AuthUserRequest,
-    GetUserResponse,
     UserPermissionAccessDTO,
 )
 from src.mappers import UserMapper
 from src.interfaces import InterfaceUserService
-
-auth2_scheme = OAuth2PasswordBearer(tokenUrl="api/user/login")
 
 
 class UserServices(InterfaceUserService):
