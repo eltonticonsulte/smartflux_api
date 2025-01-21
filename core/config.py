@@ -8,11 +8,13 @@ class Settings(BaseSettings):
     VERSION: str = "1.0.0"
     API_V1_STR: str = "/v1"
 
-    POSTGRES_USER: str = ""
-    POSTGRES_PASSWORD: str = ""
-    POSTGRES_SERVER: str = ""
-    POSTGRES_PORT: str = str(5432)
-    POSTGRES_DB: str = ""
+    DB_USER: str = ""
+    DB_PASSWORD: str = ""
+    DB_HOST: str = ""
+    DB_PORT: str = str(5432)
+    DB_NAME: str = ""
+    WEBS0CKET_ENDPOINT: str = ""
+    AWS_REGION: str = ""
     SECRET_KEY: str = (
         "fddfasdfsftriyoierksdhpgpuhfbap3456l"  # Change this in production
     )
