@@ -11,4 +11,5 @@ from .schema import (
     UserRule,
     Usuario,
     PermissaoAcesso,
+    WebsocketNotification,
 )

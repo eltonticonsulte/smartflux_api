@@ -149,3 +149,11 @@ class EventCount(Base):
     zone = relationship("Zone", backref="event_count")
 
     __table_args__ = (Index("idx_camera_date", "channel_id", "date"),)
+
+
+class WebsocketNotification(Base):
+    __tablename__ = "websocket_notification"
+
+    connect_id = Column(String, nullable=False, primary_key=True)
+    token_filial = Column(String, nullable=False)
+    create_time = Column(DateTime, default=func.now())
