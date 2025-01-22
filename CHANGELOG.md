@@ -1,3 +1,29 @@
+## 0.0.7 (2025-01-22)
+
+### Fix
+
+- update requirement
+- test conect websocket
+- add repo websocket
+- remove endpoint ws
+- add table websocket
+- up
+- updade
+- update
+- update
+- update
+- upate
+- updade
+- upate
+- add endpoin websocket
+
+### Refactor
+
+- connect database
+- websocket
+- remo service user enpoint obsolet
+- update core rename enviroment
+
 ## 0.0.6 (2025-01-16)
 
 ### Refactor
