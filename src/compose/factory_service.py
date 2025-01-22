@@ -4,7 +4,6 @@ from src.repository import (
     UserRepository,
     EmpresaRepository,
     FilialRepository,
-    ZoneRepository,
     StorageTodayRepository,
     StorageRepository,
     TaskUpdateViewRepository,
@@ -17,7 +16,6 @@ from src.services import (
     UserServices,
     EmpresaServices,
     FilialServices,
-    ZoneServices,
     StorageTodayServices,
     StorageServices,
     TaskUpdateViewService,
@@ -31,7 +29,6 @@ from src.interfaces import (
     InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceZoneService,
     InterfaceStorageTodayService,
     InterfaceStorageService,
     InterfaceTaskUpdateViewService,
@@ -65,9 +62,6 @@ class FactoryService:
 
     def create_filial(self) -> InterfaceFilialService:
         return FilialServices(FilialRepository())
-
-    def create_zone(self) -> InterfaceZoneService:
-        return ZoneServices(ZoneRepository())
 
     def create_count_event(self) -> InterfaceEventService:
         return EventService(CameraRepository(), CountEventRepository())

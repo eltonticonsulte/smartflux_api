@@ -12,7 +12,6 @@ from src.interfaces import (
     InterfaceCameraService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceZoneService,
     InterfaceStorageTodayService,
     InterfaceStorageService,
     InterfacePermissionService,
@@ -48,11 +47,6 @@ def get_service_empresa() -> InterfaceEmpresaService:
 @lru_cache()
 def get_service_filial() -> InterfaceFilialService:
     return FactoryService().create_filial()
-
-
-@lru_cache()
-def get_service_zone() -> InterfaceZoneService:
-    return FactoryService().create_zone()
 
 
 @lru_cache()

@@ -4,7 +4,6 @@ from fastapi import APIRouter
 from src.controllers.user import router as user_route
 from src.controllers.empresa import router as empresa_route
 from src.controllers.filial import router as filial_route
-from src.controllers.zone import router as zone_route
 from src.controllers.camera import router as camera_route
 from src.controllers.event import (
     router_event_count,
@@ -23,7 +22,6 @@ base_ruter.include_router(
 base_ruter.include_router(empresa_route, prefix="/empresa", tags=["Empresa"])
 base_ruter.include_router(filial_route, prefix="/filial", tags=["Filial"])
 
-base_ruter.include_router(zone_route, prefix="/zone", tags=["Zona"])
 base_ruter.include_router(camera_route, prefix="/camera", tags=["Camera"])
 
 
