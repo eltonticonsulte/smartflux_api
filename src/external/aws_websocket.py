@@ -14,7 +14,9 @@ class DataEventWebSocketNotifier(InterfaceObserver):
         self.endpoint = get_settings().WEBSOCKET_ENDPOINT
         # session = boto3.Session(profile_name="smartflux")
         self.client = boto3.client(
-            "apigatewaymanagementapi", endpoint_url=self.endpoint
+            "apigatewaymanagementapi",
+            endpoint_url=self.endpoint,
+            region_name=get_settings().AWS_REGION,
         )
 
     async def update(self, data: EventCountSendWebsocket, connection_id: str) -> None:
