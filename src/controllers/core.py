@@ -87,7 +87,7 @@ def rule_require(rule_min: UserRule):
             if user.rule.value > rule_min.value:
                 raise HTTPException(
                     401,
-                    detail=f"Unauthorized level {user.role} not allowed, min {rule_min}",
+                    detail=f"Unauthorized level {user.rule} not allowed, min {rule_min}",
                 )
         except ServiceUserJwtExecption as error:
             raise HTTPException(401, detail=str(error))

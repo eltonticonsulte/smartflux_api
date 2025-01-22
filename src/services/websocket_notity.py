@@ -28,12 +28,13 @@ class WebSocketNotifierService:
         self, datas: List[EventCountDataValidate], filial_id: int
     ):
         connect_id = self.get_ref_websocket_connect(filial_id)
+        self.log.debug(f"connect_id {connect_id}")
         if not connect_id:
-            self.log.debug(f"Cannot user connect_id filial {filial_id}")
+            self.log.warning(f"Cannot user connect_id filial {filial_id}")
             return
         for data in datas:
             data_ws = CountEventMapper.create_event_validate_to_websocket(data)
-            self.external_websocket.update(data_ws, connect_id)
+            await self.external_websocket.update(data_ws, connect_id)
 
     def get_ref_websocket_connect(self, filial_id: int) -> Optional[str]:
         datas = self.repo.fetch_all()

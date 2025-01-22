@@ -47,6 +47,6 @@ class EventService(InterfaceEventService):
         for data in datas:
             for camera in cameras:
                 if camera.channel_id == data.channel_id:
-                    data.camera_name = camera.camera_name
+                    data.camera_name = camera.name
                     data.status = True
                     break

@@ -11,7 +11,8 @@ class DataEventWebSocketNotifier(InterfaceObserver):
     def __init__(self):
         self.log = getLogger("DataEventWebSocketNotifier")
         self.log.info(" start get_stactic_count_event_websocket")
-        self.endpoint = get_settings().websocket_endpoint
+        self.endpoint = get_settings().WEBSOCKET_ENDPOINT
+        # session = boto3.Session(profile_name="smartflux")
         self.client = boto3.client(
             "apigatewaymanagementapi", endpoint_url=self.endpoint
         )

@@ -37,7 +37,7 @@ async def insert_event(
         result: List[EventCountDataValidate] = await count_event.process_event(
             request, user
         )
-        count_event.send_database()
+
         await websocket.process_websocket(result, user.filial_id)
         return result
     except Exception as error:

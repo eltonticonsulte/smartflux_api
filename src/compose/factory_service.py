@@ -10,6 +10,7 @@ from src.repository import (
     TaskUpdateViewRepository,
     PermissionRepository,
     CountEventRepository,
+    WebSocketRepository,
 )
 from src.services import (
     CameraServices,
@@ -50,7 +51,7 @@ class FactoryService:
 
     def create_websocket(self) -> WebSocketNotifierService:
         return WebSocketNotifierService(
-            WebSocketNotifierService(), self.create_user(), DataEventWebSocketNotifier()
+            WebSocketRepository(), self.create_user(), DataEventWebSocketNotifier()
         )
 
     def create_camera(self) -> InterfaceCameraService:
