@@ -2,8 +2,8 @@
 import logging
 import uuid
 from typing import List
-from ..database import Camera, DBConnectionHandler, IntegrityError, Zone, Filial
-from ..mappers import CameraMapper
+from src.database import Camera, DBConnectionHandler, IntegrityError, Filial
+from src.mappers import CameraMapper
 
 
 class RepositoryCameraExeption(Exception):
@@ -45,8 +45,7 @@ class CameraRepository:
         with DBConnectionHandler() as session:
             cameras = (
                 session.query(Camera)
-                .join(Zone, Camera.zona_id == Zone.zone_id)
-                .join(Filial, Zone.filial_id == Filial.filial_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
                 .filter(Filial.filial_id == filial_id)
                 .all()
             )

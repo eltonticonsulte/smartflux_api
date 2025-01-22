@@ -2,7 +2,7 @@
 from typing import List
 from datetime import date
 from sqlalchemy import func
-from src.database import DBConnectionHandler, EventCount, Camera, Zone, Filial
+from src.database import DBConnectionHandler, EventCount, Camera, Filial
 from src.dto import TotalCountGrupZone, TotalCountGroupDay
 
 

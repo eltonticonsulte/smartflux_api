@@ -4,7 +4,6 @@ from .connect import DBConnectionHandler
 from .schema import (
     Filial,
     Camera,
-    Zone,
     EventCountTemp,
     EventCount,
     Empresa,

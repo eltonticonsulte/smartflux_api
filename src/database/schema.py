@@ -86,17 +86,6 @@ class Filial(Base):
     description = Column(String, nullable=True)
     empresa_id = Column(Integer, ForeignKey("empresas.empresa_id"), nullable=False)
     empresa = relationship("Empresa", back_populates="filiais")
-    zones = relationship("Zone", back_populates="filial")
-
-
-class Zone(Base):
-    __tablename__ = "zones"
-
-    zone_id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String, nullable=False)
-    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
-    filial = relationship("Filial", back_populates="zones")
-    camera = relationship("Camera", back_populates="zone")
 
 
 class Camera(Base):
@@ -105,11 +94,12 @@ class Camera(Base):
         PGUUID(as_uuid=True), primary_key=True, default=uuid.uuid4, doc="UUID da camera"
     )
     name = Column(String, nullable=False)
+    tag = Column(String, nullable=False, default="")
     metadate = Column(JSON, nullable=True)
     worker_id = Column(String, nullable=True)
-    zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
+    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
     status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
-    zone = relationship("Zone", back_populates="camera")
+    filial = relationship("Filial", backref="camera")
     eventos = relationship("EventCountTemp", backref="camera")
     event_count_hourly = relationship("EventCount", backref="camera")
 
@@ -142,11 +132,7 @@ class EventCount(Base):
     total_count_in = Column(Integer, default=0, nullable=False)
     total_count_out = Column(Integer, default=0, nullable=False)
     filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
-    zona_id = Column(Integer, ForeignKey("zones.zone_id"), nullable=False)
-    zone_name = Column(String, nullable=False)
-
     filial = relationship("Filial", backref="event_count")
-    zone = relationship("Zone", backref="event_count")
 
     __table_args__ = (Index("idx_camera_date", "channel_id", "date"),)
 

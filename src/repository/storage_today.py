@@ -3,7 +3,7 @@ from typing import List
 from uuid import UUID
 from datetime import datetime
 from sqlalchemy import func
-from src.database import DBConnectionHandler, EventCountTemp, Camera, Zone, Filial
+from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
 from src.dto import TotalCountGrupZone, TotalCountGrupHour, TotalCountGrupCamera
 
 
@@ -22,8 +22,7 @@ class StorageTodayRepository:
                         func.sum(EventCountTemp.count_out).label("total_count_out"),
                     )
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Zone, Camera.zona_id == Zone.zone_id)
-                    .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .join(Filial, Camera.filial_id == Filial.filial_id)
                     .filter(Filial.filial_id == filial_id)
                     .one()
                 )
@@ -45,14 +44,13 @@ class StorageTodayRepository:
                     session.query(
                         func.sum(EventCountTemp.count_in).label("total_count_in"),
                         func.sum(EventCountTemp.count_out).label("total_count_out"),
-                        Zone.zone_id,
-                        Zone.name.label("zone_name"),
+                        Camera.tag,
+                        Camera.tag.label("zone_name"),
                     )
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Zone, Camera.zona_id == Zone.zone_id)
-                    .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .join(Filial, Camera.filial_id == Filial.filial_id)
                     .filter(Filial.filial_id == filial_id)
-                    .group_by(Zone.zone_id, Zone.name)
+                    .group_by(Camera.tag)
                     .all()
                 )
                 return [
@@ -79,8 +77,7 @@ class StorageTodayRepository:
                         Camera.name.label("camera"),
                     )
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Zone, Camera.zona_id == Zone.zone_id)
-                    .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .join(Filial, Camera.filial_id == Filial.filial_id)
                     .filter(Filial.filial_id == filial_id)
                     .group_by(Camera.channel_id, Camera.name)
                     .all()
@@ -109,8 +106,7 @@ class StorageTodayRepository:
                         ),
                     )
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Zone, Camera.zona_id == Zone.zone_id)
-                    .join(Filial, Zone.filial_id == Filial.filial_id)
+                    .join(Filial, Camera.filial_id == Filial.filial_id)
                     .filter(Filial.filial_id == filial_id)
                     .group_by(func.date_trunc("hour", EventCountTemp.event_time))
                     .all()

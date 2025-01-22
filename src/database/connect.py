@@ -21,7 +21,7 @@ class DBConnectionHandler:
     def __init__(self) -> None:
         self.session: Optional[Session] = None
 
-    @staticmethod
+    @classmethod
     def get_engine(cls) -> Engine:
         return cls.__engine
 
