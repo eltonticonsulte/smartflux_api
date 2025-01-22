@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import logging
 from typing import List
-from ..repository import EmpresaRepository
-from ..dto import CreateEmpresaRequest, GetEmpresaResponse, UpdateEmpresaRequest
-from ..mappers import EmpresaMapper
+from src.repository import EmpresaRepository
+from src.dto import CreateEmpresaRequest, GetEmpresaResponse, UpdateEmpresaRequest
+from src.mappers import EmpresaMapper
 
 
 class EmpresaServices:
@@ -25,6 +25,8 @@ class EmpresaServices:
 
     def get_by_id(self, empresa_id: int) -> GetEmpresaResponse:
         empresa = self.repository.get_by_id(empresa_id)
+        if empresa is None:
+            raise Exception(f"Empresa not found by id {empresa_id}")
         return EmpresaMapper.get_entity_to_response(empresa)
 
     def update(

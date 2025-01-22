@@ -42,6 +42,7 @@ async def get_all(
         result: List[GetEmpresaResponse] = service.get_all()
         return result
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
@@ -55,6 +56,7 @@ async def get_by_id(
         result: GetEmpresaResponse = service.get_by_id(empresa_id)
         return result
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
@@ -70,6 +72,7 @@ async def update(
         result: GetEmpresaResponse = service.update(empresa_id, request)
         return result
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
@@ -83,4 +86,5 @@ async def delete(
         service.delete(empresa_id)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
