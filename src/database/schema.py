@@ -102,6 +102,9 @@ class Camera(Base):
     filial = relationship("Filial", backref="camera")
     eventos = relationship("EventCountTemp", backref="camera")
     event_count_hourly = relationship("EventCount", backref="camera")
+    __table_args__ = (
+        UniqueConstraint("name", "filial_id", name="uix_camera_name_filial"),
+    )
 
 
 class EventCountTemp(Base):

@@ -7,12 +7,14 @@ from ..enums import CameraState
 
 class CreateCameraRequest(BaseModel):
     name: str
+    filal_id: int
     tag: Optional[str] = ""
 
 
 class GetCameraResponse(BaseModel):
     channel_id: UUID
     name: str
+    filial_id: int
     status: CameraState
     tag: str
 
@@ -20,5 +22,6 @@ class GetCameraResponse(BaseModel):
 class UpdateCameraRequest(BaseModel):
     name: Optional[str] = None
     tag: Optional[str] = None
+    filial_id: Optional[int] = None
     status: Optional[CameraState] = None
     metadate: Optional[dict] = None

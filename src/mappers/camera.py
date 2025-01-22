@@ -11,14 +11,17 @@ from src.dto import (
 class CameraMapper:
     @staticmethod
     def create_request_to_entity(new_camera: CreateCameraRequest) -> Camera:
-        return Camera(name=new_camera.name, zona_id=new_camera.zone_id)
+        return Camera(
+            name=new_camera.name, filial_id=new_camera.filal_id, tag=new_camera.tag
+        )
 
     @staticmethod
     def get_entity_to_response(entity: Camera) -> GetCameraResponse:
         return GetCameraResponse(
             channel_id=entity.channel_id,
             name=entity.name,
-            zone_id=entity.zona_id,
+            tag=entity.tag,
+            filial_id=entity.filial_id,
             status=entity.status,
         )
 
@@ -33,4 +36,6 @@ class CameraMapper:
             camera.status = request.status
         if request.metadate:
             camera.metadate = request.metadate
+        if request.filial_id:
+            camera.filial_id = request.filial_id
         return camera
