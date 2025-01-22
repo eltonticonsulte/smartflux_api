@@ -13,7 +13,7 @@ class Settings(BaseSettings):
     DB_HOST: str = ""
     DB_PORT: str = str(5432)
     DB_NAME: str = ""
-    WEBS0CKET_ENDPOINT: str = ""
+    WEBSOCKET_ENDPOINT: str = ""
     AWS_REGION: str = ""
     SECRET_KEY: str = (
         "fddfasdfsftriyoierksdhpgpuhfbap3456l"  # Change this in production
@@ -23,13 +23,13 @@ class Settings(BaseSettings):
 
     @property
     def view_connection(self) -> str:
-        return f"postgresql://{self.POSTGRES_USER}:.........@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+        return f"postgresql://{self.DB_USER}:.........@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     @property
     def DATABASE_URL(self) -> str:
         return (
-            f"postgresql://{self.POSTGRES_USER}:{self.POSTGRES_PASSWORD}"
-            f"@{self.POSTGRES_SERVER}:{self.POSTGRES_PORT}/{self.POSTGRES_DB}"
+            f"postgresql://{self.DB_USER}:{self.DB_PASSWORD}"
+            f"@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
         )
 
     model_config = {"env_file": ".env", "case_sensitive": True}
