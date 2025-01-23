@@ -35,10 +35,7 @@ from src.interfaces import (
     InterfacePermissionService,
     InterfaceEventService,
 )
-from src.observers import (
-    SubjectEventCount,
-    DataEventCountSave,
-)
+
 from src.external import DataEventWebSocketNotifier
 
 
