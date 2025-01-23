@@ -25,6 +25,7 @@ class DataEventWebSocketNotifier(InterfaceObserver):
             region_name=get_settings().AWS_REGION,
             config=config,
         )
+        self.log.info(f" auth {self.client}")
 
     async def update(self, data: EventCountSendWebsocket, connection_id: str) -> None:
 
@@ -33,4 +34,6 @@ class DataEventWebSocketNotifier(InterfaceObserver):
                 ConnectionId=connection_id, Data=json.dumps(data.to_dict())
             )
         except Exception as error:
-            self.log.error(f"Erro ao enviar mensagem para o WebSocket: {error}")
+            self.log.error(
+                f"Erro ao enviar mensagem para o WebSocket: {error}", exc_info=error
+            )
