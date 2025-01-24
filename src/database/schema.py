@@ -99,6 +99,7 @@ class Camera(Base):
     worker_id = Column(String, nullable=True)
     filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
     status = Column(Enum(CameraState, name="camera_state"), default=CameraState.STOP)
+    ultima_modificacao = Column(DateTime, default=func.now(), onupdate=func.now())
     filial = relationship("Filial", backref="camera")
     eventos = relationship("EventCountTemp", backref="camera")
     event_count_hourly = relationship("EventCount", backref="camera")

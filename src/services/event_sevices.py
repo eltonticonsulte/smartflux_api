@@ -23,7 +23,17 @@ class EventService(InterfaceEventService):
         self.camera_repository = camera_repository
         self.event_repository = event_repository
 
-    async def process_event(
+    def create_event(self, event: EventCountRequest) -> EventCountResponse:
+        camera = self.camera_repository.get_by_channel_id(event.channel_id)
+        if camera is None:
+            raise ValueError(f"Camera {event.channel_id} not found")
+        entity = CountEventMapper.create_event_request_to_entity(event)
+        self.event_repository.create(entity)
+        return EventCountResponse(
+            event_id=event.event_id, status=True, description="create"
+        )
+
+    async def process_events(
         self, events: List[EventCountRequest], user: UserPermissionAccessDTO
     ) -> List[EventCountDataValidate]:
         result_validate: List[EventCountDataValidate] = []

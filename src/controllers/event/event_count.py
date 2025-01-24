@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
+from uuid import UUID
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from src.enums import UserRule
-from src.interfaces import InterfaceEventService
+from src.interfaces import InterfaceEventService, InterfaceFilialService
 from src.services import WebSocketNotifierService
 
 from src.dto import (
@@ -12,10 +13,37 @@ from src.dto import (
     UserPermissionAccessDTO,
     EventCountDataValidate,
 )
-from ..core import get_service_count_event, rule_require, get_service_websocket
+from ..core import (
+    get_service_count_event,
+    rule_require,
+    get_service_websocket,
+    get_service_filial,
+)
 
 router = APIRouter()
 log = getLogger("controller_count_event")
+
+
+@router.post("/count", status_code=200, response_model=EventCountResponse)
+async def create_event(
+    request: EventCountRequest,
+    token: UUID = Header(...),
+    filial_service: InterfaceFilialService = Depends(get_service_filial),
+    event_service: InterfaceEventService = Depends(get_service_count_event),
+):
+    log.info(f"create_event {request}")
+    try:
+        filial_service.check_token(token)
+    except Exception as error:
+        log.error(f"error: request {request}", exc_info=error)
+        raise HTTPException(401, detail=str(error))
+
+    try:
+        result: EventCountResponse = event_service.create_event(request)
+        return result
+    except Exception as error:
+        log.error(f"error: request {request}", exc_info=error)
+        raise HTTPException(500, detail=str(error))
 
 
 @router.post("/counts", status_code=201, response_model=List[EventCountDataValidate])
@@ -34,7 +62,7 @@ async def insert_event(
         raise HTTPException(401, detail="O usuário não possui filial")
     try:
         log.info(f"insert_event {request}")
-        result: List[EventCountDataValidate] = await count_event.process_event(
+        result: List[EventCountDataValidate] = await count_event.process_events(
             request, user
         )
 

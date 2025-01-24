@@ -2,9 +2,13 @@
 import uuid
 import logging
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Header
 from fastapi.responses import JSONResponse
-from src.interfaces import InterfaceCameraService, InterfaceUserService
+from src.interfaces import (
+    InterfaceCameraService,
+    InterfaceUserService,
+    InterfaceFilialService,
+)
 from src.exceptions import ServiceUserJwtExecption
 from src.dto import (
     CreateCameraRequest,
@@ -12,8 +16,9 @@ from src.dto import (
     UpdateCameraRequest,
     AuthUserResponse,
 )
-from .core import get_service_camera, rule_require
-from ..enums import UserRule
+from src.enums import UserRule
+from .core import get_service_camera, rule_require, get_service_filial
+
 
 router = APIRouter()
 log = logging.getLogger("controller_camera")
@@ -32,6 +37,26 @@ async def create(
     except ServiceUserJwtExecption as error:
         log.error("error", exc_info=error)
         raise HTTPException(401, detail=str(error))
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.post("/ping", status_code=200)
+async def ping(
+    token: str = Header(...),
+    service_filial: InterfaceFilialService = Depends(get_service_filial),
+    service_camera: InterfaceCameraService = Depends(get_service_camera),
+):
+    try:
+        service_filial.check_token(token)
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(401, detail=str(error))
+
+    try:
+        service_camera.ping()
+        return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

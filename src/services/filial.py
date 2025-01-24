@@ -29,6 +29,10 @@ class FilialServices(InterfaceFilialService):
         result = [FilialMapper.get_entity_to_response(filial) for filial in datas]
         return result
 
+    def get_by_id(self, filial_id: int) -> GetFilialResponse:
+        filial = self.repository.get_by_id(filial_id)
+        return FilialMapper.get_entity_to_response(filial)
+
     def get_by_token(self, token: UUID) -> GetFilialResponse:
         self.log.debug(f"validate_token {token}")
         filial = self.repository.get_by_token(token)

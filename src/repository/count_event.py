@@ -19,7 +19,7 @@ class CountEventRepository:
         with DBConnectionHandler() as session:
             session.add(event)
             session.commit()
-            return event.channel_id
+            return event.count_event_id
 
     def delete_by_channel_ids(self, channel_ids: List[UUID]):
         with DBConnectionHandler() as session:

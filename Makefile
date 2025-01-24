@@ -25,3 +25,6 @@ logs:
 	docker logs ia -f
 conect_db:
 	docker exec -it smartflux_db psql -U postgres
+
+upgrade_db:
+	alembic upgrade head
