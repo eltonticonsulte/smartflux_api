@@ -5,7 +5,11 @@ import datetime
 from fastapi import APIRouter, Header, Depends, HTTPException
 
 from src.interfaces import InterfaceStorageService
-from src.dto import TotalCountGrupZone, UserPermissionAccessDTO, TotalCountGroupDay
+from src.dto import (
+    ResponseTotalCountGrupZone,
+    UserPermissionAccessDTO,
+    ResponseTotalCountGroupDay,
+)
 from src.enums import UserRule
 from ..core import get_service_storage, rule_require
 
@@ -14,12 +18,12 @@ router = APIRouter()
 log = getLogger("controller_count_event")
 
 
-@router.get("/zone", status_code=200, response_model=List[TotalCountGrupZone])
+@router.get("/zone", status_code=200, response_model=List[ResponseTotalCountGrupZone])
 async def get_data_filial_grup_zone(
     current_date: datetime.date,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
-) -> List[TotalCountGrupZone]:
+) -> List[ResponseTotalCountGrupZone]:
     """
     busca dados de uma filial agrupados port zona formato 2024-01-29
     """
@@ -30,7 +34,7 @@ async def get_data_filial_grup_zone(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/period", status_code=200, response_model=List[TotalCountGrupZone])
+@router.get("/period", status_code=200, response_model=List[ResponseTotalCountGrupZone])
 async def get_periodo(
     start_day: datetime.date,
     end_day: datetime.date,
@@ -50,14 +54,14 @@ async def get_periodo(
 @router.get(
     "/month-day/{year}/{month}",
     status_code=200,
-    response_model=List[TotalCountGroupDay],
+    response_model=List[ResponseTotalCountGroupDay],
 )
 def get_storage_day(
     year: int,
     month: int,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
-) -> List[TotalCountGroupDay]:
+) -> List[ResponseTotalCountGroupDay]:
     try:
         return storage.get_count_by_filial_group_day(user.filial_id, year, month)
     except Exception as error:

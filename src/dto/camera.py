@@ -4,19 +4,20 @@ from typing import Optional
 from pydantic import BaseModel
 from src.enums import CameraState
 
+
 class RequestPing(BaseModel):
     channel_id: UUID
     status: CameraState
     worker_id: str
 
 
-class CreateCameraRequest(BaseModel):
+class RequestCreateCamera(BaseModel):
     name: str
     filal_id: int
     tag: Optional[str] = ""
 
 
-class GetCameraResponse(BaseModel):
+class ResponseCamera(BaseModel):
     channel_id: UUID
     name: str
     filial_id: int
@@ -24,7 +25,7 @@ class GetCameraResponse(BaseModel):
     tag: str
 
 
-class UpdateCameraRequest(BaseModel):
+class RequestUpdateCamera(BaseModel):
     name: Optional[str] = None
     tag: Optional[str] = None
     filial_id: Optional[int] = None

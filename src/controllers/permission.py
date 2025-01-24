@@ -5,12 +5,8 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
 from src.interfaces import InterfacePermissionService
 from src.dto import (
-    AuthUserResponse,
-    AuthUserRequest,
-    CreateUserRequest,
-    GetUserResponse,
     UserPermissionAccessDTO,
-    CreatePermissionRequest,
+    RequestCreatePermission,
 )
 from src.enums import UserRule
 from .core import get_service_permission, rule_require
@@ -22,7 +18,7 @@ log = getLogger("controller Permission")
 
 @router.post("/create", status_code=200)
 async def create(
-    request: CreatePermissionRequest,
+    request: RequestCreatePermission,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfacePermissionService = Depends(get_service_permission),
 ):

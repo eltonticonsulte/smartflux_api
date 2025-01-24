@@ -1,15 +1,15 @@
 # -*- coding: utf-8 -*-
 from ..database import Filial
 from ..dto import (
-    CreateFilialRequest,
-    GetFilialResponse,
-    UpdateFilialRequest,
+    RequestCreateFilial,
+    ResponseFilial,
+    RequestUpdateFilial,
 )
 
 
 class FilialMapper:
     @staticmethod
-    def create_request_to_entity(new_filial: CreateFilialRequest) -> Filial:
+    def create_request_to_entity(new_filial: RequestCreateFilial) -> Filial:
         return Filial(
             name=new_filial.name_filial,
             cnpj=new_filial.cnpj,
@@ -17,8 +17,8 @@ class FilialMapper:
         )
 
     @staticmethod
-    def get_entity_to_response(filial: Filial) -> GetFilialResponse:
-        return GetFilialResponse(
+    def get_entity_to_response(filial: Filial) -> ResponseFilial:
+        return ResponseFilial(
             filial_id=filial.filial_id,
             token=filial.token_api,
             name=filial.name,
@@ -28,7 +28,7 @@ class FilialMapper:
         )
 
     @staticmethod
-    def update_request_to_entity(filial_id: int, filial: UpdateFilialRequest) -> Filial:
+    def update_request_to_entity(filial_id: int, filial: RequestUpdateFilial) -> Filial:
         up_filial = Filial(filial_id=filial_id)
 
         if filial.name is not None:

@@ -4,11 +4,11 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class CreateEmpresaRequest(BaseModel):
+class RequestCreateEmpresa(BaseModel):
     name: str
 
 
-class GetEmpresaResponse(BaseModel):
+class ResponseEmpresa(BaseModel):
     empresa_id: int
     name: str
     is_active: bool
@@ -16,7 +16,7 @@ class GetEmpresaResponse(BaseModel):
     description: str
 
 
-class UpdateEmpresaRequest(BaseModel):
+class ResquestUpdateEmpresa(BaseModel):
     name: Optional[str] = None
     is_active: Optional[bool] = None
     description: Optional[str] = None

@@ -8,9 +8,9 @@ from src.repository import UserRepository
 from src.database import Usuario
 from src.exceptions import ServiceUserExecption, ServiceUserJwtExecption
 from src.dto import (
-    AuthUserResponse,
-    CreateUserRequest,
-    AuthUserRequest,
+    ResponseAuthUser,
+    RequestCreateUser,
+    RequestAuthUser,
     UserPermissionAccessDTO,
 )
 from src.mappers import UserMapper
@@ -22,14 +22,14 @@ class UserServices(InterfaceUserService):
         self.repo_user = repo_user
         self.log = logging.getLogger(__name__)
 
-    def create(self, user: CreateUserRequest) -> int:
+    def create(self, user: RequestCreateUser) -> int:
         self.log.debug(f"create_user {user}")
         entity = UserMapper.create_user_to_entity(user)
         user_id = self.repo_user.create(entity)
         new_user = self.repo_user.get_by_id(user_id)
         return UserMapper.get_entity_to_response(new_user)
 
-    def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
+    def auth_user(self, request: RequestAuthUser) -> ResponseAuthUser:
         password_hash = UserMapper.password_to_hash(request.password)
         user: Usuario = self.repo_user.get_user_by_name(request.username)
         self.log.debug(f"auth_user {user}")
@@ -41,7 +41,7 @@ class UserServices(InterfaceUserService):
         if not user.is_active:
             raise ServiceUserExecption("Inactive user")
 
-        user_result = AuthUserResponse(
+        user_result = ResponseAuthUser(
             username=user.username,
             user_id=user.user_id,
             access_token="",
@@ -72,7 +72,7 @@ class UserServices(InterfaceUserService):
             raise ServiceUserJwtExecption(f"JWT Error: {erros}") from erros
 
     @staticmethod
-    def create_access_token(user: AuthUserRequest) -> None:
+    def create_access_token(user: RequestAuthUser) -> None:
         to_encode = {"sub": user.username}
         expire = datetime.utcnow() + timedelta(
             minutes=get_settings().ACCESS_TOKEN_EXPIRE_MINUTES

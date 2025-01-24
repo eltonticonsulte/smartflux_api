@@ -1,19 +1,18 @@
 # -*- coding: utf-8 -*-
 import uuid
-from datetime import datetime
 from src.database import Camera
 from src.enums import CameraState
 from src.dto import (
-    CreateCameraRequest,
-    GetCameraResponse,
-    UpdateCameraRequest,
-    RequestPing
+    RequestCreateCamera,
+    ResponseCamera,
+    RequestUpdateCamera,
+    RequestPing,
 )
 
 
 class CameraMapper:
     @staticmethod
-    def create_request_to_entity(new_camera: CreateCameraRequest) -> Camera:
+    def create_request_to_entity(new_camera: RequestCreateCamera) -> Camera:
         if new_camera.tag is None or new_camera.tag == "":
             new_camera.tag = new_camera.name
         return Camera(
@@ -27,8 +26,8 @@ class CameraMapper:
         )
 
     @staticmethod
-    def get_entity_to_response(entity: Camera) -> GetCameraResponse:
-        return GetCameraResponse(
+    def get_entity_to_response(entity: Camera) -> ResponseCamera:
+        return ResponseCamera(
             channel_id=entity.channel_id,
             name=entity.name,
             tag=entity.tag,
@@ -38,7 +37,7 @@ class CameraMapper:
 
     @staticmethod
     def update_request_to_entity(
-        channel_id: uuid.UUID, request: UpdateCameraRequest
+        channel_id: uuid.UUID, request: RequestUpdateCamera
     ) -> Camera:
         camera = Camera(channel_id=channel_id)
         if request.name:

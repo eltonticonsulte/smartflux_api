@@ -3,7 +3,7 @@ from typing import List
 from datetime import date
 from sqlalchemy import func
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
-from src.dto import TotalCountGrupZone, TotalCountGroupDay
+from src.dto import ResponseTotalCountGrupZone, ResponseTotalCountGroupDay
 
 
 class RepositoryCountEventStorageException(Exception):
@@ -26,7 +26,7 @@ class StorageRepository:
 
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> List[TotalCountGrupZone]:
+    ) -> List[ResponseTotalCountGrupZone]:
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -41,7 +41,7 @@ class StorageRepository:
                     .all()
                 )
                 return [
-                    TotalCountGrupZone(
+                    ResponseTotalCountGrupZone(
                         zone_name=count.zone_name,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
@@ -54,7 +54,7 @@ class StorageRepository:
 
     def get_count_by_filial_grup_zone_periodo(
         self, filial_id: int, start_day: date, end_day: date
-    ) -> List[TotalCountGrupZone]:
+    ) -> List[ResponseTotalCountGrupZone]:
         with DBConnectionHandler() as session:
             try:
                 result = (
@@ -69,7 +69,7 @@ class StorageRepository:
                     .all()
                 )
                 return [
-                    TotalCountGrupZone(
+                    ResponseTotalCountGrupZone(
                         zone_name=count.zone_name,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
@@ -82,7 +82,7 @@ class StorageRepository:
 
     def get_filial_month_group_day(
         self, filial_id: int, year: int, month: int
-    ) -> List[TotalCountGroupDay]:
+    ) -> List[ResponseTotalCountGroupDay]:
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -99,7 +99,7 @@ class StorageRepository:
                     .all()
                 )
                 return [
-                    TotalCountGroupDay(
+                    ResponseTotalCountGroupDay(
                         day=count.day.strftime("%Y-%m-%d"),
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,

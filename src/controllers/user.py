@@ -6,10 +6,9 @@ from fastapi.security import OAuth2PasswordRequestForm
 from fastapi import APIRouter, Depends, HTTPException
 from src.interfaces import InterfaceUserService
 from src.dto import (
-    AuthUserResponse,
-    AuthUserRequest,
-    CreateUserRequest,
-    GetUserResponse,
+    ResponseAuthUser,
+    RequestAuthUser,
+    RequestCreateUser,
     UserPermissionAccessDTO,
 )
 from src.enums import UserRule
@@ -20,14 +19,14 @@ router = APIRouter()
 log = getLogger("controller user")
 
 
-@router.post("/login", response_model=AuthUserResponse, status_code=200)
+@router.post("/login", response_model=ResponseAuthUser, status_code=200)
 async def get_login(
     auth: Annotated[OAuth2PasswordRequestForm, Depends()],
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
-        result: AuthUserResponse = service.auth_user(
-            AuthUserRequest(username=auth.username, password=auth.password)
+        result: ResponseAuthUser = service.auth_user(
+            RequestAuthUser(username=auth.username, password=auth.password)
         )
         return result
     except Exception as error:
@@ -37,12 +36,12 @@ async def get_login(
 
 @router.post("/create", status_code=200)
 async def create(
-    request: CreateUserRequest,
+    request: RequestCreateUser,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
-        result: AuthUserResponse = service.create(request)
+        result: ResponseAuthUser = service.create(request)
         return result
     except Exception as error:
         log.error("error", exc_info=error)
@@ -56,13 +55,13 @@ async def get_status(
     return user
 
 
-@router.get("/all", status_code=200, response_model=List[GetUserResponse])
+@router.get("/all", status_code=200, response_model=List[ResponseAuthUser])
 async def get_all(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
-        result: List[GetUserResponse] = service.get_all()
+        result: List[ResponseAuthUser] = service.get_all()
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

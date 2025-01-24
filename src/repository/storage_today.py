@@ -4,7 +4,11 @@ from uuid import UUID
 from datetime import datetime
 from sqlalchemy import func
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
-from src.dto import TotalCountGrupZone, TotalCountGrupHour, TotalCountGrupCamera
+from src.dto import (
+    ResponseTotalCountGrupZone,
+    ResponseTotalCountGrupHour,
+    ResponseTotalCountGrupCamera,
+)
 
 
 class RepositoryCountEventException(Exception):
@@ -37,7 +41,7 @@ class StorageTodayRepository:
 
     def count_by_filial_count_grup_zone(
         self, filial_id: int
-    ) -> List[TotalCountGrupZone]:
+    ) -> List[ResponseTotalCountGrupZone]:
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -54,7 +58,7 @@ class StorageTodayRepository:
                     .all()
                 )
                 return [
-                    TotalCountGrupZone(
+                    ResponseTotalCountGrupZone(
                         zone_name=count.zone_name,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
@@ -67,7 +71,7 @@ class StorageTodayRepository:
 
     def get_count_by_camera_grup_hour(
         self, filial_id: int
-    ) -> List[TotalCountGrupCamera]:
+    ) -> List[ResponseTotalCountGrupCamera]:
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -83,7 +87,7 @@ class StorageTodayRepository:
                     .all()
                 )
                 return [
-                    TotalCountGrupCamera(
+                    ResponseTotalCountGrupCamera(
                         camera=count.camera,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
@@ -94,7 +98,9 @@ class StorageTodayRepository:
                 session.rollback()
                 raise error
 
-    def count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
+    def count_by_filial_grup_hour(
+        self, filial_id: int
+    ) -> List[ResponseTotalCountGrupHour]:
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -112,7 +118,7 @@ class StorageTodayRepository:
                     .all()
                 )
                 return [
-                    TotalCountGrupHour(
+                    ResponseTotalCountGrupHour(
                         hour=datetime.strftime(count.hour_timestamp, "%H:%M"),
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,

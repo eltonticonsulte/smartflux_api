@@ -28,13 +28,13 @@ class EventCountDataValidate(BaseModel):
         }
 
 
-class EventCountResponse(BaseModel):
+class ResponseEventCount(BaseModel):
     event_id: int
     status: bool
     description: Optional[str]
 
 
-class EventCountRequest(BaseModel):
+class RequestEventCount(BaseModel):
     event_id: int
     channel_id: uuid.UUID
     event_time: datetime
@@ -51,6 +51,6 @@ class EventCountRequest(BaseModel):
         }
 
 
-class TotalCount(BaseModel):
+class ResponseTotalCount(BaseModel):
     total_count_in: int
     total_count_out: int

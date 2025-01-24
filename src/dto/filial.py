@@ -4,13 +4,13 @@ from typing import Optional
 from pydantic import BaseModel
 
 
-class CreateFilialRequest(BaseModel):
+class RequestCreateFilial(BaseModel):
     name_filial: str
     empresa_id: int
     cnpj: str
 
 
-class GetFilialResponse(BaseModel):
+class ResponseFilial(BaseModel):
     filial_id: int
     token: UUID
     name: str
@@ -19,7 +19,7 @@ class GetFilialResponse(BaseModel):
     empresa_id: int
 
 
-class UpdateFilialRequest(BaseModel):
+class RequestUpdateFilial(BaseModel):
     name: Optional[str] = None
     cnpj: Optional[str] = None
     is_active: Optional[bool] = None

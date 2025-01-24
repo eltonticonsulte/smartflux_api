@@ -1,40 +1,39 @@
 # -*- coding: utf-8 -*-
 from .user import (
-    AuthUserResponse,
-    CreateUserRequest,
-    AuthUserRequest,
-    GetUserResponse,
+    ResponseAuthUser,
+    RequestCreateUser,
+    RequestAuthUser,
     UserPermissionAccessDTO,
 )
 from .empresa import (
-    CreateEmpresaRequest,
-    GetEmpresaResponse,
-    UpdateEmpresaRequest,
+    RequestCreateEmpresa,
+    ResponseEmpresa,
+    ResquestUpdateEmpresa,
 )
 from .filial import (
-    CreateFilialRequest,
-    GetFilialResponse,
-    UpdateFilialRequest,
+    RequestCreateFilial,
+    ResponseFilial,
+    RequestUpdateFilial,
 )
 
 from .camera import (
-    CreateCameraRequest,
-    GetCameraResponse,
-    UpdateCameraRequest,
-    RequestPing
+    RequestCreateCamera,
+    ResponseCamera,
+    RequestUpdateCamera,
+    RequestPing,
 )
 
 from .event_count import (
-    EventCountRequest,
-    EventCountResponse,
-    TotalCount,
+    RequestEventCount,
+    ResponseEventCount,
+    ResponseTotalCount,
     EventCountDataValidate,
 )
 from .event_count_storage import (
-    TotalCountGrupZone,
-    TotalCountGrupHour,
-    TotalCountGrupCamera,
-    TotalCountGroupDay,
+    ResponseTotalCountGrupZone,
+    ResponseTotalCountGrupHour,
+    ResponseTotalCountGrupCamera,
+    ResponseTotalCountGroupDay,
 )
-from .permission import CreatePermissionRequest, DataPermission, PermissionResponse
+from .permission import RequestCreatePermission, ResponsePermission
 from .aws_websocket import EventCountSendWebsocket

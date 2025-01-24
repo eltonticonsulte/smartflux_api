@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from src.enums import UserRule
 
 
-class AuthUserResponse(BaseModel):
+class ResponseAuthUser(BaseModel):
     username: str
     user_id: int
     access_token: str
@@ -12,20 +12,14 @@ class AuthUserResponse(BaseModel):
     role: UserRule
 
 
-class AuthUserRequest(BaseModel):
+class RequestAuthUser(BaseModel):
     username: str
     password: str
 
 
-class CreateUserRequest(BaseModel):
+class RequestCreateUser(BaseModel):
     username: str
     password: str
-    role: UserRule
-
-
-class GetUserResponse(BaseModel):
-    user_id: int
-    username: str
     role: UserRule
 
 

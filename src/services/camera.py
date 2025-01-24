@@ -4,10 +4,10 @@ import uuid
 from typing import List
 from src.repository import CameraRepository
 from src.dto import (
-    CreateCameraRequest,
-    GetCameraResponse,
-    UpdateCameraRequest,
-    RequestPing
+    RequestCreateCamera,
+    ResponseCamera,
+    RequestUpdateCamera,
+    RequestPing,
 )
 from src.mappers import CameraMapper
 from src.interfaces import InterfaceCameraService
@@ -18,18 +18,18 @@ class CameraServices(InterfaceCameraService):
         self.repository = repository
         self.log = logging.getLogger(__name__)
 
-    def create(self, request: CreateCameraRequest) -> GetCameraResponse:
+    def create(self, request: RequestCreateCamera) -> ResponseCamera:
         self.log.debug(f"create_camera {request}")
         new_camera = CameraMapper.create_request_to_entity(request)
         channel_id = self.repository.create(new_camera)
         entity = self.repository.get_by_channel_id(channel_id)
         return CameraMapper.get_entity_to_response(entity)
 
-    def ping(self, data: RequestPing ) -> None:
+    def ping(self, data: RequestPing) -> None:
         entity = CameraMapper.update_ping_to_entity(data)
         self.repository.ping(entity)
 
-    def get_all(self) -> List[GetCameraResponse]:
+    def get_all(self) -> List[ResponseCamera]:
         datas = self.repository.get_all()
         result = [CameraMapper.get_entity_to_response(camera) for camera in datas]
         return result
@@ -53,8 +53,8 @@ class CameraServices(InterfaceCameraService):
         self.repository.get_by_channel_id(channel_id)
 
     def update(
-        self, channel_id: uuid.UUID, request: UpdateCameraRequest
-    ) -> GetCameraResponse:
+        self, channel_id: uuid.UUID, request: RequestUpdateCamera
+    ) -> ResponseCamera:
 
         camera = CameraMapper.update_request_to_entity(channel_id, request)
         self.repository.update(camera)

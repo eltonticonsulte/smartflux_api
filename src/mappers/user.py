@@ -2,17 +2,16 @@
 import hashlib
 from src.database import Usuario, PermissaoAcesso
 from src.dto import (
-    CreateUserRequest,
-    AuthUserResponse,
-    GetUserResponse,
+    RequestCreateUser,
+    ResponseAuthUser,
     UserPermissionAccessDTO,
 )
 
 
 class UserMapper:
     @staticmethod
-    def auth_entity_to_response(user: Usuario) -> AuthUserResponse:
-        return AuthUserResponse(
+    def auth_entity_to_response(user: Usuario) -> ResponseAuthUser:
+        return ResponseAuthUser(
             username=user.username,
             access_token=user.username,
             token_type="bearer",
@@ -20,7 +19,7 @@ class UserMapper:
         )
 
     @staticmethod
-    def create_user_to_entity(user: CreateUserRequest) -> Usuario:
+    def create_user_to_entity(user: RequestCreateUser) -> Usuario:
         return Usuario(
             username=user.username,
             password_hash=UserMapper.password_to_hash(user.password),
@@ -29,9 +28,13 @@ class UserMapper:
         )
 
     @staticmethod
-    def get_entity_to_response(user: Usuario) -> GetUserResponse:
-        return GetUserResponse(
-            user_id=user.user_id, username=user.username, role=user.role
+    def get_entity_to_response(user: Usuario) -> ResponseAuthUser:
+        return ResponseAuthUser(
+            usermane=user.username,
+            user_id=user.user_id,
+            access_token="",
+            token_type="",
+            role=user.role,
         )
 
     @staticmethod

@@ -8,8 +8,8 @@ from src.interfaces import InterfaceEventService, InterfaceFilialService
 from src.services import WebSocketNotifierService
 
 from src.dto import (
-    EventCountRequest,
-    EventCountResponse,
+    RequestEventCount,
+    ResponseEventCount,
     UserPermissionAccessDTO,
     EventCountDataValidate,
 )
@@ -24,9 +24,9 @@ router = APIRouter()
 log = getLogger("controller_count_event")
 
 
-@router.post("/count", status_code=200, response_model=EventCountResponse)
+@router.post("/count", status_code=200, response_model=ResponseEventCount)
 async def create_event(
-    request: EventCountRequest,
+    request: RequestEventCount,
     token: UUID = Header(...),
     filial_service: InterfaceFilialService = Depends(get_service_filial),
     event_service: InterfaceEventService = Depends(get_service_count_event),
@@ -39,7 +39,7 @@ async def create_event(
         raise HTTPException(401, detail=str(error))
 
     try:
-        result: EventCountResponse = event_service.create_event(request)
+        result: ResponseEventCount = event_service.create_event(request)
         return result
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
@@ -48,7 +48,7 @@ async def create_event(
 
 @router.post("/counts", status_code=201, response_model=List[EventCountDataValidate])
 async def insert_event(
-    request: List[EventCountRequest],
+    request: List[RequestEventCount],
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     count_event: InterfaceEventService = Depends(get_service_count_event),
     websocket: WebSocketNotifierService = Depends(get_service_websocket),

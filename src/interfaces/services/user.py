@@ -2,16 +2,16 @@
 from abc import ABC, abstractmethod
 from typing import List
 from src.dto import (
-    AuthUserRequest,
-    AuthUserResponse,
-    CreateUserRequest,
+    RequestAuthUser,
+    ResponseAuthUser,
+    RequestCreateUser,
     UserPermissionAccessDTO,
 )
 
 
 class InterfaceUserService(ABC):
     @abstractmethod
-    def auth_user(self, request: AuthUserRequest) -> AuthUserResponse:
+    def auth_user(self, request: RequestAuthUser) -> ResponseAuthUser:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
@@ -19,9 +19,9 @@ class InterfaceUserService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def create(self, request: CreateUserRequest) -> AuthUserResponse:
+    def create(self, request: RequestCreateUser) -> ResponseAuthUser:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_all(self) -> List[AuthUserResponse]:
+    def get_all(self) -> List[ResponseAuthUser]:
         raise NotImplementedError("Method not implemented")

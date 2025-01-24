@@ -7,9 +7,9 @@ from src.interfaces import InterfaceUserService, InterfaceFilialService
 from src.enums import UserRule
 from .core import auth2_admin, get_service_user, get_service_filial, rule_require
 from ..dto import (
-    CreateFilialRequest,
-    GetFilialResponse,
-    UpdateFilialRequest,
+    RequestCreateFilial,
+    ResponseFilial,
+    RequestUpdateFilial,
     UserPermissionAccessDTO,
 )
 
@@ -17,41 +17,41 @@ router = APIRouter()
 log = getLogger("controller Filial")
 
 
-@router.post("/create", status_code=201, response_model=GetFilialResponse)
+@router.post("/create", status_code=201, response_model=ResponseFilial)
 async def create(
-    request: CreateFilialRequest,
+    request: RequestCreateFilial,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceFilialService = Depends(get_service_filial),
 ):
     try:
-        result: GetFilialResponse = service.create(request)
+        result: ResponseFilial = service.create(request)
         return result
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/all", status_code=200, response_model=List[GetFilialResponse])
+@router.get("/all", status_code=200, response_model=List[ResponseFilial])
 async def get_all(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.EMPRESA)),
     service: InterfaceFilialService = Depends(get_service_filial),
 ):
     try:
-        result: List[GetFilialResponse] = service.get_all()
+        result: List[ResponseFilial] = service.get_all()
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
 
-@router.put("/update/{filial_id}", status_code=200, response_model=GetFilialResponse)
+@router.put("/update/{filial_id}", status_code=200, response_model=ResponseFilial)
 async def update(
     filial_id: int,
-    request: UpdateFilialRequest,
+    request: RequestUpdateFilial,
     service: InterfaceFilialService = Depends(get_service_filial),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.EMPRESA)),
 ):
     try:
-        result: GetFilialResponse = service.update(filial_id, request)
+        result: ResponseFilial = service.update(filial_id, request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))

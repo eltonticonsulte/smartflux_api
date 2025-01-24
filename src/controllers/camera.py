@@ -11,11 +11,11 @@ from src.interfaces import (
 )
 from src.exceptions import ServiceUserJwtExecption
 from src.dto import (
-    CreateCameraRequest,
-    GetCameraResponse,
-    UpdateCameraRequest,
-    AuthUserResponse,
-    RequestPing
+    RequestCreateCamera,
+    ResponseCamera,
+    RequestUpdateCamera,
+    ResponseAuthUser,
+    RequestPing,
 )
 from src.enums import UserRule
 from .core import get_service_camera, rule_require, get_service_filial
@@ -25,15 +25,15 @@ router = APIRouter()
 log = logging.getLogger("controller_camera")
 
 
-@router.post("/create", status_code=201, response_model=GetCameraResponse)
+@router.post("/create", status_code=201, response_model=ResponseCamera)
 async def create(
-    request: CreateCameraRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    request: RequestCreateCamera,
+    user: ResponseAuthUser = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
     try:
-        result: GetCameraResponse = service.create(request)
+        result: ResponseCamera = service.create(request)
         return result
     except ServiceUserJwtExecption as error:
         log.error("error", exc_info=error)
@@ -64,30 +64,30 @@ async def ping(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/all", status_code=200, response_model=List[GetCameraResponse])
+@router.get("/all", status_code=200, response_model=List[ResponseCamera])
 async def get_all(
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: ResponseAuthUser = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
     try:
-        result: List[GetCameraResponse] = service.get_all()
+        result: List[ResponseCamera] = service.get_all()
         return result
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
-@router.put("/update/{channel_id}", status_code=200, response_model=GetCameraResponse)
+@router.put("/update/{channel_id}", status_code=200, response_model=ResponseCamera)
 async def update(
     channel_id: uuid.UUID,
-    request: UpdateCameraRequest,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    request: RequestUpdateCamera,
+    user: ResponseAuthUser = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 
     try:
-        result: GetCameraResponse = service.update(channel_id, request)
+        result: ResponseCamera = service.update(channel_id, request)
         return result
     except Exception as error:
         raise HTTPException(500, detail=str(error))
@@ -96,7 +96,7 @@ async def update(
 @router.delete("/delete/{channel_id}", status_code=200)
 async def delete(
     channel_id: uuid.UUID,
-    user: AuthUserResponse = Depends(rule_require(UserRule.ADMIN)),
+    user: ResponseAuthUser = Depends(rule_require(UserRule.ADMIN)),
     service: InterfaceCameraService = Depends(get_service_camera),
 ):
 

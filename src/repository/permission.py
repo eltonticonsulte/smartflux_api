@@ -3,7 +3,7 @@ import logging
 from typing import List
 from sqlalchemy.orm.exc import NoResultFound
 from src.database import Usuario, DBConnectionHandler, PermissaoAcesso, Empresa, Filial
-from src.dto import CreatePermissionRequest
+from src.dto import RequestCreatePermission
 
 
 class PermissionRepository:

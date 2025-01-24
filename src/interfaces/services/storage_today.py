@@ -2,32 +2,34 @@
 from abc import ABC, abstractmethod
 from typing import List
 from src.dto import (
-    EventCountRequest,
-    EventCountResponse,
-    TotalCount,
-    TotalCountGrupZone,
-    TotalCountGrupHour,
-    TotalCountGrupCamera,
+    RequestEventCount,
+    ResponseEventCount,
+    ResponseTotalCount,
+    ResponseTotalCountGrupZone,
+    ResponseTotalCountGrupHour,
+    ResponseTotalCountGrupCamera,
 )
 
 
 class InterfaceStorageTodayService(ABC):
     @abstractmethod
-    def get_count_by_filial(self, filial_id: int) -> TotalCount:
+    def get_count_by_filial(self, filial_id: int) -> ResponseTotalCount:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def get_count_by_filial_count_grup_zone(
         self, filial_id: int
-    ) -> List[TotalCountGrupZone]:
+    ) -> List[ResponseTotalCountGrupZone]:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_hour(self, filial_id: int) -> List[TotalCountGrupHour]:
+    def get_count_by_filial_grup_hour(
+        self, filial_id: int
+    ) -> List[ResponseTotalCountGrupHour]:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def get_count_by_camera_grup_hour(
         self, filial_id: int
-    ) -> List[TotalCountGrupCamera]:
+    ) -> List[ResponseTotalCountGrupCamera]:
         raise NotImplementedError("Method no implemented")

@@ -3,21 +3,21 @@
 from src.mappers.empresa import EmpresaMapper
 from src.database import Empresa
 from src.dto import (
-    CreateEmpresaRequest,
-    GetEmpresaResponse,
-    UpdateEmpresaRequest,
+    RequestCreateEmpresa,
+    ResponseEmpresa,
+    ResquestUpdateEmpresa,
 )
 
 import unittest
 from src.mappers.empresa import EmpresaMapper
-from src.dto import UpdateEmpresaRequest
+from src.dto import ResquestUpdateEmpresa
 from src.database import Empresa
 
 
 class TestEmpresaMapper(unittest.TestCase):
     def xtest_update_request_to_entity_with_all_fields(self):
         empresa_id = 1
-        empresa_request = UpdateEmpresaRequest(
+        empresa_request = ResquestUpdateEmpresa(
             name="name", is_active=True, description="description"
         )
         expected_empresa = Empresa(
@@ -34,7 +34,7 @@ class TestEmpresaMapper(unittest.TestCase):
 
     def test_update_request_to_entity_with_none_fields(self):
         empresa_id = 1
-        empresa_request = UpdateEmpresaRequest()
+        empresa_request = ResquestUpdateEmpresa()
         expected_empresa = Empresa(
             empresa_id=empresa_id, name=None, is_active=None, description=None
         )
@@ -46,7 +46,7 @@ class TestEmpresaMapper(unittest.TestCase):
 
     def test_update_request_to_entity_with_partial_fields(self):
         empresa_id = 1
-        empresa_request = UpdateEmpresaRequest(name="name")
+        empresa_request = ResquestUpdateEmpresa(name="name")
         expected_empresa = Empresa(
             empresa_id=empresa_id, name="name", is_active=None, description=None
         )

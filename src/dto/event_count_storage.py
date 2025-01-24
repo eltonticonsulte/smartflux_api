@@ -2,25 +2,25 @@
 from pydantic import BaseModel
 
 
-class TotalCountGrupZone(BaseModel):
+class ResponseTotalCountGrupZone(BaseModel):
     zone_name: str
     total_count_in: int
     total_count_out: int
 
 
-class TotalCountGrupHour(BaseModel):
+class ResponseTotalCountGrupHour(BaseModel):
     hour: str
     total_count_in: int
     total_count_out: int
 
 
-class TotalCountGrupCamera(BaseModel):
+class ResponseTotalCountGrupCamera(BaseModel):
     camera: str
     total_count_in: int
     total_count_out: int
 
 
-class TotalCountGroupDay(BaseModel):
+class ResponseTotalCountGroupDay(BaseModel):
     day: str
     total_count_in: int
     total_count_out: int

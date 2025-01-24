@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from src.dto import EventCountRequest, EventCountDataValidate, EventCountSendWebsocket
+from src.dto import RequestEventCount, EventCountDataValidate, EventCountSendWebsocket
 from src.database import EventCountTemp
 
 
 class CountEventMapper:
     @staticmethod
-    def to_dto(count_event: EventCountTemp) -> EventCountRequest:
-        return EventCountRequest(
+    def to_dto(count_event: EventCountTemp) -> RequestEventCount:
+        return RequestEventCount(
             channel_id=count_event.channel_id,
             event_time=count_event.event_time,
             count_in=count_event.count_in,
@@ -16,7 +16,7 @@ class CountEventMapper:
 
     @staticmethod
     def create_event_request_to_entity(
-        count_event: EventCountRequest,
+        count_event: RequestEventCount,
     ) -> EventCountTemp:
         return EventCountTemp(
             channel_id=count_event.channel_id,
@@ -27,7 +27,7 @@ class CountEventMapper:
 
     @staticmethod
     def create_event_request_to_validate(
-        event: EventCountRequest,
+        event: RequestEventCount,
     ) -> EventCountDataValidate:
         return EventCountDataValidate(
             event_id=event.event_id,

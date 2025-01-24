@@ -3,16 +3,16 @@ from abc import ABC, abstractmethod
 from uuid import UUID
 from typing import List
 from src.dto import (
-    CreateCameraRequest,
-    GetCameraResponse,
-    UpdateCameraRequest,
-    RequestPing
+    RequestCreateCamera,
+    ResponseCamera,
+    RequestUpdateCamera,
+    RequestPing,
 )
 
 
 class InterfaceCameraService(ABC):
     @abstractmethod
-    def create(self, request: CreateCameraRequest) -> GetCameraResponse:
+    def create(self, request: RequestCreateCamera) -> ResponseCamera:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
@@ -20,10 +20,10 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_all(self) -> List[GetCameraResponse]:
+    def get_all(self) -> List[ResponseCamera]:
         raise NotImplementedError("Method not implemented")
 
-    def get_by_name(self, name: str) -> GetCameraResponse:
+    def get_by_name(self, name: str) -> ResponseCamera:
         pass
 
     @abstractmethod
@@ -35,9 +35,7 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def update(
-        self, channel_id: UUID, request: UpdateCameraRequest
-    ) -> GetCameraResponse:
+    def update(self, channel_id: UUID, request: RequestUpdateCamera) -> ResponseCamera:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
