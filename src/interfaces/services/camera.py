@@ -6,6 +6,7 @@ from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
     UpdateCameraRequest,
+    RequestPing
 )
 
 
@@ -15,7 +16,7 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def ping(self, channel_id: UUID) -> None:
+    def ping(self, data: RequestPing) -> None:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

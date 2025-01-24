@@ -4,6 +4,11 @@ from typing import Optional
 from pydantic import BaseModel
 from src.enums import CameraState
 
+class RequestPing(BaseModel):
+    channel_id: UUID
+    status: CameraState
+    worker_id: str
+
 
 class CreateCameraRequest(BaseModel):
     name: str

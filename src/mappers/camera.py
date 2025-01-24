@@ -7,6 +7,7 @@ from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
     UpdateCameraRequest,
+    RequestPing
 )
 
 
@@ -20,9 +21,9 @@ class CameraMapper:
         )
 
     @staticmethod
-    def update_ping_to_entity(channel_id: uuid.UUID):
+    def update_ping_to_entity(data: RequestPing):
         return Camera(
-            ultimo_ping=datetime.now(), status=CameraState.RUNING, channel_id=channel_id
+            worker_id=data.worker_id, status=data.status, channel_id=data.channel_id
         )
 
     @staticmethod

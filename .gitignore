@@ -8,6 +8,7 @@ dependencies
 # Distribution / packaging
 .Python
 build/
+devops/pgdata
 develop-eggs/
 dist/
 downloads/
