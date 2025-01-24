@@ -11,6 +11,8 @@ from src.dto import (
 class CameraMapper:
     @staticmethod
     def create_request_to_entity(new_camera: CreateCameraRequest) -> Camera:
+        if new_camera.tag is None or new_camera.tag == "":
+            new_camera.tag = new_camera.name
         return Camera(
             name=new_camera.name, filial_id=new_camera.filal_id, tag=new_camera.tag
         )

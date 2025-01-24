@@ -2,17 +2,18 @@
 import logging
 from typing import List
 from uuid import UUID
-from ..repository import FilialRepository
-from ..dto import (
+from src.interfaces import InterfaceFilialService
+from src.repository import FilialRepository
+from src.dto import (
     CreateFilialRequest,
     UpdateFilialRequest,
     GetFilialResponse,
 )
-from ..mappers import FilialMapper
-from ..database import Filial
+from src.mappers import FilialMapper
+from src.database import Filial
 
 
-class FilialServices:
+class FilialServices(InterfaceFilialService):
     def __init__(self, repository: FilialRepository):
         self.repository = repository
         self.log = logging.getLogger(__name__)
@@ -37,13 +38,14 @@ class FilialServices:
             raise ValueError("Filial inativa")
         return FilialMapper.get_entity_to_response(filial)
 
-    def auth(self, name: str, password: str) -> None:
-        filial: Filial = self.repository.get_by_name(name)
-        if str(filial.password_hash) != password:
-            self.log.error(filial.password_hash, password)
-            raise ValueError("Senha inválida")
+    def check_token(self, token: UUID) -> None:
+        filial = self.repository.get_by_token(token)
+        if filial is None:
+            raise ValueError("Token filial é inválido code 002")
+        if filial.token_api != token:
+            raise ValueError("Token filial é inválido code 003")
         if not filial.is_active:
-            raise ValueError("Usuário inativo")
+            raise ValueError("Filial inativa")
 
     def update(self, filial_id: int, request: UpdateFilialRequest) -> GetFilialResponse:
         entity = FilialMapper.update_request_to_entity(filial_id, request)

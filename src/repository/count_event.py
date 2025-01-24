@@ -15,6 +15,12 @@ class CountEventRepository:
                 session.rollback()
                 raise error
 
+    def create(self, event: EventCountTemp):
+        with DBConnectionHandler() as session:
+            session.add(event)
+            session.commit()
+            return event.channel_id
+
     def delete_by_channel_ids(self, channel_ids: List[UUID]):
         with DBConnectionHandler() as session:
             try:

@@ -18,7 +18,7 @@ router = APIRouter()
 log = getLogger("controller_count_event")
 
 
-@router.post("/count", status_code=201, response_model=List[EventCountDataValidate])
+@router.post("/counts", status_code=201, response_model=List[EventCountDataValidate])
 async def insert_event(
     request: List[EventCountRequest],
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),

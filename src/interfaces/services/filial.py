@@ -15,6 +15,10 @@ class InterfaceFilialService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def check_token(self, token: UUID) -> bool:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def get_by_token(self, token: UUID) -> GetFilialResponse:
         raise NotImplementedError("Method not implemented")
 
