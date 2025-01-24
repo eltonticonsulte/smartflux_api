@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 import uuid
+from datetime import datetime
 from src.database import Camera
+from src.enums import CameraState
 from src.dto import (
     CreateCameraRequest,
     GetCameraResponse,
@@ -15,6 +17,12 @@ class CameraMapper:
             new_camera.tag = new_camera.name
         return Camera(
             name=new_camera.name, filial_id=new_camera.filal_id, tag=new_camera.tag
+        )
+
+    @staticmethod
+    def update_ping_to_entity(channel_id: uuid.UUID):
+        return Camera(
+            ultimo_ping=datetime.now(), status=CameraState.RUNING, channel_id=channel_id
         )
 
     @staticmethod

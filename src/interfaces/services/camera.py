@@ -15,6 +15,10 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def ping(self, channel_id: UUID) -> None:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def get_all(self) -> List[GetCameraResponse]:
         raise NotImplementedError("Method not implemented")
 

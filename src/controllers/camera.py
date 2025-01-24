@@ -44,18 +44,19 @@ async def create(
 
 @router.post("/ping", status_code=200)
 async def ping(
-    token: str = Header(...),
+    token_filial: uuid.UUID = Header(...),
+    token_camera: uuid.UUID = Header(...),
     service_filial: InterfaceFilialService = Depends(get_service_filial),
     service_camera: InterfaceCameraService = Depends(get_service_camera),
 ):
     try:
-        service_filial.check_token(token)
+        service_filial.check_token(token_filial)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(401, detail=str(error))
 
     try:
-        service_camera.ping()
+        service_camera.ping(token_camera)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         log.error("error", exc_info=error)
