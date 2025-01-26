@@ -24,6 +24,15 @@ class WebSocketNotifierService:
         self.service_user = service_user
         self.external_websocket = external_websocket
 
+    async def send_message(self, data: EventCountDataValidate, filial_id: int):
+        connect_id = self.get_ref_websocket_connect(filial_id)
+        self.log.debug(f"connect_id {connect_id}")
+        if not connect_id:
+            self.log.warning(f"Cannot user connect_id filial {filial_id}")
+            return
+        CountEventMapper.create_event_validate_to_websocket(data)
+        await self.external_websocket.update(data_ws, connect_id)
+
     async def process_websocket(
         self, datas: List[EventCountDataValidate], filial_id: int
     ):

@@ -30,6 +30,7 @@ async def create_event(
     token: UUID = Header(...),
     filial_service: InterfaceFilialService = Depends(get_service_filial),
     event_service: InterfaceEventService = Depends(get_service_count_event),
+    websocket: WebSocketNotifierService = Depends(get_service_websocket),
 ):
     log.info(f"create_event {request}")
     try:
@@ -37,6 +38,9 @@ async def create_event(
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(401, detail=str(error))
+    websocket.send_message(
+        EventCountDataValidate(**request.dict(), filial_id=filial_service.filial_id)
+    )
 
     try:
         result: ResponseEventCount = event_service.create_event(request)
