@@ -30,7 +30,7 @@ class WebSocketNotifierService:
         if not connect_id:
             self.log.warning(f"Cannot user connect_id filial {filial_id}")
             return
-        CountEventMapper.create_event_validate_to_websocket(data)
+        data_ws = CountEventMapper.create_event_validate_to_websocket(data)
         await self.external_websocket.update(data_ws, connect_id)
 
     async def process_websocket(
