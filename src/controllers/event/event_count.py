@@ -50,7 +50,7 @@ async def create_event(
             status=False,
             description="tEST",
         ),
-        filial_id=filial_service.filial_id,
+        filial_id=1,
     )
 
     try:
