@@ -39,7 +39,18 @@ async def create_event(
         log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(401, detail=str(error))
     websocket.send_message(
-        EventCountDataValidate(**request.dict(), filial_id=filial_service.filial_id)
+        EventCountDataValidate(
+            event_id=request.event_id,
+            camera_name="tEST",
+            channel_id=request.channel_id,
+            zone_name="tEST",
+            count_in=request.count_in,
+            count_out=request.count_out,
+            event_time=request.event_time,
+            status=False,
+            description="tEST",
+        ),
+        filial_id=filial_service.filial_id,
     )
 
     try:
