@@ -27,4 +27,5 @@ conect_db:
 	docker exec -it smartflux_db psql -U postgres
 
 upgrade_db:
+	alembic revision --autogenerate -m "initial migration"
 	alembic upgrade head
