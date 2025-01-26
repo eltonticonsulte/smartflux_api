@@ -38,7 +38,7 @@ async def create_event(
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(401, detail=str(error))
-    websocket.send_message(
+    await websocket.send_message(
         EventCountDataValidate(
             event_id=request.event_id,
             camera_name="tEST",
