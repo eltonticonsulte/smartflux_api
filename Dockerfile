@@ -16,5 +16,5 @@ RUN chmod -R 777 /app
 EXPOSE 8002
 HEALTHCHECK CMD curl --fail http://localhost:8002/_stcore/health
 
-CMD ["sh", "-c", "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8002"]
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port 8002"]
 #CMD ["uvicorn", "main:app", "-b", "0.0.0.0:8002","-k", "uvicorn.workers.UvicornWorker", "-w", "1", "--timeout" ,"10"]
