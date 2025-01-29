@@ -16,7 +16,6 @@ from src.dto import (
 from ..core import (
     get_service_count_event,
     rule_require,
-    get_service_websocket,
     get_service_filial,
 )
 
