@@ -25,11 +25,6 @@ factor_service = FactoryService()
 
 
 @lru_cache()
-def get_service_websocket() -> WebSocketNotifierService:
-    return factor_service.create_websocket()
-
-
-@lru_cache()
 def get_service_user() -> InterfaceUserService:
     return factor_service.create_user()
 

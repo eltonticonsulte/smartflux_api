@@ -43,11 +43,6 @@ class FactoryService:
     def __init__(self):
         pass
 
-    def create_websocket(self) -> WebSocketNotifierService:
-        return WebSocketNotifierService(
-            WebSocketRepository(), self.create_user(), DataEventWebSocketNotifier()
-        )
-
     def create_camera(self) -> InterfaceCameraService:
         return CameraServices(CameraRepository())
 

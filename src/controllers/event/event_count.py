@@ -30,7 +30,6 @@ async def create_event(
     token: UUID = Header(...),
     filial_service: InterfaceFilialService = Depends(get_service_filial),
     event_service: InterfaceEventService = Depends(get_service_count_event),
-    websocket: WebSocketNotifierService = Depends(get_service_websocket),
 ):
     log.info(f"create_event {request}")
     try:
@@ -38,21 +37,6 @@ async def create_event(
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(401, detail=str(error))
-    await websocket.send_message(
-        EventCountDataValidate(
-            event_id=request.event_id,
-            camera_name="tEST",
-            channel_id=request.channel_id,
-            zone_name="tEST",
-            count_in=request.count_in,
-            count_out=request.count_out,
-            event_time=request.event_time,
-            status=False,
-            description="tEST",
-        ),
-        filial_id=1,
-    )
-
     try:
         result: ResponseEventCount = event_service.create_event(request)
         return result
@@ -66,7 +50,6 @@ async def insert_event(
     request: List[RequestEventCount],
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     count_event: InterfaceEventService = Depends(get_service_count_event),
-    websocket: WebSocketNotifierService = Depends(get_service_websocket),
 ) -> List[EventCountDataValidate]:
     if user.rule != UserRule.FILIAL:
         raise HTTPException(
@@ -80,8 +63,6 @@ async def insert_event(
         result: List[EventCountDataValidate] = await count_event.process_events(
             request, user
         )
-
-        await websocket.process_websocket(result, user.filial_id)
         return result
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
