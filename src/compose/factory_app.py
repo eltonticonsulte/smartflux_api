@@ -18,8 +18,11 @@ scheduler = BackgroundScheduler(executors=executors)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     print("lifespan Iniciando scheduler...")
-    with DBConnectionHandler() as db:
-        print("Conexão ao banco de dados estabelecida.")
+    try:
+        with DBConnectionHandler() as db:
+            print("Conexão ao banco de dados estabelecida.")
+    except Exception as e:
+        print(f"Erro ao estabelecer conexão ao banco de dados: {e}")
     # scheduler.start()
 
     yield
