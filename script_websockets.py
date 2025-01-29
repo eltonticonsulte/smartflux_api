@@ -3,13 +3,13 @@ import websocket
 import requests
 import json
 
-# server = "btm4q4irvg.us-east-1.awsapprunner.com"
-server = "localhost:8002"
+server = "btm4q4irvg.us-east-1.awsapprunner.com"
+# server = "localhost:8002"
 
 
 def login(user, password):
     data = {"username": user, "password": password}
-    response = requests.post(f"http://{server}/v1/user/login", data=data)
+    response = requests.post(f"https://{server}/v1/user/login", data=data)
     if response.status_code != 200:
         raise Exception(response.json())
     return response.json()
@@ -31,7 +31,7 @@ def connect_to_websocket():
         print(f"Conectado ao WebSocket")
         payload = {
             "action": "sendMessage",
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJGaWxpYWwiLCJleHAiOjE3Mzc1Nzk1Njh9.FiiAR7z5XbEM2TkSwh42TniAvSe9_MgkJXdBV1_LhR0",
+            "token": "8a26c365-a366-44d9-8f8a-e2750775d2de",
             "message": "Hello, WebSocket!",
         }
         ws.send(json.dumps(payload))

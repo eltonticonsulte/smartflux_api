@@ -4,8 +4,8 @@ from datetime import datetime
 import time
 from random import randint
 
-endpoint = "http://localhost:8002"
-# endpoint = "https://btm4q4irvg.us-east-1.awsapprunner.com"
+# endpoint = "http://localhost:8002"
+endpoint = "https://btm4q4irvg.us-east-1.awsapprunner.com"
 
 
 def login(user, password):

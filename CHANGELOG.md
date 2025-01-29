@@ -1,3 +1,33 @@
+## 0.0.8 (2025-01-29)
+
+### Fix
+
+- update
+- update
+- try connect db
+- update
+- update
+- update
+- update
+- update
+- update
+- ping update
+- add enpoint ping
+- **config**: alembic
+- add service check token api
+- add log
+- **observer**: remove observe
+- update
+- add region aws
+
+### Refactor
+
+- refactor dto
+- test create camera
+- validate enpoint camera
+- remove zone
+- crete table note zone
+
 ## 0.0.7 (2025-01-22)
 
 ### Fix
