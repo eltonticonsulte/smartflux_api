@@ -30,10 +30,11 @@ class UserMapper:
     @staticmethod
     def get_entity_to_response(user: Usuario) -> ResponseAuthUser:
         return ResponseAuthUser(
-            usermane=user.username,
+            username=user.username,
             user_id=user.user_id,
             access_token="",
-            token_type="",
+            token_type="bearer",
+            is_active=user.is_active,
             role=user.role,
         )
 

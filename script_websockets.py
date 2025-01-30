@@ -7,14 +7,6 @@ server = "btm4q4irvg.us-east-1.awsapprunner.com"
 # server = "localhost:8002"
 
 
-def login(user, password):
-    data = {"username": user, "password": password}
-    response = requests.post(f"https://{server}/v1/user/login", data=data)
-    if response.status_code != 200:
-        raise Exception(response.json())
-    return response.json()
-
-
 def connect_to_websocket():
     uri = f"wss://fmqkl4r7pk.execute-api.us-east-1.amazonaws.com/production/"
 
@@ -31,20 +23,18 @@ def connect_to_websocket():
         print(f"Conectado ao WebSocket")
         payload = {
             "action": "sendMessage",
-            "token": "8a26c365-a366-44d9-8f8a-e2750775d2de",
+            "token": "0c66a137-ff7d-44c4-9813-b7f720fdbb87",
             "message": "Hello, WebSocket!",
         }
         ws.send(json.dumps(payload))
 
-    name_filial = "Filial"
     # password = "filial123"
-    password = "123"
-    user = login(name_filial, password)
-    print(user)
+    # user = login(name_filial, password)
+    # print(user)
 
     headers = {
         "action": "sendMessage",
-        "Authorization": f"Bearer {user['access_token']}",
+        "Authorization": f"Bearer ",
     }
     ws = websocket.WebSocketApp(
         uri, on_message=on_message, on_error=on_error, on_close=on_close, header=headers

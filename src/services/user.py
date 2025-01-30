@@ -46,6 +46,7 @@ class UserServices(InterfaceUserService):
             user_id=user.user_id,
             access_token="",
             token_type="bearer",
+            is_active=user.is_active,
             role=user.role,
         )
         UserServices.create_access_token(user_result)
