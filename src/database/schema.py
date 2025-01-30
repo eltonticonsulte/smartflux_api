@@ -16,6 +16,7 @@ from sqlalchemy import Enum
 from sqlalchemy.orm import relationship, declarative_base
 from sqlalchemy import UniqueConstraint
 from sqlalchemy.sql import func
+from sqlalchemy.dialects.postgresql import TIMESTAMP
 
 from sqlalchemy.dialects.postgresql import UUID as PGUUID
 
@@ -116,7 +117,7 @@ class EventCountTemp(Base):
     )
 
     count_event_id = Column(Integer, primary_key=True, autoincrement=True)
-    event_time = Column(DateTime, default=func.now())
+    event_time = Column(TIMESTAMP(6), default=func.now())
     count_in = Column(Integer, default=0)
     count_out = Column(Integer, default=0)
     channel_id = Column(PGUUID, ForeignKey("cameras.channel_id"), nullable=False)
