@@ -43,5 +43,11 @@ async def post_update(
 ):
     log.info(f"post_status {data}")
     nameuser = service.check_token(token)
+    # bucket_name = "meu-bucket"
+    # file_key = "minha_app.zip"
+
+    # url = s3.generate_presigned_url('get_object',
+    # Params={'Bucket': bucket_name, 'Key': file_key},
+    # ExpiresIn=3600)  # Expira em 1 hora
 
     return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
