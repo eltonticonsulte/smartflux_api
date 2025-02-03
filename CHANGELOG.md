@@ -1,3 +1,13 @@
+## 0.0.10 (2025-02-03)
+
+### Fix
+
+- decimal timestamp
+
+### Refactor
+
+- refactor ping camera
+
 ## 0.0.9 (2025-01-30)
 
 ### Fix
