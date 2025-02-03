@@ -4,6 +4,7 @@ from fastapi import APIRouter, Header, Depends, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
 from .core import get_service_user, get_service_filial
+from src.dto import ResponseFindUpdate, RequestFindUpdate
 
 router = APIRouter()
 from logging import getLogger
@@ -34,10 +35,13 @@ async def get_file_zip(
     return JSONResponse(status_code=200, content={"status": "ok"})
 
 
-@router.post("/status", status_code=200, deprecated=True)
-async def post_status(
+@router.get("/find_update", status_code=200, response_model=ResponseFindUpdate)
+async def post_update(
+    data: RequestFindUpdate,
     token: uuid.UUID = Header(...),
-    service: InterfaceUserService = Depends(get_service_user),
+    service: InterfaceFilialService = Depends(get_service_filial),
 ):
-    nameuser = service.current_user(token)
+    log.info(f"post_status {data}")
+    nameuser = service.check_token(token)
+
     return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
