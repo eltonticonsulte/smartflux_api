@@ -1,11 +1,14 @@
 # -*- coding: utf-8 -*-
 import uuid
-from fastapi import APIRouter, Header, Depends, HTTPException
+from fastapi import APIRouter, Header, Depends, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
-from src.interfaces import InterfaceUserService
-from .core import get_service_user
+from src.interfaces import InterfaceUserService, InterfaceFilialService
+from .core import get_service_user, get_service_filial
 
 router = APIRouter()
+from logging import getLogger
+
+log = getLogger("controller Aplication")
 
 
 @router.post("/license", status_code=200, deprecated=True)
@@ -19,12 +22,16 @@ async def check_license(
         raise HTTPException(500, detail=str(error))
 
 
-@router.post("/logs", status_code=200, deprecated=True)
-async def get_logs(
+@router.post("/zipe_file", status_code=200)
+async def get_file_zip(
     token: uuid.UUID = Header(...),
+    zipe_file: UploadFile = File(...),
     service: InterfaceUserService = Depends(get_service_user),
 ):
-    pass
+
+    zip_content = await zipe_file.read()
+    log.info(zip_content)
+    return JSONResponse(status_code=200, content={"status": "ok"})
 
 
 @router.post("/status", status_code=200, deprecated=True)

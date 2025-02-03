@@ -29,7 +29,7 @@ class CameraRepository:
                 self.log.error(error)
                 raise error
 
-    def ping(self, entity: Camera):
+    def update_status(self, entity: Camera):
         with DBConnectionHandler() as session:
             session.query(Camera).update(entity)
             session.commit()

@@ -4,5 +4,5 @@ from enum import Enum
 
 class CameraState(Enum):
     RUNING = 0
-    STOP = 2
-    ERROR = 3
+    STOP = 1
+    ERROR = 2

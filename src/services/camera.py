@@ -7,7 +7,7 @@ from src.dto import (
     RequestCreateCamera,
     ResponseCamera,
     RequestUpdateCamera,
-    RequestPing,
+    RequestStatus,
 )
 from src.mappers import CameraMapper
 from src.interfaces import InterfaceCameraService
@@ -25,9 +25,9 @@ class CameraServices(InterfaceCameraService):
         entity = self.repository.get_by_channel_id(channel_id)
         return CameraMapper.get_entity_to_response(entity)
 
-    def ping(self, data: RequestPing) -> None:
-        entity = CameraMapper.update_ping_to_entity(data)
-        self.repository.ping(entity)
+    def update_status(self, data: RequestStatus) -> None:
+        entity = CameraMapper.update_status_to_entity(data)
+        self.repository.update_status(entity)
 
     def get_all(self) -> List[ResponseCamera]:
         datas = self.repository.get_all()

@@ -15,7 +15,7 @@ from src.dto import (
     ResponseCamera,
     RequestUpdateCamera,
     ResponseAuthUser,
-    RequestPing,
+    RequestStatus,
 )
 from src.enums import UserRule
 from .core import get_service_camera, rule_require, get_service_filial
@@ -43,10 +43,10 @@ async def create(
         raise HTTPException(500, detail=str(error))
 
 
-@router.post("/ping", status_code=200, response_model=RequestPing)
-async def ping(
+@router.post("/status", status_code=200, response_model=RequestStatus)
+async def status(
     token_filial: uuid.UUID = Header(...),
-    data: RequestPing = Depends(),
+    data: RequestStatus = Depends(),
     service_filial: InterfaceFilialService = Depends(get_service_filial),
     service_camera: InterfaceCameraService = Depends(get_service_camera),
 ):
@@ -57,7 +57,7 @@ async def ping(
         raise HTTPException(401, detail=str(error))
 
     try:
-        service_camera.ping(data)
+        service_camera.update_status(data)
         return JSONResponse(status_code=200, content={"status": "ok"})
     except Exception as error:
         log.error("error", exc_info=error)

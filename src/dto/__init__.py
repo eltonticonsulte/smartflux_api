@@ -20,7 +20,7 @@ from .camera import (
     RequestCreateCamera,
     ResponseCamera,
     RequestUpdateCamera,
-    RequestPing,
+    RequestStatus,
 )
 
 from .event_count import (

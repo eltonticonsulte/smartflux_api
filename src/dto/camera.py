@@ -5,10 +5,10 @@ from pydantic import BaseModel
 from src.enums import CameraState
 
 
-class RequestPing(BaseModel):
+class RequestStatus(BaseModel):
     channel_id: UUID
     status: CameraState
-    worker_id: str
+    worker_id: Optional[str] = None
 
 
 class RequestCreateCamera(BaseModel):

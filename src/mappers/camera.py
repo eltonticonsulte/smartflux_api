@@ -6,7 +6,7 @@ from src.dto import (
     RequestCreateCamera,
     ResponseCamera,
     RequestUpdateCamera,
-    RequestPing,
+    RequestStatus,
 )
 
 
@@ -20,10 +20,11 @@ class CameraMapper:
         )
 
     @staticmethod
-    def update_ping_to_entity(data: RequestPing):
-        return Camera(
-            worker_id=data.worker_id, status=data.status, channel_id=data.channel_id
-        )
+    def update_status_to_entity(data: RequestStatus):
+        camera = Camera(channel_id=data.channel_id, status=data.status)
+        if data.worker_id:
+            camera.worker_id = data.worker_id
+        return camera
 
     @staticmethod
     def get_entity_to_response(entity: Camera) -> ResponseCamera:
