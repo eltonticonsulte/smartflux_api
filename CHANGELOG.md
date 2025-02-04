@@ -1,3 +1,13 @@
+## 0.0.11 (2025-02-04)
+
+### Fix
+
+- add update data camera
+- **update**: data base
+- view get all camera
+- exemple link assinado s3
+- add endpoint update aplication
+
 ## 0.0.10 (2025-02-03)
 
 ### Fix
