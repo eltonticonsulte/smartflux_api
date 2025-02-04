@@ -20,6 +20,7 @@ class RequestCreateCamera(BaseModel):
 class ResponseCamera(BaseModel):
     channel_id: UUID
     name: str
+    worker_id: str
     filial_id: int
     status: CameraState
     tag: str

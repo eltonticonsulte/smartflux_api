@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-import uuid
 from fastapi import APIRouter, Header, Depends, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
-from .core import get_service_user, get_service_filial
-from src.dto import ResponseFindUpdate, RequestFindUpdate
+from .core import get_service_user, get_service_filial, verificar_api_key
+from src.dto import ResponseFindUpdate, RequestFindUpdate, ResponseFilial
 
 router = APIRouter()
 from logging import getLogger
@@ -14,7 +13,7 @@ log = getLogger("controller Aplication")
 
 @router.post("/license", status_code=200, deprecated=True)
 async def check_license(
-    token: uuid.UUID = Header(...),
+    data_filial=Depends(verificar_api_key),
     service: InterfaceUserService = Depends(get_service_user),
 ):
     try:
@@ -25,7 +24,7 @@ async def check_license(
 
 @router.post("/zipe_file", status_code=200)
 async def get_file_zip(
-    token: uuid.UUID = Header(...),
+    data_filial: ResponseFilial = Depends(verificar_api_key),
     zipe_file: UploadFile = File(...),
     service: InterfaceUserService = Depends(get_service_user),
 ):
@@ -36,13 +35,13 @@ async def get_file_zip(
 
 
 @router.get("/find_update", status_code=200, response_model=ResponseFindUpdate)
-async def post_update(
-    data: RequestFindUpdate,
-    token: uuid.UUID = Header(...),
+async def get_update(
+    data: RequestFindUpdate = Depends(),
+    data_filial: ResponseFilial = Depends(verificar_api_key),
     service: InterfaceFilialService = Depends(get_service_filial),
 ):
     log.info(f"post_status {data}")
-    nameuser = service.check_token(token)
+
     # bucket_name = "meu-bucket"
     # file_key = "minha_app.zip"
 
@@ -50,4 +49,9 @@ async def post_update(
     # Params={'Bucket': bucket_name, 'Key': file_key},
     # ExpiresIn=3600)  # Expira em 1 hora
 
-    return JSONResponse(status_code=200, content={"status": "ok", "name": nameuser})
+    return ResponseFindUpdate(
+        current_version=data.current_version,
+        new_version="1.0.0",
+        is_update=False,
+        url_download=None,
+    )

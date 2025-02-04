@@ -31,7 +31,7 @@ class CameraRepository:
 
     def update_status(self, entity: Camera):
         with DBConnectionHandler() as session:
-            session.query(Camera).update(entity)
+            session.merge(entity)
             session.commit()
 
     def get_by_name(self, name: str) -> Camera:

@@ -31,6 +31,7 @@ class CameraMapper:
         return ResponseCamera(
             channel_id=entity.channel_id,
             name=entity.name,
+            worker_id="" if entity.worker_id is None else entity.worker_id,
             tag=entity.tag,
             filial_id=entity.filial_id,
             status=entity.status,

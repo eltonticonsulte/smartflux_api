@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
 from functools import lru_cache
+from fastapi.security.api_key import APIKeyHeader
 from fastapi.security import OAuth2PasswordBearer
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Security
 from core import get_settings
 from src.enums import UserRule
 from src.exceptions import ServiceUserJwtExecption
-from src.dto import UserPermissionAccessDTO
-from src.services import WebSocketNotifierService
+from src.dto import UserPermissionAccessDTO, ResponseFilial
 from src.interfaces import (
     InterfaceUserService,
     InterfaceCameraService,
@@ -16,10 +16,10 @@ from src.interfaces import (
     InterfaceStorageService,
     InterfacePermissionService,
     InterfaceEventService,
-    InterfaceObserver,
 )
 from src.compose import FactoryService
 
+api_key_header = APIKeyHeader(name="X-API-KEY", auto_error=True)
 auth2_admin = OAuth2PasswordBearer(tokenUrl=f"{get_settings().API_V1_STR}/user/login")
 factor_service = FactoryService()
 
@@ -62,6 +62,17 @@ def get_service_storage() -> InterfaceStorageService:
 @lru_cache()
 def get_service_permission() -> InterfacePermissionService:
     return FactoryService().create_permission()
+
+
+def verificar_api_key(
+    api_key: str = Security(api_key_header),
+    service_filial: InterfaceFilialService = Depends(get_service_filial),
+):
+    try:
+        result: ResponseFilial = service_filial.get_by_token(api_key)
+    except Exception as error:
+        raise HTTPException(status_code=403, detail=str(error))
+    return result
 
 
 def rule_require(rule_min: UserRule):

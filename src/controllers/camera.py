@@ -18,7 +18,12 @@ from src.dto import (
     RequestStatus,
 )
 from src.enums import UserRule
-from .core import get_service_camera, rule_require, get_service_filial
+from .core import (
+    get_service_camera,
+    rule_require,
+    get_service_filial,
+    verificar_api_key,
+)
 
 
 router = APIRouter()
@@ -43,18 +48,12 @@ async def create(
         raise HTTPException(500, detail=str(error))
 
 
-@router.post("/status", status_code=200, response_model=RequestStatus)
+@router.post("/status", status_code=200)
 async def status(
-    token_filial: uuid.UUID = Header(...),
-    data: RequestStatus = Depends(),
-    service_filial: InterfaceFilialService = Depends(get_service_filial),
+    data: RequestStatus,
+    data_filial: ResponseAuthUser = Depends(verificar_api_key),
     service_camera: InterfaceCameraService = Depends(get_service_camera),
 ):
-    try:
-        service_filial.check_token(token_filial)
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(401, detail=str(error))
 
     try:
         service_camera.update_status(data)
