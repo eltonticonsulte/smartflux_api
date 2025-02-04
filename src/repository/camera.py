@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import logging
 import uuid
+from datetime import datetime
 from typing import List
 from src.database import Camera, DBConnectionHandler, IntegrityError, Filial
 from src.mappers import CameraMapper
@@ -31,6 +32,7 @@ class CameraRepository:
 
     def update_status(self, entity: Camera):
         with DBConnectionHandler() as session:
+            entity.ultima_modificacao = datetime.utcnow()
             session.merge(entity)
             session.commit()
 
