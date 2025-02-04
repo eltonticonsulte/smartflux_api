@@ -3,6 +3,6 @@ from enum import Enum
 
 
 class CameraState(Enum):
-    RUNING = 0
-    STOP = 1
-    ERROR = 2
+    RUNING = "RUNING"
+    STOP = "STOP"
+    ERROR = "ERROR"
