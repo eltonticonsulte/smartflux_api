@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from apscheduler.schedulers.background import BackgroundScheduler
 from apscheduler.executors.pool import ThreadPoolExecutor
@@ -36,10 +37,21 @@ def event():
     task.update_view()
 
 
+def permsion(app: FastAPI):
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["*"],  # Permite qualquer origem
+        allow_credentials=True,
+        allow_methods=["*"],  # Permite qualquer método (GET, POST, PUT, DELETE, etc.)
+        allow_headers=["*"],  # Permite qualquer cabeçalho
+    )
+
+
 def create_app(log, version):
 
     app = FastAPI(title=get_settings().PROJECT_NAME, version=version, lifespan=lifespan)
     app.include_router(base_ruter, prefix=get_settings().API_V1_STR)
+    permsion(app)
     trigger = CronTrigger(
         hour=0,
         minute=0,
