@@ -31,6 +31,7 @@ async def get_data_filial_grup_zone(
     try:
         return storage.get_count_by_filial_count_grup_zone(user.filial_id, current_date)
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 

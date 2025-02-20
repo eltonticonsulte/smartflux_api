@@ -33,16 +33,17 @@ class StorageRepository:
                     session.query(
                         func.sum(EventCount.total_count_in).label("total_count_in"),
                         func.sum(EventCount.total_count_out).label("total_count_out"),
-                        EventCount.zone_name,
+                        Camera.filial_id,
+                        Camera.tag.label("camera_tag"),
                     )
                     .filter(EventCount.filial_id == filial_id)
                     .filter(EventCount.date == current_date)
-                    .group_by(EventCount.zona_id, EventCount.zone_name)
+                    .group_by(Camera.filial_id, Camera.tag)
                     .all()
                 )
                 return [
                     ResponseTotalCountGrupZone(
-                        zone_name=count.zone_name,
+                        zone_name=count.camera_tag,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
                     )
@@ -61,16 +62,17 @@ class StorageRepository:
                     session.query(
                         func.sum(EventCount.total_count_in).label("total_count_in"),
                         func.sum(EventCount.total_count_out).label("total_count_out"),
-                        EventCount.zone_name,
+                        Camera.tag.label("camera_tag"),
                     )
+                    .join(Camera, Camera.channel_id == EventCount.channel_id)
                     .filter(EventCount.filial_id == filial_id)
                     .filter(EventCount.date > start_day)
-                    .group_by(EventCount.zona_id, EventCount.zone_name)
+                    .group_by(Camera.tag)
                     .all()
                 )
                 return [
                     ResponseTotalCountGrupZone(
-                        zone_name=count.zone_name,
+                        zone_name=count.camera_tag,
                         total_count_in=count.total_count_in,
                         total_count_out=count.total_count_out,
                     )
