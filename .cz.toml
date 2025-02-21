@@ -1,6 +1,6 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
-version = "0.0.15"
+version = "0.0.16"
 tag_format = "$version"
 version_files = [
     "main.py:__version__",

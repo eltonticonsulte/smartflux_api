@@ -1,3 +1,9 @@
+## 0.0.16 (2025-02-21)
+
+### Fix
+
+- add busca por periodo retorna formato novo
+
 ## 0.0.15 (2025-02-21)
 
 ### Fix
