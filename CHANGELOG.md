@@ -1,3 +1,9 @@
+## 0.0.15 (2025-02-21)
+
+### Fix
+
+- **storage**: add enpoint filter by camera
+
 ## 0.0.14 (2025-02-21)
 
 ### Fix
