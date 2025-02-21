@@ -8,6 +8,7 @@ from src.dto import (
     ResponseTotalCountGrupZone,
     ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
+    ResponseGrupData,
 )
 
 
@@ -17,15 +18,19 @@ class InterfaceStorageTodayService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_count_grup_zone(
+    def get_count_by_filial_grup_zone(
         self, filial_id: int
     ) -> List[ResponseTotalCountGrupZone]:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_hour(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupHour]:
+    def get_count_by_filial_zone_grup_hour(
+        self, filial_id: int, name_zona: str
+    ) -> ResponseGrupData:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupData:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

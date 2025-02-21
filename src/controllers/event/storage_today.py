@@ -39,7 +39,7 @@ async def get_data_filial_grup_zone(
     count_event: InterfaceStorageTodayService = Depends(get_storage_today),
 ) -> List[ResponseTotalCountGrupZone]:
     try:
-        return count_event.get_count_by_filial_count_grup_zone(user.filial_id)
+        return count_event.get_count_by_filial_grup_zone(user.filial_id)
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
@@ -56,6 +56,19 @@ async def get_today_camera(
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, str(error))
+
+
+@router.get("/today/hour/{zona}", status_code=200, response_model=ResponseGrupData)
+async def get_data_filial_grup_hour(
+    zona: str,
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    count_event: InterfaceStorageTodayService = Depends(get_storage_today),
+) -> ResponseGrupData:
+    try:
+        return count_event.get_count_by_filial_zone_grup_hour(user.filial_id, zona)
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
 
 
 @router.get("/today/hour", status_code=200, response_model=ResponseGrupData)

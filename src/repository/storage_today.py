@@ -39,7 +39,7 @@ class StorageTodayRepository:
                 session.rollback()
                 raise error
 
-    def count_by_filial_count_grup_zone(
+    def count_by_filial_grup_zone(
         self, filial_id: int
     ) -> List[ResponseTotalCountGrupZone]:
         with DBConnectionHandler() as session:
@@ -125,6 +125,31 @@ class StorageTodayRepository:
             except Exception as error:
                 session.rollback()
                 raise error
+
+    def count_by_filial_zone_grup_hour(
+        self, filial_id: int, name_zona: str, date: date = date.today()
+    ):
+        start_date = datetime.combine(date, datetime.min.time())
+        end_date = start_date + timedelta(days=1)
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    func.date_trunc("hour", EventCountTemp.event_time).label(
+                        "hour_timestamp"
+                    ),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .filter(Camera.tag == name_zona)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .filter(EventCountTemp.event_time.between(start_date, end_date))
+                .group_by(func.date_trunc("hour", EventCountTemp.event_time))
+                .order_by("hour_timestamp")
+                .all()
+            )
+            return counts
 
     def delete_by_channel_ids(self, channel_ids: List[UUID]):
         with DBConnectionHandler() as session:
