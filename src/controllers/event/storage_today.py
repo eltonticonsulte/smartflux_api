@@ -58,12 +58,28 @@ async def get_today_camera(
         raise HTTPException(500, str(error))
 
 
-@router.get("/today/hour/{zona}", status_code=200, response_model=ResponseGrupData)
+@router.get("/today/hour", status_code=200, response_model=ResponseGrupData)
 async def get_data_filial_grup_hour(
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    count_event: InterfaceStorageTodayService = Depends(get_storage_today),
+) -> ResponseGrupData:
+    try:
+
+        return count_event.get_count_by_filial_grup_hour(user.filial_id)
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/today/hour/zona/{name}", status_code=200, response_model=ResponseGrupData)
+async def get_data_filial_zona_grup_hour(
     zona: str,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     count_event: InterfaceStorageTodayService = Depends(get_storage_today),
 ) -> ResponseGrupData:
+    """
+    busca dados do dia atual de uma filial e zona agrupados por hora
+    """
     try:
         return count_event.get_count_by_filial_zone_grup_hour(user.filial_id, zona)
     except Exception as error:
@@ -71,13 +87,20 @@ async def get_data_filial_grup_hour(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/today/hour", status_code=200, response_model=ResponseGrupData)
-async def get_data_filial_grup_hour(
+@router.get(
+    "/today/hour/device/{name}", status_code=200, response_model=ResponseGrupData
+)
+async def get_data_filial_camera_grup_hour(
+    device: str,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     count_event: InterfaceStorageTodayService = Depends(get_storage_today),
 ) -> ResponseGrupData:
+    """
+    busca dados do dia atual de uma filial e camera agrupados por hora
+    """
+
     try:
-        return count_event.get_count_by_filial_grup_hour(user.filial_id)
+        return count_event.get_count_by_filial_camera_grup_hour(user.filial_id, device)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

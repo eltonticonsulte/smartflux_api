@@ -34,6 +34,31 @@ class StorageTodayServices(InterfaceStorageTodayService):
     ) -> List[ResponseTotalCountGrupZone]:
         return self.repo.count_by_filial_grup_zone(filial_id)
 
+    def get_count_by_filial_camera_grup_hour(
+        self, filial_id: int, name_device: str
+    ) -> ResponseGrupData:
+        result = self.repo.count_by_filial_camera_grup_hour(filial_id, name_device)
+        self.log.critical(result)
+        label = []
+        count_in = []
+        count_out = []
+        lis_gup_hour = []
+
+        for item in result:
+            label.append(item.hour_timestamp.strftime("%Y-%m-%d %H:%M"))
+            count_in.append(item.total_count_in)
+            count_out.append(item.total_count_out)
+            lis_gup_hour.append(
+                CountGrup(
+                    people_in=item.total_count_in,
+                    people_out=item.total_count_out,
+                    hour=item.hour_timestamp.strftime("%Y-%m-%d %H:%M"),
+                )
+            )
+
+        line = LineGraph(label=label, people_int=count_in, people_out=count_out)
+        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+
     def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupData:
         result = self.repo.count_by_filial_grup_hour(filial_id)
         label = []

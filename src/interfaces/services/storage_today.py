@@ -30,6 +30,12 @@ class InterfaceStorageTodayService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def get_count_by_filial_camera_grup_hour(
+        self, filial_id: int, name_device: str
+    ) -> ResponseGrupData:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupData:
         raise NotImplementedError("Method not implemented")
 

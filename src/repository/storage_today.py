@@ -151,6 +151,32 @@ class StorageTodayRepository:
             )
             return counts
 
+    def count_by_filial_camera_grup_hour(
+        self, filial_id: int, name_device: str, date: date = date.today()
+    ):
+        start_date = datetime.combine(date, datetime.min.time())
+        end_date = start_date + timedelta(days=1)
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    func.date_trunc("hour", EventCountTemp.event_time).label(
+                        "hour_timestamp"
+                    ),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .filter(Camera.name == name_device)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .filter(EventCountTemp.event_time.between(start_date, end_date))
+                .group_by(func.date_trunc("hour", EventCountTemp.event_time))
+                .order_by("hour_timestamp")
+                .all()
+            )
+
+            return counts
+
     def delete_by_channel_ids(self, channel_ids: List[UUID]):
         with DBConnectionHandler() as session:
             try:
