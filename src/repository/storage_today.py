@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List
 from uuid import UUID
-from datetime import datetime
+from datetime import datetime, date, timedelta
 from sqlalchemy import func
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
 from src.dto import (
@@ -99,8 +99,10 @@ class StorageTodayRepository:
                 raise error
 
     def count_by_filial_grup_hour(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupHour]:
+        self, filial_id: int, date: date = date.today()
+    ) -> List[dict]:
+        start_date = datetime.combine(date, datetime.min.time())
+        end_date = start_date + timedelta(days=1)
         with DBConnectionHandler() as session:
             try:
                 counts = (
@@ -114,17 +116,12 @@ class StorageTodayRepository:
                     .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
                     .join(Filial, Camera.filial_id == Filial.filial_id)
                     .filter(Filial.filial_id == filial_id)
+                    .filter(EventCountTemp.event_time.between(start_date, end_date))
                     .group_by(func.date_trunc("hour", EventCountTemp.event_time))
+                    .order_by("hour_timestamp")
                     .all()
                 )
-                return [
-                    ResponseTotalCountGrupHour(
-                        hour=datetime.strftime(count.hour_timestamp, "%H:%M"),
-                        total_count_in=count.total_count_in,
-                        total_count_out=count.total_count_out,
-                    )
-                    for count in counts
-                ]
+                return counts
             except Exception as error:
                 session.rollback()
                 raise error
