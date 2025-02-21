@@ -1,3 +1,10 @@
+## 0.0.14 (2025-02-21)
+
+### Fix
+
+- add enpoind totay/hour/zone
+- update
+
 ## 0.0.13 (2025-02-20)
 
 ### Fix
