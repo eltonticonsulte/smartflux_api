@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Tuple, Any
 from datetime import date
-from sqlalchemy import func
+from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
 from src.dto import ResponseTotalCountGrupZone, ResponseTotalCountGroupDay
 
@@ -111,3 +111,40 @@ class StorageRepository:
             except Exception as error:
                 session.rollback()
                 raise error
+
+    # o agrupamento deve ser por dia
+    def get_count_by_filial_grup_periodo(
+        self, filial_id: int, start_day: date, end_day: date
+    ) -> List[Row[Tuple[int, int, Any]]]:
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCount.total_count_in).label("total_count_in"),
+                    func.sum(EventCount.total_count_out).label("total_count_out"),
+                    func.date_trunc("day", EventCount.date).label("timestamp"),
+                )
+                .filter(EventCount.filial_id == filial_id)
+                .filter(EventCount.date.between(start_day, end_day))
+                .group_by(func.date_trunc("day", EventCount.date))
+                .order_by("timestamp")
+                .all()
+            )
+            return counts
+
+    def get_count_by_filial_grup_hour(
+        self, filial_id: int, start_day: date, end_day: date
+    ) -> List[Row[Tuple[int, int, Any]]]:
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCount.total_count_in).label("total_count_in"),
+                    func.sum(EventCount.total_count_out).label("total_count_out"),
+                    func.date_trunc("hour", EventCount.date).label("timestamp"),
+                )
+                .filter(EventCount.filial_id == filial_id)
+                .filter(EventCount.date.between(start_day, end_day))
+                .group_by(func.date_trunc("hour", EventCount.date))
+                .order_by("timestamp")
+                .all()
+            )
+            return counts
