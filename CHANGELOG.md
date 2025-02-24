@@ -1,3 +1,14 @@
+## 0.0.17 (2025-02-24)
+
+### Fix
+
+- counter today gup zone
+- formate out storage zone
+
+### Refactor
+
+- storage
+
 ## 0.0.16 (2025-02-21)
 
 ### Fix
