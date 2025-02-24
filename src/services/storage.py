@@ -11,6 +11,7 @@ from src.dto import (
     ResponseGrupData,
 )
 from src.repository import StorageRepository
+from src.mappers import MapperStorage
 
 
 class StorageServices(InterfaceStorageService):
@@ -18,12 +19,11 @@ class StorageServices(InterfaceStorageService):
         self.log = logging.getLogger(__name__)
         self.repository = repository
 
-    def get_count_by_filial_count_grup_zone(
+    def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> ResponseTotalCountGrupZone:
-        return self.repository.get_count_by_filial_count_grup_zone(
-            filial_id, current_date
-        )
+    ) -> ResponseGrupData:
+        result = self.repository.get_count_by_filial_grup_zone(filial_id, current_date)
+        return MapperStorage.to_response_grup_data(result)
 
     def get_count_by_filial_grup_periodo(
         self, filial_id: int, start_day: date, end_day: date

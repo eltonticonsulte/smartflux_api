@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List, Tuple, Any
-from datetime import date
+from datetime import date, datetime, timedelta
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
 from src.dto import ResponseTotalCountGrupZone, ResponseTotalCountGroupDay
@@ -24,34 +24,26 @@ class StorageRepository:
                 session.rollback()
                 raise error
 
-    def get_count_by_filial_count_grup_zone(
+    def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> List[ResponseTotalCountGrupZone]:
+    ) -> List[Row[Tuple[int, int, int, str]]]:
+
+        start_date = datetime.combine(current_date, datetime.min.time())
+        end_date = start_date + timedelta(days=1)
+
         with DBConnectionHandler() as session:
-            try:
-                counts = (
-                    session.query(
-                        func.sum(EventCount.total_count_in).label("total_count_in"),
-                        func.sum(EventCount.total_count_out).label("total_count_out"),
-                        Camera.filial_id,
-                        Camera.tag.label("camera_tag"),
-                    )
-                    .filter(EventCount.filial_id == filial_id)
-                    .filter(EventCount.date == current_date)
-                    .group_by(Camera.filial_id, Camera.tag)
-                    .all()
+            counts = (
+                session.query(
+                    func.sum(EventCount.total_count_in).label("total_count_in"),
+                    func.sum(EventCount.total_count_out).label("total_count_out"),
+                    Camera.tag.label("label"),
                 )
-                return [
-                    ResponseTotalCountGrupZone(
-                        zone_name=count.camera_tag,
-                        total_count_in=count.total_count_in,
-                        total_count_out=count.total_count_out,
-                    )
-                    for count in counts
-                ]
-            except Exception as error:
-                session.rollback()
-                raise error
+                .filter(EventCount.filial_id == filial_id)
+                .filter(EventCount.date.between(start_date, end_date))
+                .group_by(Camera.filial_id, Camera.tag)
+                .all()
+            )
+            return counts
 
     def get_count_by_filial_grup_zone_periodo(
         self, filial_id: int, start_day: date, end_day: date

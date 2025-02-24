@@ -2,14 +2,18 @@
 from abc import ABC, abstractmethod
 from typing import List
 from datetime import date
-from src.dto import ResponseTotalCountGrupZone, ResponseTotalCountGroupDay
+from src.dto import (
+    ResponseTotalCountGrupZone,
+    ResponseTotalCountGroupDay,
+    ResponseGrupData,
+)
 
 
 class InterfaceStorageService(ABC):
     @abstractmethod
-    def get_count_by_filial_count_grup_zone(
+    def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> ResponseTotalCountGrupZone:
+    ) -> ResponseGrupData:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

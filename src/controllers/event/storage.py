@@ -19,18 +19,18 @@ router = APIRouter()
 log = getLogger("controller_count_event")
 
 
-@router.get("/zone", status_code=200, response_model=List[ResponseTotalCountGrupZone])
+@router.get("/zone", status_code=200, response_model=ResponseGrupData)
 async def get_data_filial_grup_zone(
     current_date: datetime.date,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
-) -> List[ResponseTotalCountGrupZone]:
+) -> ResponseGrupData:
     """
     busca dados de uma filial agrupados port zona formato 2024-01-29
     """
 
     try:
-        return storage.get_count_by_filial_count_grup_zone(user.filial_id, current_date)
+        return storage.get_count_by_filial_grup_zone(user.filial_id, current_date)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
