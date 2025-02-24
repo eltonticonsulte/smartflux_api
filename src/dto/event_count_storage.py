@@ -3,10 +3,16 @@ from typing import List
 from pydantic import BaseModel
 
 
-class CountGrup(BaseModel):
+class CountGrupHour(BaseModel):
     people_in: int
     people_out: int
     hour: str
+
+
+class CountGrupCode(BaseModel):
+    people_in: int
+    people_out: int
+    code: str
 
 
 class LineGraph(BaseModel):
@@ -15,8 +21,13 @@ class LineGraph(BaseModel):
     people_out: List[int]
 
 
-class ResponseGrupData(BaseModel):
-    table: List[CountGrup]
+class ResponseGrupDataCode(BaseModel):
+    table: List[CountGrupCode]
+    linegraph: LineGraph
+
+
+class ResponseGrupDataHour(BaseModel):
+    table: List[CountGrupHour]
     linegraph: LineGraph
 
 

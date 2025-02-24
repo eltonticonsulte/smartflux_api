@@ -7,7 +7,7 @@ from src.dto import (
     ResponseTotalCountGrupZone,
     ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
-    ResponseGrupData,
+    ResponseGrupDataHour,
 )
 
 
@@ -17,25 +17,25 @@ class InterfaceStorageTodayService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupDataHour:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def get_count_by_filial_zone_grup_hour(
         self, filial_id: int, name_zona: str
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataHour:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
     def get_count_by_filial_camera_grup_hour(
         self, filial_id: int, name_device: str
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataHour:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupDataHour:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupDataHour:
         raise NotImplementedError("Method no implemented")

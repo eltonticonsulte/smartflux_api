@@ -5,8 +5,8 @@ from src.mappers import MapperStorageToday
 from src.dto import (
     ResponseTotalCount,
     ResponseTotalCountGrupCamera,
-    ResponseGrupData,
-    CountGrup,
+    ResponseGrupDataHour,
+    CountGrupHour,
     LineGraph,
 )
 from src.repository import StorageTodayRepository
@@ -27,17 +27,17 @@ class StorageTodayServices(InterfaceStorageTodayService):
             total_count_out=count_out if count_out is not None else 0,
         )
 
-    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupDataHour:
         result = self.repo.count_by_filial_grup_zone(filial_id)
         return MapperStorageToday.to_response_grup_data(result)
 
-    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupDataHour:
         result = self.repo.count_by_filial_grup_camera(filial_id)
         return MapperStorageToday.to_response_grup_data(result)
 
     def get_count_by_filial_camera_grup_hour(
         self, filial_id: int, name_device: str
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataHour:
         result = self.repo.count_by_filial_camera_grup_hour(filial_id, name_device)
         self.log.critical(result)
         label = []
@@ -50,7 +50,7 @@ class StorageTodayServices(InterfaceStorageTodayService):
             count_in.append(item.total_count_in)
             count_out.append(item.total_count_out)
             lis_gup_hour.append(
-                CountGrup(
+                CountGrupHour(
                     people_in=item.total_count_in,
                     people_out=item.total_count_out,
                     hour=item.hour_timestamp.strftime("%Y-%m-%d %H:%M"),
@@ -58,9 +58,9 @@ class StorageTodayServices(InterfaceStorageTodayService):
             )
 
         line = LineGraph(label=label, people_int=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+        return ResponseGrupDataHour(table=lis_gup_hour, linegraph=line)
 
-    def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupData:
+    def get_count_by_filial_grup_hour(self, filial_id: int) -> ResponseGrupDataHour:
         result = self.repo.count_by_filial_grup_hour(filial_id)
         label = []
         count_in = []
@@ -72,7 +72,7 @@ class StorageTodayServices(InterfaceStorageTodayService):
             count_in.append(item.total_count_in)
             count_out.append(item.total_count_out)
             lis_gup_hour.append(
-                CountGrup(
+                CountGrupHour(
                     people_in=item.total_count_in,
                     people_out=item.total_count_out,
                     hour=item.hour_timestamp.strftime("%Y-%m-%d %H:%M"),
@@ -80,11 +80,11 @@ class StorageTodayServices(InterfaceStorageTodayService):
             )
 
         line = LineGraph(label=label, people_int=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+        return ResponseGrupDataHour(table=lis_gup_hour, linegraph=line)
 
     def get_count_by_filial_zone_grup_hour(
         self, filial_id: int, name_zona: str
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataHour:
         result = self.repo.count_by_filial_zone_grup_hour(filial_id, name_zona)
         label = []
         count_in = []
@@ -96,7 +96,7 @@ class StorageTodayServices(InterfaceStorageTodayService):
             count_in.append(item.total_count_in)
             count_out.append(item.total_count_out)
             lis_gup_hour.append(
-                CountGrup(
+                CountGrupHour(
                     people_in=item.total_count_in,
                     people_out=item.total_count_out,
                     hour=item.hour_timestamp.strftime("%Y-%m-%d %H:%M"),
@@ -104,4 +104,4 @@ class StorageTodayServices(InterfaceStorageTodayService):
             )
 
         line = LineGraph(label=label, people_int=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+        return ResponseGrupDataHour(table=lis_gup_hour, linegraph=line)

@@ -4,9 +4,10 @@ from datetime import date
 from src.interfaces import InterfaceStorageService
 from src.dto import (
     ResponseTotalCountGrupZone,
-    CountGrup,
+    CountGrupHour,
     LineGraph,
-    ResponseGrupData,
+    ResponseGrupDataHour,
+    ResponseGrupDataCode,
 )
 from src.repository import StorageRepository
 from src.mappers import MapperStorage
@@ -19,18 +20,19 @@ class StorageServices(InterfaceStorageService):
 
     def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataCode:
         result = self.repository.get_count_by_filial_grup_zone(filial_id, current_date)
-        return MapperStorage.to_response_grup_data(result)
+        return MapperStorage.to_response_grup_data_code(result)
 
     def get_count_by_filial_grup_periodo(
         self, filial_id: int, start_day: date, end_day: date
-    ) -> ResponseGrupData:
+    ) -> ResponseGrupDataHour:
         if (end_day - start_day).days < 1:
             self.log.info(f"agrupando por hora {start_day} {end_day}")
             result = self.repository.get_count_by_filial_grup_hour(
                 filial_id, start_day, end_day
             )
+            return MapperStorage.to_response_grup_data_hour(result)
             label = []
             count_in = []
             count_out = []
@@ -40,14 +42,14 @@ class StorageServices(InterfaceStorageService):
                 count_in.append(item.total_count_in)
                 count_out.append(item.total_count_out)
                 lis_gup_hour.append(
-                    CountGrup(
+                    CountGrupHour(
                         people_in=item.total_count_in,
                         people_out=item.total_count_out,
                         hour=item.timestamp.strftime("%Y-%m-%d %H:%M"),
                     )
                 )
             line = LineGraph(label=label, people_int=count_in, people_out=count_out)
-            return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+            return ResponseGrupDataHour(table=lis_gup_hour, linegraph=line)
 
         result = self.repository.get_count_by_filial_grup_periodo(
             filial_id, start_day, end_day
@@ -61,11 +63,11 @@ class StorageServices(InterfaceStorageService):
             count_in.append(item.total_count_in)
             count_out.append(item.total_count_out)
             lis_gup_hour.append(
-                CountGrup(
+                CountGrupHour(
                     people_in=item.total_count_in,
                     people_out=item.total_count_out,
                     hour=item.timestamp.strftime("%Y-%m-%d %H:%M"),
                 )
             )
         line = LineGraph(label=label, people_int=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+        return ResponseGrupDataHour(table=lis_gup_hour, linegraph=line)
