@@ -35,6 +35,14 @@ class InterfaceCameraService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
+    def get_list_name_camera_by_filial(self, filial_id: int) -> List[str]:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_list_tag_by_filial(self, filial_id: int) -> List[str]:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
     def update(self, channel_id: UUID, request: RequestUpdateCamera) -> ResponseCamera:
         raise NotImplementedError("Method not implemented")
 

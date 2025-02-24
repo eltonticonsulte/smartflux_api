@@ -67,7 +67,7 @@ async def get_data_filial_grup_hour(
 
 
 @router.get(
-    "/today/hour/zona/{name}", status_code=200, response_model=ResponseGrupDataHour
+    "/today/hour/zone/{name}", status_code=200, response_model=ResponseGrupDataHour
 )
 async def get_data_filial_zona_grup_hour(
     zona: str,

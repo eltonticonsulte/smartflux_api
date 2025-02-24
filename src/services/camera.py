@@ -39,6 +39,18 @@ class CameraServices(InterfaceCameraService):
         result = [camera.channel_id for camera in datas]
         return result
 
+    def get_list_name_camera_by_filial(self, filial_id: int) -> List[str]:
+        datas = self.repository.get_by_filial(filial_id)
+        result = [camera.name for camera in datas]
+        result.sort(key=str.lower)
+        return result
+
+    def get_list_tag_by_filial(self, filial_id: int) -> List[str]:
+        datas = self.repository.get_by_filial(filial_id)
+        result = [camera.tag for camera in datas]
+        result.sort(key=str.lower)
+        return result
+
     def get_channel_by_filial(self, filial_id: int) -> List[uuid.UUID]:
         datas = self.repository.get_by_filial(filial_id)
         result = [camera.channel_id for camera in datas]
