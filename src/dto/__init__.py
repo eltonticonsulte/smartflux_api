@@ -33,7 +33,6 @@ from .event_count_storage import (
     ResponseTotalCountGrupZone,
     ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
-    ResponseTotalCountGroupDay,
     CountGrup,
     LineGraph,
     ResponseGrupData,

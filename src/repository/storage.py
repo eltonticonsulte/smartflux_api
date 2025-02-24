@@ -3,7 +3,7 @@ from typing import List, Tuple, Any
 from datetime import date, datetime, timedelta
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
-from src.dto import ResponseTotalCountGrupZone, ResponseTotalCountGroupDay
+from src.dto import ResponseTotalCountGrupZone
 
 
 class RepositoryCountEventStorageException(Exception):
@@ -69,36 +69,6 @@ class StorageRepository:
                         total_count_out=count.total_count_out,
                     )
                     for count in result
-                ]
-            except Exception as error:
-                session.rollback()
-                raise error
-
-    def get_filial_month_group_day(
-        self, filial_id: int, year: int, month: int
-    ) -> List[ResponseTotalCountGroupDay]:
-        with DBConnectionHandler() as session:
-            try:
-                counts = (
-                    session.query(
-                        func.sum(EventCount.total_count_in).label("total_count_in"),
-                        func.sum(EventCount.total_count_out).label("total_count_out"),
-                        EventCount.date.label("day"),
-                    )
-                    .filter(EventCount.filial_id == filial_id)
-                    .filter(func.extract("year", EventCount.date) == year)
-                    .filter(func.extract("month", EventCount.date) == month)
-                    .group_by(EventCount.date)
-                    .order_by(EventCount.date)
-                    .all()
-                )
-                return [
-                    ResponseTotalCountGroupDay(
-                        day=count.day.strftime("%Y-%m-%d"),
-                        total_count_in=count.total_count_in,
-                        total_count_out=count.total_count_out,
-                    )
-                    for count in counts
                 ]
             except Exception as error:
                 session.rollback()

@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from typing import List
 from logging import getLogger
 import datetime
 from fastapi import APIRouter, Header, Depends, HTTPException
@@ -8,7 +7,6 @@ from src.interfaces import InterfaceStorageService
 from src.dto import (
     ResponseTotalCountGrupZone,
     UserPermissionAccessDTO,
-    ResponseTotalCountGroupDay,
     ResponseGrupData,
 )
 from src.enums import UserRule
@@ -52,24 +50,6 @@ async def get_periodo(
         return storage.get_count_by_filial_grup_periodo(
             user.filial_id, start_day, end_day
         )
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(500, detail=str(error))
-
-
-@router.get(
-    "/month-day/{year}/{month}",
-    status_code=200,
-    response_model=List[ResponseTotalCountGroupDay],
-)
-def get_storage_day(
-    year: int,
-    month: int,
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
-) -> List[ResponseTotalCountGroupDay]:
-    try:
-        return storage.get_count_by_filial_group_day(user.filial_id, year, month)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

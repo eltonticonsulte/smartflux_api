@@ -36,9 +36,3 @@ class ResponseTotalCountGrupCamera(BaseModel):
     camera: str
     total_count_in: int
     total_count_out: int
-
-
-class ResponseTotalCountGroupDay(BaseModel):
-    day: str
-    total_count_in: int
-    total_count_out: int
