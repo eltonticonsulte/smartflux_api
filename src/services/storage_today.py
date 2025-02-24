@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-from typing import List
 import logging
 from src.interfaces import InterfaceStorageTodayService
 from src.mappers import MapperStorageToday
@@ -30,6 +29,10 @@ class StorageTodayServices(InterfaceStorageTodayService):
 
     def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupData:
         result = self.repo.count_by_filial_grup_zone(filial_id)
+        return MapperStorageToday.to_response_grup_data(result)
+
+    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupData:
+        result = self.repo.count_by_filial_grup_camera(filial_id)
         return MapperStorageToday.to_response_grup_data(result)
 
     def get_count_by_filial_camera_grup_hour(
@@ -102,8 +105,3 @@ class StorageTodayServices(InterfaceStorageTodayService):
 
         line = LineGraph(label=label, people_int=count_in, people_out=count_out)
         return ResponseGrupData(table=lis_gup_hour, linegraph=line)
-
-    def get_count_by_camera_grup_hour(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupCamera]:
-        return self.repo.get_count_by_camera_grup_hour(filial_id)

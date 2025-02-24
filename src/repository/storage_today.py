@@ -59,6 +59,26 @@ class StorageTodayRepository:
             )
             return counts
 
+    def count_by_filial_grup_camera(
+        self, filial_id: int
+    ) -> List[Row[Tuple[int, int, str, str]]]:
+        with DBConnectionHandler() as session:
+
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    Camera.name,
+                    Camera.name.label("label"),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .group_by(Camera.channel_id)
+                .all()
+            )
+            return counts
+
     def get_count_by_camera_grup_hour(
         self, filial_id: int
     ) -> List[ResponseTotalCountGrupCamera]:

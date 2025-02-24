@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 from logging import getLogger
-from typing import List
 from fastapi import APIRouter, Depends, HTTPException
 from src.enums import UserRule
 from src.interfaces import InterfaceStorageTodayService
@@ -42,15 +41,13 @@ async def get_data_filial_grup_zone(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get(
-    "/today/camera", status_code=200, response_model=List[ResponseTotalCountGrupCamera]
-)
+@router.get("/today/camera", status_code=200, response_model=ResponseGrupData)
 async def get_today_camera(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageTodayService = Depends(get_storage_today),
-) -> List[ResponseTotalCountGrupCamera]:
+) -> ResponseGrupData:
     try:
-        return storage.get_count_by_camera_grup_hour(user.filial_id)
+        return storage.get_count_by_filial_grup_camera(user.filial_id)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, str(error))

@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
-from typing import List
 from src.dto import (
     RequestEventCount,
     ResponseEventCount,
@@ -38,7 +37,5 @@ class InterfaceStorageTodayService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_camera_grup_hour(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupCamera]:
+    def get_count_by_filial_grup_camera(self, filial_id: int) -> ResponseGrupData:
         raise NotImplementedError("Method no implemented")
