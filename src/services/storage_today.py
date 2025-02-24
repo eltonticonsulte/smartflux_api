@@ -2,10 +2,9 @@
 from typing import List
 import logging
 from src.interfaces import InterfaceStorageTodayService
+from src.mappers import MapperStorageToday
 from src.dto import (
     ResponseTotalCount,
-    ResponseTotalCountGrupZone,
-    ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
     ResponseGrupData,
     CountGrup,
@@ -29,10 +28,9 @@ class StorageTodayServices(InterfaceStorageTodayService):
             total_count_out=count_out if count_out is not None else 0,
         )
 
-    def get_count_by_filial_grup_zone(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupZone]:
-        return self.repo.count_by_filial_grup_zone(filial_id)
+    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupData:
+        result = self.repo.count_by_filial_grup_zone(filial_id)
+        return MapperStorageToday.to_response_grup_data(result)
 
     def get_count_by_filial_camera_grup_hour(
         self, filial_id: int, name_device: str

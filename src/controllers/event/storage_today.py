@@ -31,13 +31,11 @@ async def get_data_day(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get(
-    "/today/zone", status_code=200, response_model=List[ResponseTotalCountGrupZone]
-)
+@router.get("/today/zone", status_code=200, response_model=ResponseGrupData)
 async def get_data_filial_grup_zone(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     count_event: InterfaceStorageTodayService = Depends(get_storage_today),
-) -> List[ResponseTotalCountGrupZone]:
+) -> ResponseGrupData:
     try:
         return count_event.get_count_by_filial_grup_zone(user.filial_id)
     except Exception as error:

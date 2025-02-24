@@ -18,9 +18,7 @@ class InterfaceStorageTodayService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_zone(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupZone]:
+    def get_count_by_filial_grup_zone(self, filial_id: int) -> ResponseGrupData:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

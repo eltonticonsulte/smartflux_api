@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Tuple
 from uuid import UUID
 from datetime import datetime, date, timedelta
-from sqlalchemy import func
+from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
 from src.dto import (
     ResponseTotalCountGrupZone,
@@ -41,33 +41,23 @@ class StorageTodayRepository:
 
     def count_by_filial_grup_zone(
         self, filial_id: int
-    ) -> List[ResponseTotalCountGrupZone]:
+    ) -> List[Row[Tuple[int, int, str, str]]]:
         with DBConnectionHandler() as session:
-            try:
-                counts = (
-                    session.query(
-                        func.sum(EventCountTemp.count_in).label("total_count_in"),
-                        func.sum(EventCountTemp.count_out).label("total_count_out"),
-                        Camera.tag,
-                        Camera.tag.label("zone_name"),
-                    )
-                    .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Filial, Camera.filial_id == Filial.filial_id)
-                    .filter(Filial.filial_id == filial_id)
-                    .group_by(Camera.tag)
-                    .all()
+
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    Camera.tag,
+                    Camera.tag.label("label"),
                 )
-                return [
-                    ResponseTotalCountGrupZone(
-                        zone_name=count.zone_name,
-                        total_count_in=count.total_count_in,
-                        total_count_out=count.total_count_out,
-                    )
-                    for count in counts
-                ]
-            except Exception as error:
-                session.rollback()
-                raise error
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .group_by(Camera.tag)
+                .all()
+            )
+            return counts
 
     def get_count_by_camera_grup_hour(
         self, filial_id: int

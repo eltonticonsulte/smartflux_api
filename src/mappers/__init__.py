@@ -6,3 +6,4 @@ from .count_even_mapper import CountEventMapper
 from .camera import CameraMapper
 from .permission import MapperPermission
 from .storage import MapperStorage
+from .storage_today import MapperStorageToday
