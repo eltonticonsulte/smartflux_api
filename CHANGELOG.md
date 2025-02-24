@@ -1,3 +1,10 @@
+## 0.0.19 (2025-02-24)
+
+### Fix
+
+- add list camera e list tag
+- add resturn code value
+
 ## 0.0.18 (2025-02-24)
 
 ### Fix
