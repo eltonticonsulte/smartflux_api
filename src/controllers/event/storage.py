@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import datetime
-from typing import Optional
 from fastapi import APIRouter, Header, Depends, HTTPException, Query
 
 from src.interfaces import InterfaceStorageService
@@ -52,35 +51,6 @@ async def get_periodo(
         return storage.get_count_by_filial_grup_periodo(
             user.filial_id, start_day, end_day
         )
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(500, detail=str(error))
-
-
-@router.get("/visitor/data", status_code=200, response_model=ResponseGrupData)
-async def get_visitor(
-    start_date: datetime.date = Query(...),
-    end_date: Optional[datetime.date] = None,
-    grup: Optional[DataFilterTimer] = Query(DataFilterTimer.UNDEFINED),
-    zone: Optional[str] = Query(None),
-    device: Optional[str] = Query(None),
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
-):
-    """
-    Busca data dado um periodo de uma filial
-    start_day: 2025-01-01
-    end_day: 2025-01-31
-    """
-    try:
-        data = RequestVisitor(
-            start_data=start_date,
-            end_data=end_date,
-            grup=grup,
-            zone=zone,
-            device=device,
-        )
-        return storage.get_count_visitor(user.filial_id, data)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
