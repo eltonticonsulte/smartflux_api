@@ -112,7 +112,6 @@ class StorageServices(InterfaceStorageService):
         result = self.repository.get_count_by_filial_grup_date(
             filial_id, data.start_data, data.end_data, data.grup
         )
-        print(result)
         if data.grup == DataFilterTimer.HOUR:
             return MapperStorage.to_response_grup_hour(result)
         if data.grup == DataFilterTimer.DAY:

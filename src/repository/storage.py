@@ -59,7 +59,7 @@ class StorageRepository:
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
                     Camera.tag.label("label"),
-                    func.date_trunc(flag_time_value, EventCount.date).label(
+                    func.date_trunc(flag_time_value, EventCount.timestamp).label(
                         "timestamp"
                     ),
                 )
@@ -83,7 +83,7 @@ class StorageRepository:
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
                     Camera.name.label("label"),
-                    func.date_trunc(flag_time_value, EventCount.date).label(
+                    func.date_trunc(flag_time_value, EventCount.timestamp).label(
                         "timestamp"
                     ),
                 )
@@ -103,37 +103,17 @@ class StorageRepository:
                 session.query(
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
-                    func.date_trunc(flag_time.value.lower(), EventCount.date).label(
-                        "timestamp"
-                    ),
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCount.timestamp
+                    ).label("timestamp"),
                 )
                 .filter(EventCount.filial_id == filial_id)
                 .filter(EventCount.date.between(start_day, end_day))
-                .group_by(func.date_trunc(flag_time.value.lower(), EventCount.date))
-                .order_by("timestamp")
-                .all()
-            )
-            print(counts)
-            return counts
-
-    def get_count_by_filial_grup_date_hour(
-        self, filial_id: int, start_day: date, end_day: date, flag_time: DataFilterTimer
-    ) -> List[Row[Tuple[int, int, Any]]]:
-
-        with DBConnectionHandler() as session:
-            counts = (
-                session.query(
-                    func.sum(EventCount.total_count_in).label("total_count_in"),
-                    func.sum(EventCount.total_count_out).label("total_count_out"),
-                    func.date_trunc(flag_time.value.lower(), EventCount.date).label(
-                        "timestamp"
-                    ),
+                .group_by(
+                    func.date_trunc(flag_time.value.lower(), EventCount.timestamp)
                 )
-                .filter(EventCount.filial_id == filial_id)
-                .filter(EventCount.date.between(start_day, end_day))
-                .group_by(func.date_trunc(flag_time.value.lower(), EventCount.date))
                 .order_by("timestamp")
                 .all()
             )
-            print(counts)
+
             return counts
