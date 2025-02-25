@@ -1,3 +1,15 @@
+## 0.0.21 (2025-02-25)
+
+### Fix
+
+- remove label
+- correcao filtros
+- erro filter date
+
+### Refactor
+
+- add endpoint visitor
+
 ## 0.0.20 (2025-02-25)
 
 ### Fix
