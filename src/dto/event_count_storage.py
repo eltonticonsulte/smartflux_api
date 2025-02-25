@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
-from typing import List
+from typing import List, Optional
+from datetime import date
 from pydantic import BaseModel
+from src.enums import DataFilterTimer
 
 
-class CountGrupHour(BaseModel):
+class CountGrupData(BaseModel):
     people_in: int
     people_out: int
-    hour: str
+    date: str
 
 
 class CountGrupCode(BaseModel):
@@ -17,7 +19,7 @@ class CountGrupCode(BaseModel):
 
 class LineGraph(BaseModel):
     label: List[str]
-    people_int: List[int]
+    people_in: List[int]
     people_out: List[int]
 
 
@@ -26,9 +28,17 @@ class ResponseGrupDataCode(BaseModel):
     linegraph: LineGraph
 
 
-class ResponseGrupDataHour(BaseModel):
-    table: List[CountGrupHour]
+class ResponseGrupData(BaseModel):
+    table: List[CountGrupData]
     linegraph: LineGraph
+
+
+class RequestVisitor(BaseModel):
+    start_data: date
+    end_data: Optional[date] = None
+    grup: Optional[DataFilterTimer] = DataFilterTimer.UNDEFINED
+    zone: Optional[str] = None
+    device: Optional[str] = None
 
 
 class ResponseTotalCountGrupZone(BaseModel):

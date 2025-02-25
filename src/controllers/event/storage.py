@@ -1,15 +1,17 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 import datetime
-from fastapi import APIRouter, Header, Depends, HTTPException
+from typing import Optional
+from fastapi import APIRouter, Header, Depends, HTTPException, Query
 
 from src.interfaces import InterfaceStorageService
 from src.dto import (
     UserPermissionAccessDTO,
-    ResponseGrupDataHour,
+    ResponseGrupData,
     ResponseGrupDataCode,
+    RequestVisitor,
 )
-from src.enums import UserRule
+from src.enums import UserRule, DataFilterTimer
 from ..core import get_service_storage, rule_require
 
 
@@ -34,7 +36,7 @@ async def get_data_filial_grup_zone(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/period", status_code=200, response_model=ResponseGrupDataHour)
+@router.get("/period", status_code=200, response_model=ResponseGrupData)
 async def get_periodo(
     start_day: datetime.date,
     end_day: datetime.date,
@@ -50,6 +52,35 @@ async def get_periodo(
         return storage.get_count_by_filial_grup_periodo(
             user.filial_id, start_day, end_day
         )
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/visitors", status_code=200, response_model=ResponseGrupData)
+async def get_visitor(
+    start_date: datetime.date = Query(...),
+    end_date: Optional[datetime.date] = None,
+    grup: Optional[DataFilterTimer] = Query(DataFilterTimer.UNDEFINED),
+    zone: Optional[str] = Query(None),
+    device: Optional[str] = Query(None),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+):
+    """
+    Busca data dado um periodo de uma filial, se o periodo for um dia agrupa por hora, se for mais de um dia agrupa por dia
+    start_day: 2025-01-01
+    end_day: 2025-01-31
+    """
+    try:
+        data = RequestVisitor(
+            start_data=start_date,
+            end_data=end_date,
+            grup=grup,
+            zone=zone,
+            device=device,
+        )
+        return storage.get_count_visitor(user.filial_id, data)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

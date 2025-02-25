@@ -117,7 +117,7 @@ class EventCountTemp(Base):
     )
 
     count_event_id = Column(Integer, primary_key=True, autoincrement=True)
-    event_time = Column(TIMESTAMP(5), default=func.now())
+    event_time = Column(TIMESTAMP(timezone=True, precision=4), default=func.now())
     count_in = Column(Integer, default=0)
     count_out = Column(Integer, default=0)
     channel_id = Column(PGUUID, ForeignKey("cameras.channel_id"), nullable=False)
@@ -134,6 +134,7 @@ class EventCount(Base):
     channel_id = Column(PGUUID, ForeignKey("cameras.channel_id"), nullable=False)
     date = Column(Date, nullable=False)
     hour = Column(Integer, nullable=False)
+    timestamp = Column(TIMESTAMP(0), default=func.now(), nullable=False)
     total_count_in = Column(Integer, default=0, nullable=False)
     total_count_out = Column(Integer, default=0, nullable=False)
     filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)

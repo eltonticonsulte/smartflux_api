@@ -33,11 +33,12 @@ from .event_count_storage import (
     ResponseTotalCountGrupZone,
     ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
-    CountGrupHour,
+    CountGrupData,
     LineGraph,
-    ResponseGrupDataHour,
+    ResponseGrupData,
     CountGrupCode,
     ResponseGrupDataCode,
+    RequestVisitor,
 )
 from .permission import RequestCreatePermission, ResponsePermission
 from .aws_websocket import EventCountSendWebsocket
