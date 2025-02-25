@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from datetime import datetime, date, timedelta
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from src.database import DBConnectionHandler
@@ -12,7 +13,10 @@ from src.database import (
 
 def aggregate_events():
     with DBConnectionHandler() as session:
-        # Query para agrupar os eventos por hora, filial, e zona
+        start_date = datetime.combine(
+            date.today() - timedelta(days=1), datetime.min.time()
+        )
+        end_date = start_date + timedelta(days=1)
         print("len event ", session.query(EventCountTemp).count())
         aggregated_data = (
             session.query(
@@ -26,7 +30,7 @@ def aggregate_events():
             )
             .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
             .join(Filial, Camera.filial_id == Filial.filial_id)
-            # .filter(EventCountTemp.event_time >= data_inicio, EventCountTemp.event_time < data_fim)
+            .filter(EventCountTemp.event_time.between(start_date, end_date))
             .group_by(
                 Camera.channel_id,
                 func.date_trunc("hour", EventCountTemp.event_time),
@@ -38,10 +42,15 @@ def aggregate_events():
 
         # Inserir dados agregados na tabela EventCount
         for data in aggregated_data:
+            timestamp = datetime.combine(
+                data.hour_timestamp.date(), datetime.min.time()
+            ) + timedelta(hours=data.hour_timestamp.hour)
+
             new_event_count = EventCount(
                 channel_id=data.channel_id,
                 date=data.hour_timestamp.date(),
                 hour=data.hour_timestamp.hour,
+                timestamp=timestamp,
                 total_count_in=data.total_count_in,
                 total_count_out=data.total_count_out,
                 filial_id=data.filial_id,
@@ -53,7 +62,9 @@ def aggregate_events():
         session.commit()
 
         # Remover dados processados de EventCountTemp
-        session.query(EventCountTemp).delete()
+        session.query(EventCountTemp).filter(
+            EventCountTemp.event_time.between(start_date, end_date)
+        ).delete()
         session.commit()
 
         print("Dados agregados e removidos com sucesso!")
