@@ -59,7 +59,7 @@ class FactoryService:
         return EventService(CameraRepository(), CountEventRepository())
 
     def create_storage(self) -> InterfaceStorageService:
-        return StorageServices(StorageRepository())
+        return StorageServices(StorageRepository(), StorageTodayRepository())
 
     def create_storage_today(self) -> InterfaceStorageTodayService:
         return StorageTodayServices(StorageTodayRepository())

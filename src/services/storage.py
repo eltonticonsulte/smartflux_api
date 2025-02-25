@@ -11,19 +11,22 @@ from src.dto import (
     RequestVisitor,
 )
 from src.enums import DataFilterTimer
-from src.repository import StorageRepository
+from src.repository import StorageRepository, StorageTodayRepository
 from src.mappers import MapperStorage
 
 
 class StorageServices(InterfaceStorageService):
-    def __init__(self, repository: StorageRepository):
+    def __init__(
+        self, rep_storage: StorageRepository, rep_today: StorageTodayRepository
+    ):
         self.log = logging.getLogger(__name__)
-        self.repository = repository
+        self.rep_storage = rep_storage
+        self.rep_storage_today = rep_today
 
     def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
     ) -> ResponseGrupDataCode:
-        result = self.repository.get_count_by_filial_grup_zone(filial_id, current_date)
+        result = self.rep_storage.get_count_by_filial_grup_zone(filial_id, current_date)
         return MapperStorage.to_response_grup_data_code(result)
 
     def get_count_by_filial_grup_periodo(
@@ -31,7 +34,7 @@ class StorageServices(InterfaceStorageService):
     ) -> ResponseGrupData:
         if (end_day - start_day).days < 1:
             self.log.info(f"agrupando por hora {start_day} {end_day}")
-            result = self.repository.get_count_by_filial_grup_date(
+            result = self.rep_storage.get_count_by_filial_grup_date(
                 filial_id, start_day, end_day
             )
             return MapperStorage.to_response_grup_data_label(result)
@@ -53,7 +56,7 @@ class StorageServices(InterfaceStorageService):
             line = LineGraph(label=label, people_in=count_in, people_out=count_out)
             return ResponseGrupData(table=lis_gup_hour, linegraph=line)
 
-        result = self.repository.get_count_by_filial_grup_day(
+        result = self.rep_storage.get_count_by_filial_grup_day(
             filial_id, start_day, end_day
         )
         label = []
@@ -89,7 +92,7 @@ class StorageServices(InterfaceStorageService):
         return self.filter_by_date(filial_id, data)
 
     def filter_by_zone(self, filial_id, data: RequestVisitor) -> ResponseGrupData:
-        result = self.repository.get_count_by_filial_grup_zone_date(
+        result = self.rep_storage.get_count_by_filial_grup_zone_date(
             filial_id=filial_id, current_date=data.start_data, flag_time=data.grup
         )
         if data.grup == DataFilterTimer.HOUR:
@@ -100,7 +103,7 @@ class StorageServices(InterfaceStorageService):
     def filter_by_device(
         self, filial_id: int, data: RequestVisitor
     ) -> ResponseGrupData:
-        result = self.repository.get_count_by_filial_grup_cameras_date(
+        result = self.rep_storage.get_count_by_filial_grup_cameras_date(
             filial_id, data.start_data, data.grup
         )
         if data.grup == DataFilterTimer.HOUR:
@@ -109,7 +112,7 @@ class StorageServices(InterfaceStorageService):
             return MapperStorage.to_respone_grup_day(result)
 
     def filter_by_date(self, filial_id: int, data: RequestVisitor) -> ResponseGrupData:
-        result = self.repository.get_count_by_filial_grup_date(
+        result = self.rep_storage.get_count_by_filial_grup_date(
             filial_id, data.start_data, data.end_data, data.grup
         )
         if data.grup == DataFilterTimer.HOUR:

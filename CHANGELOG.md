@@ -1,3 +1,13 @@
+## 0.0.20 (2025-02-25)
+
+### Fix
+
+- update deprecated
+- update
+- update
+- add update aggregate
+- all
+
 ## 0.0.19 (2025-02-24)
 
 ### Fix
