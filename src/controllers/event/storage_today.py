@@ -66,7 +66,12 @@ async def get_data_filial_grup_hour(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/today/hour/zone/{name}", status_code=200, response_model=ResponseGrupData)
+@router.get(
+    "/today/hour/zone/{name}",
+    status_code=200,
+    response_model=ResponseGrupData,
+    deprecated=True,
+)
 async def get_data_filial_zona_grup_hour(
     zona: str,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
@@ -83,7 +88,10 @@ async def get_data_filial_zona_grup_hour(
 
 
 @router.get(
-    "/today/hour/device/{name}", status_code=200, response_model=ResponseGrupData
+    "/today/hour/device/{name}",
+    status_code=200,
+    response_model=ResponseGrupData,
+    deprecated=True,
 )
 async def get_data_filial_camera_grup_hour(
     device: str,

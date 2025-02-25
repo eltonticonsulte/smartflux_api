@@ -85,12 +85,12 @@ class StorageServices(InterfaceStorageService):
         if data.zone:
             return self.filter_by_zone(filial_id, data)
         if data.device:
-            return self.filter_by_device(data)
+            return self.filter_by_device(filial_id, data)
         return self.filter_by_date(filial_id, data)
 
     def filter_by_zone(self, filial_id, data: RequestVisitor) -> ResponseGrupData:
         result = self.repository.get_count_by_filial_grup_zone_date(
-            filial_id=data.filial_id, current_date=data.start_data, flag_time=data.grup
+            filial_id=filial_id, current_date=data.start_data, flag_time=data.grup
         )
         if data.grup == DataFilterTimer.HOUR:
             return MapperStorage.to_response_grup_hour(result)
