@@ -97,6 +97,8 @@ class StorageRepository:
     def get_count_by_filial_grup_date(
         self, filial_id: int, start_day: date, end_day: date, flag_time: DataFilterTimer
     ) -> List[Row[Tuple[int, int, Any]]]:
+        str_timer = flag_time.value.lower()
+        print(str_timer, start_day, end_day, filial_id)
 
         with DBConnectionHandler() as session:
             counts = (

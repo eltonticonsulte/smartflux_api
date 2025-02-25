@@ -37,7 +37,7 @@ class StorageServices(InterfaceStorageService):
             result = self.rep_storage.get_count_by_filial_grup_date(
                 filial_id, start_day, end_day
             )
-            return MapperStorage.to_response_grup_data_label(result)
+            return MapperStorage.to_response_grup_label(result)
             label = []
             count_in = []
             count_out = []
@@ -95,10 +95,7 @@ class StorageServices(InterfaceStorageService):
         result = self.rep_storage.get_count_by_filial_grup_zone_date(
             filial_id=filial_id, current_date=data.start_data, flag_time=data.grup
         )
-        if data.grup == DataFilterTimer.HOUR:
-            return MapperStorage.to_response_grup_hour(result)
-        if data.grup == DataFilterTimer.DAY:
-            return MapperStorage.to_respone_grup_day(result)
+        return MapperStorage.to_response_grup_date(result, data.grup)
 
     def filter_by_device(
         self, filial_id: int, data: RequestVisitor
@@ -106,19 +103,20 @@ class StorageServices(InterfaceStorageService):
         result = self.rep_storage.get_count_by_filial_grup_cameras_date(
             filial_id, data.start_data, data.grup
         )
-        if data.grup == DataFilterTimer.HOUR:
-            return MapperStorage.to_response_grup_hour(result)
-        if data.grup == DataFilterTimer.DAY:
-            return MapperStorage.to_respone_grup_day(result)
+        return MapperStorage.to_response_grup_date(result, data.grup)
 
     def filter_by_date(self, filial_id: int, data: RequestVisitor) -> ResponseGrupData:
         result = self.rep_storage.get_count_by_filial_grup_date(
             filial_id, data.start_data, data.end_data, data.grup
         )
-        if data.grup == DataFilterTimer.HOUR:
-            return MapperStorage.to_response_grup_hour(result)
-        if data.grup == DataFilterTimer.DAY:
-            return MapperStorage.to_respone_grup_day(result)
+        print(result, data)
+        if data.start_data == date.today():
+            today_result = self.rep_storage_today.xget_count_by_filial_grup_date(
+                filial_id, data.start_data, data.end_data, data.grup
+            )
+            return MapperStorage.merge_data(result, today_result, data.grup)
+
+        return MapperStorage.to_response_grup_date(result, data.grup)
 
     def compute_grup(self, data: RequestVisitor):
         if data.grup == DataFilterTimer.UNDEFINED:

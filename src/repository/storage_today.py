@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from typing import List, Tuple
+from typing import Any, List, Tuple
 from uuid import UUID
 from datetime import datetime, date, timedelta
 from sqlalchemy import func, Row
@@ -9,6 +9,7 @@ from src.dto import (
     ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
 )
+from src.enums.storage import DataFilterTimer
 
 
 class RepositoryCountEventException(Exception):
@@ -182,6 +183,30 @@ class StorageTodayRepository:
                 .filter(EventCountTemp.event_time.between(start_date, end_date))
                 .group_by(func.date_trunc("hour", EventCountTemp.event_time))
                 .order_by("hour_timestamp")
+                .all()
+            )
+
+            return counts
+
+    def xget_count_by_filial_grup_date(
+        self, filial_id: int, start_day: date, end_day: date, flag_time: DataFilterTimer
+    ) -> List[Row[Tuple[int, int, Any]]]:
+
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp"),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                # .filter(EventCountTemp.event_time.between(start_day, end_day))
+                .group_by("timestamp")
+                .order_by("timestamp")
                 .all()
             )
 
