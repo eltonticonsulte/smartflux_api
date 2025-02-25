@@ -65,7 +65,7 @@ class StorageRepository:
                 )
                 .filter(EventCount.filial_id == filial_id)
                 .filter(EventCount.date.between(start_date, end_date))
-                .group_by(flag_time_value, Camera.tag)
+                .group_by("timestamp", Camera.tag)
                 .all()
             )
             return counts
@@ -89,7 +89,7 @@ class StorageRepository:
                 )
                 .filter(EventCount.filial_id == filial_id)
                 .filter(EventCount.date.between(start_date, end_date))
-                .group_by(flag_time_value, Camera.channel_id)
+                .group_by("timestamp", Camera.channel_id)
                 .all()
             )
             return counts
