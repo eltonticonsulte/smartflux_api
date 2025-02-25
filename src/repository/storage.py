@@ -46,11 +46,15 @@ class StorageRepository:
             )
             return counts
 
-    def get_count_by_filial_grup_zone_date(
-        self, filial_id: int, current_date: date, flag_time: DataFilterTimer
+    def get_count_by_filial_zone_grup_date(
+        self,
+        filial_id: int,
+        start_date: date,
+        end_date: date,
+        zone: str,
+        flag_time: DataFilterTimer,
     ) -> List[Row[Tuple[int, int, int, str]]]:
-        start_date = datetime.combine(current_date, datetime.min.time())
-        end_date = start_date + timedelta(days=1)
+
         flag_time_value = flag_time.value.lower()
 
         with DBConnectionHandler() as session:
@@ -58,23 +62,30 @@ class StorageRepository:
                 session.query(
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
-                    Camera.tag.label("label"),
                     func.date_trunc(flag_time_value, EventCount.timestamp).label(
                         "timestamp"
                     ),
                 )
                 .filter(EventCount.filial_id == filial_id)
+                .filter(Camera.tag == zone)
                 .filter(EventCount.date.between(start_date, end_date))
-                .group_by("timestamp", Camera.tag)
+                .group_by(
+                    func.date_trunc(flag_time_value, EventCount.timestamp).label(
+                        "timestamp"
+                    )
+                )
                 .all()
             )
             return counts
 
-    def get_count_by_filial_grup_cameras_date(
-        self, filial_id: int, current_date: date, flag_time: DataFilterTimer
+    def get_count_by_filial_camera_grup_date(
+        self,
+        filial_id: int,
+        start_date: date,
+        end_date: date,
+        name_camera: str,
+        flag_time: DataFilterTimer,
     ) -> List[Row[Tuple[int, int, int, str]]]:
-        start_date = datetime.combine(current_date, datetime.min.time())
-        end_date = start_date + timedelta(days=1)
         flag_time_value = flag_time.value.lower()
 
         with DBConnectionHandler() as session:
@@ -82,14 +93,18 @@ class StorageRepository:
                 session.query(
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
-                    Camera.name.label("label"),
                     func.date_trunc(flag_time_value, EventCount.timestamp).label(
                         "timestamp"
                     ),
                 )
                 .filter(EventCount.filial_id == filial_id)
+                .filter(Camera.name == name_camera)
                 .filter(EventCount.date.between(start_date, end_date))
-                .group_by("timestamp", Camera.channel_id)
+                .group_by(
+                    func.date_trunc(flag_time_value, EventCount.timestamp).label(
+                        "timestamp"
+                    )
+                )
                 .all()
             )
             return counts

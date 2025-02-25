@@ -188,8 +188,80 @@ class StorageTodayRepository:
 
             return counts
 
+    def xget_count_by_filial_camera_grup_date(
+        self,
+        filial_id: int,
+        start_date: date,
+        end_date: date,
+        name_camera: str,
+        flag_time: DataFilterTimer,
+    ) -> List[Row[Tuple[int, int, Any]]]:
+
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp"),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Camera.name == name_camera)
+                .filter(Filial.filial_id == filial_id)
+                # .filter(EventCountTemp.event_time.between(start_day, end_day))
+                .group_by(
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp")
+                )
+                .order_by("timestamp")
+                .all()
+            )
+
+            return counts
+
+    def xget_count_by_filial_zone_grup_date(
+        self,
+        filial_id: int,
+        start_date: date,
+        end_date: date,
+        zone: str,
+        flag_time: DataFilterTimer,
+    ) -> List[Row[Tuple[int, int, Any]]]:
+
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp"),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Camera.tag == zone)
+                .filter(Filial.filial_id == filial_id)
+                # .filter(EventCountTemp.event_time.between(start_day, end_day))
+                .group_by(
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp")
+                )
+                .order_by("timestamp")
+                .all()
+            )
+
+            return counts
+
     def xget_count_by_filial_grup_date(
-        self, filial_id: int, start_day: date, end_day: date, flag_time: DataFilterTimer
+        self,
+        filial_id: int,
+        start_date: date,
+        end_date: date,
+        flag_time: DataFilterTimer,
     ) -> List[Row[Tuple[int, int, Any]]]:
 
         with DBConnectionHandler() as session:
@@ -205,7 +277,11 @@ class StorageTodayRepository:
                 .join(Filial, Camera.filial_id == Filial.filial_id)
                 .filter(Filial.filial_id == filial_id)
                 # .filter(EventCountTemp.event_time.between(start_day, end_day))
-                .group_by("timestamp")
+                .group_by(
+                    func.date_trunc(
+                        flag_time.value.lower(), EventCountTemp.event_time
+                    ).label("timestamp")
+                )
                 .order_by("timestamp")
                 .all()
             )
