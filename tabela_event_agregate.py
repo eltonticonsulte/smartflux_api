@@ -56,14 +56,14 @@ def aggregate_events():
                 filial_id=data.filial_id,
             )
 
-        #    session.add(new_event_count)
+            session.add(new_event_count)
 
-        # session.commit()
+        session.commit()
 
-        # session.query(EventCountTemp).filter(
-        #    EventCountTemp.event_time < start_date)
-        # ).delete()
-        # session.commit()
+        session.query(EventCountTemp).filter(
+            EventCountTemp.event_time < start_date
+        ).delete()
+        session.commit()
 
         print("Dados agregados e removidos com sucesso!")
 

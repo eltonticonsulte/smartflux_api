@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import websocket
+import json
 
 
 def connect_to_websocket():
@@ -16,12 +17,12 @@ def connect_to_websocket():
 
     def on_open(ws):
         print(f"Conectado ao WebSocke")
-        # payload = {
-        #    "action": "sendMessage",
-        #    "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
-        #    "message": "Hello, WebSocket!",
-        # }
-        # ws.send(json.dumps(payload))
+        payload = {
+            "action": "sendMessage",
+            "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
+            "message": "Hello, WebSocket!",
+        }
+        ws.send(json.dumps(payload))
 
     headers = {
         "action": "sendMessage",
