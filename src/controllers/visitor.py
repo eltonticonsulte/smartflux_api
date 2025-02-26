@@ -21,7 +21,7 @@ log = getLogger("controller_count_visitor")
 
 
 @router.get("/date", status_code=200, response_model=ResponseGrupData)
-async def get_visitor(
+async def get_visitor_grup_data(
     start_date: datetime.date = Query(...),
     end_date: Optional[datetime.date] = None,
     grup: Optional[DataFilterTimer] = Query(DataFilterTimer.AUTO_SELECT),
@@ -50,7 +50,7 @@ async def get_visitor(
 
 
 @router.get("/label", status_code=200, response_model=ResponseGrupDataLabel)
-async def get_visitor(
+async def get_visitor_grup_label(
     start_date: datetime.date = Query(...),
     end_date: Optional[datetime.date] = None,
     grup: Optional[DataGrupLabel] = Query(DataGrupLabel.ZONE),
