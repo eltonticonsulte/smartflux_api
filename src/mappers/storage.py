@@ -77,6 +77,47 @@ class MapperStorage:
         return ResponseGrupData(table=list_gup_data, linegraph=line)
 
     @staticmethod
+    def merge_data_label(
+        counts: List[Row[Tuple[int, int, Any]]],
+        counts2: List[Row[Tuple[int, int, Any]]],
+        flag_time: DataFilterTimer,
+    ) -> ResponseGrupData:
+        str_format_time = (
+            "%Y-%m-%d %H:%M" if flag_time == DataFilterTimer.HOUR else "%Y-%m-%d"
+        )
+
+        labels = []
+        count_in = []
+        count_out = []
+        list_gup_data = []
+        for item in counts:
+
+            labels.append(item.label)
+            count_in.append(item.total_count_in)
+            count_out.append(item.total_count_out)
+            list_gup_data.append(
+                CountGrupCode(
+                    people_in=item.total_count_in,
+                    people_out=item.total_count_out,
+                    code=item.label,
+                )
+            )
+        for item in counts2:
+            labels.append(item.label)
+            count_in.append(item.total_count_in)
+            count_out.append(item.total_count_out)
+            list_gup_data.append(
+                CountGrupCode(
+                    people_in=item.total_count_in,
+                    people_out=item.total_count_out,
+                    code=item.label,
+                )
+            )
+
+        line = LineGraph(label=labels, people_in=count_in, people_out=count_out)
+        return ResponseGrupDataLabel(table=list_gup_data, linegraph=line)
+
+    @staticmethod
     def to_response_grup_date(
         counts: List[Row[Tuple[int, int, Any]]], flag_time: DataFilterTimer
     ) -> ResponseGrupData:

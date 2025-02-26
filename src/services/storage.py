@@ -47,7 +47,9 @@ class StorageServices(InterfaceStorageService):
             filial_id, data.start_data, data.end_data
         )
         if data.start_data == date.today() or data.end_data == date.today():
-            pass
+            resul_count = self.rep_storage_today.count_by_filial_grup_zone(filial_id)
+            return MapperStorage.merge_data_label(result, resul_count)
+        return MapperStorage.merge_data_label(result, [])
 
     def get_count_grup_camera(
         self, filial_id: int, data: RequestVisitorLabel
@@ -55,6 +57,10 @@ class StorageServices(InterfaceStorageService):
         result = self.rep_storage.get_count_by_filial_grup_camera(
             filial_id, data.start_data, data.end_data
         )
+        if data.start_data == date.today() or data.end_data == date.today():
+            resul_count = self.rep_storage_today.count_by_filial_grup_camera(filial_id)
+            return MapperStorage.merge_data_label(result, resul_count)
+        return MapperStorage.merge_data_label(result, [])
 
     def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
