@@ -17,6 +17,7 @@ from src.dto import (
     ResponseAuthUser,
     RequestStatus,
     UserPermissionAccessDTO,
+    ResponseCameraList,
 )
 from src.enums import UserRule
 from .core import (
@@ -129,6 +130,22 @@ async def get_lista_tag_camera(
     try:
         if user.filial_id:
             result: List[str] = service.get_list_tag_by_filial(user.filial_id)
+            return result
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/list", status_code=200, response_model=List[ResponseCameraList])
+async def get_list(
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    service: InterfaceCameraService = Depends(get_service_camera),
+) -> List[ResponseCameraList]:
+    try:
+        if user.filial_id:
+            result: List[ResponseCameraList] = service.get_list_by_filial(
+                user.filial_id
+            )
             return result
     except Exception as error:
         log.error("error", exc_info=error)

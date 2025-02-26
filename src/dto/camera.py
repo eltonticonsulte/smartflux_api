@@ -26,6 +26,11 @@ class ResponseCamera(BaseModel):
     tag: str
 
 
+class ResponseCameraList(BaseModel):
+    name: str
+    zone: str
+
+
 class RequestUpdateCamera(BaseModel):
     name: Optional[str] = None
     tag: Optional[str] = None

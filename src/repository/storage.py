@@ -74,6 +74,7 @@ class StorageRepository:
                         "timestamp"
                     )
                 )
+                .order_by("timestamp")
                 .all()
             )
             return counts
@@ -105,6 +106,7 @@ class StorageRepository:
                         "timestamp"
                     )
                 )
+                .order_by("timestamp")
                 .all()
             )
             return counts

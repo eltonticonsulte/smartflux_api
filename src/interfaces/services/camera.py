@@ -7,6 +7,7 @@ from src.dto import (
     ResponseCamera,
     RequestUpdateCamera,
     RequestStatus,
+    ResponseCameraList,
 )
 
 
@@ -48,4 +49,8 @@ class InterfaceCameraService(ABC):
 
     @abstractmethod
     def delete(self, channel_id: UUID) -> None:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_list_by_filial(self, filial_id: int) -> List[ResponseCameraList]:
         raise NotImplementedError("Method not implemented")

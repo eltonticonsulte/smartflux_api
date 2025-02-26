@@ -8,6 +8,7 @@ from src.dto import (
     ResponseCamera,
     RequestUpdateCamera,
     RequestStatus,
+    ResponseCameraList,
 )
 from src.mappers import CameraMapper
 from src.interfaces import InterfaceCameraService
@@ -37,6 +38,11 @@ class CameraServices(InterfaceCameraService):
     def get_all_channels(self) -> List[uuid.UUID]:
         datas = self.repository.get_all()
         result = [camera.channel_id for camera in datas]
+        return result
+
+    def get_list_by_filial(self, filial_id: int) -> List[ResponseCameraList]:
+        datas = self.repository.get_by_filial(filial_id)
+        result = [CameraMapper.get_entity_to_response_list(camera) for camera in datas]
         return result
 
     def get_list_name_camera_by_filial(self, filial_id: int) -> List[str]:

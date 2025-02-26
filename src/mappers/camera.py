@@ -7,6 +7,7 @@ from src.dto import (
     ResponseCamera,
     RequestUpdateCamera,
     RequestStatus,
+    ResponseCameraList,
 )
 
 
@@ -36,6 +37,10 @@ class CameraMapper:
             filial_id=entity.filial_id,
             status=entity.status,
         )
+
+    @staticmethod
+    def get_entity_to_response_list(entity: Camera) -> ResponseCameraList:
+        return ResponseCameraList(name=entity.name, zone=entity.tag)
 
     @staticmethod
     def update_request_to_entity(

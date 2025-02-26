@@ -21,6 +21,7 @@ from .camera import (
     ResponseCamera,
     RequestUpdateCamera,
     RequestStatus,
+    ResponseCameraList,
 )
 
 from .event_count import (
