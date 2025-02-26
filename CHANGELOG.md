@@ -1,3 +1,14 @@
+## 0.0.27 (2025-02-26)
+
+### Fix
+
+- test websocket
+- compatible enpont
+
+### Perf
+
+- performace query
+
 ## 0.0.26 (2025-02-26)
 
 ### Fix
