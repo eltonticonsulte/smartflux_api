@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from uuid import UUID
-from typing import Optional
+from typing import Optional, List
 from pydantic import BaseModel
 from src.enums import CameraState
 
@@ -29,6 +29,22 @@ class ResponseCamera(BaseModel):
 class ResponseCameraList(BaseModel):
     name: str
     zone: str
+
+
+class ResponseCamerasName(BaseModel):
+    label: str
+    value: str
+
+
+class DataComboZone(BaseModel):
+    id: str
+    name: str
+
+
+class ResponseCamerasZone(BaseModel):
+    page: Optional[int] = 1
+    total: int
+    items: List[DataComboZone]
 
 
 class RequestUpdateCamera(BaseModel):

@@ -18,6 +18,9 @@ from src.dto import (
     RequestStatus,
     UserPermissionAccessDTO,
     ResponseCameraList,
+    ResponseCamerasName,
+    ResponseCamerasZone,
+    DataComboZone,
 )
 from src.enums import UserRule
 from .core import (
@@ -107,30 +110,35 @@ async def delete(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/list-name-device", status_code=200, response_model=List[str])
+@router.get(
+    "/list-name-device", status_code=200, response_model=List[ResponseCamerasName]
+)
 async def get_lista_name_camera(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     service: InterfaceCameraService = Depends(get_service_camera),
-) -> List[str]:
+) -> List[ResponseCamerasName]:
     try:
         if user.filial_id:
             result: List[str] = service.get_list_name_camera_by_filial(user.filial_id)
-            return result
+
+            return [ResponseCamerasName(label=name, value=name) for name in result]
 
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/list-zone", status_code=200, response_model=List[str])
+@router.get("/list-zone", status_code=200, response_model=ResponseCamerasZone)
 async def get_lista_tag_camera(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     service: InterfaceCameraService = Depends(get_service_camera),
-) -> List[str]:
+) -> ResponseCamerasZone:
     try:
         if user.filial_id:
             result: List[str] = service.get_list_tag_by_filial(user.filial_id)
-            return result
+            total = len(result)
+            items = [DataComboZone(id=tag, label=tag, total=total) for tag in result]
+            return ResponseCamerasZone(items=items, total=total)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
