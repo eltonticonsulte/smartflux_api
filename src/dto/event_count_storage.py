@@ -36,7 +36,7 @@ class ResponseGrupData(BaseModel):
 class RequestVisitor(BaseModel):
     start_data: date
     end_data: Optional[date] = None
-    grup: Optional[DataFilterTimer] = DataFilterTimer.UNDEFINED
+    grup: Optional[DataFilterTimer] = DataFilterTimer.AUTO_SELECT
     zone: Optional[str] = None
     device: Optional[str] = None
 

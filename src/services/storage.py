@@ -141,7 +141,7 @@ class StorageServices(InterfaceStorageService):
         return MapperStorage.to_response_grup_date(result, data.grup)
 
     def compute_grup(self, data: RequestVisitor):
-        if data.grup == DataFilterTimer.UNDEFINED:
+        if data.grup == DataFilterTimer.AUTO_SELECT:
             self.log.warning(f"agrupamento não encontrado")
             if (data.start_data - data.end_data).days < 1:
                 self.log.warning(
