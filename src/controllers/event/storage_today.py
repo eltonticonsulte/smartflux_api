@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 from logging import getLogger
+from datetime import date
 from fastapi import APIRouter, Depends, HTTPException
-from src.enums import UserRule
-from src.interfaces import InterfaceStorageTodayService
+from src.enums import UserRule, DataGrupLabel
+from src.interfaces import InterfaceStorageTodayService, InterfaceStorageService
 from src.dto import (
     ResponseTotalCount,
     ResponseTotalCountGrupZone,
@@ -11,8 +12,10 @@ from src.dto import (
     UserPermissionAccessDTO,
     ResponseTotalCountGrupCamera,
     ResponseGrupData,
+    RequestVisitorLabel,
+    ResponseGrupDataLabel,
 )
-from ..core import rule_require, get_storage_today
+from ..core import rule_require, get_storage_today, get_service_storage
 
 router = APIRouter()
 log = getLogger("controller_count_event")
@@ -31,14 +34,22 @@ async def get_data_day(
 
 
 @router.get(
-    "/today/zone", status_code=200, response_model=ResponseGrupData, deprecated=True
+    "/today/zone",
+    status_code=200,
+    response_model=ResponseGrupDataLabel,
+    deprecated=True,
 )
 async def get_data_filial_grup_zone(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    count_event: InterfaceStorageTodayService = Depends(get_storage_today),
-) -> ResponseGrupData:
+    storage: InterfaceStorageService = Depends(get_service_storage),
+) -> ResponseGrupDataLabel:
     try:
-        return count_event.get_count_by_filial_grup_zone(user.filial_id)
+        data = RequestVisitorLabel(
+            start_data=date.today(),
+            grup=DataGrupLabel.ZONE,
+        )
+        return storage.get_count_visitor_label(user.filial_id, data)
+
     except Exception as error:
         raise HTTPException(500, detail=str(error))
 
