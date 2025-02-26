@@ -7,10 +7,11 @@ from src.dto import (
     CountGrupData,
     LineGraph,
     ResponseGrupData,
-    ResponseGrupDataCode,
+    ResponseGrupDataLabel,
     RequestVisitor,
+    RequestVisitorLabel,
 )
-from src.enums import DataFilterTimer
+from src.enums import DataFilterTimer, DataGrupLabel
 from src.repository import StorageRepository, StorageTodayRepository
 from src.mappers import MapperStorage
 
@@ -23,9 +24,41 @@ class StorageServices(InterfaceStorageService):
         self.rep_storage = rep_storage
         self.rep_storage_today = rep_today
 
+    def get_count_visitor_label(
+        self, filial_id: int, data: RequestVisitorLabel
+    ) -> ResponseGrupDataLabel:
+        if data.end_data is None:
+            data.end_data = data.start_data
+
+        if data.end_data < data.start_data:
+            raise Exception("data final menor que data inicial")
+
+        if data.grup == DataGrupLabel.ZONE:
+            return self.get_count_grup_zone(filial_id, data)
+        elif data.grup == DataGrupLabel.CAMERA:
+            return self.get_count_grup_camera(filial_id, data)
+        else:
+            raise Exception("grup invalido")
+
+    def get_count_grup_zone(
+        self, filial_id: int, data: RequestVisitorLabel
+    ) -> ResponseGrupDataLabel:
+        result = self.rep_storage.get_count_by_filial_grup_zone(
+            filial_id, data.start_data, data.end_data
+        )
+        if data.start_data == date.today() or data.end_data == date.today():
+            pass
+
+    def get_count_grup_camera(
+        self, filial_id: int, data: RequestVisitorLabel
+    ) -> ResponseGrupDataLabel:
+        result = self.rep_storage.get_count_by_filial_grup_camera(
+            filial_id, data.start_data, data.end_data
+        )
+
     def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
-    ) -> ResponseGrupDataCode:
+    ) -> ResponseGrupDataLabel:
         result = self.rep_storage.get_count_by_filial_grup_zone(filial_id, current_date)
         return MapperStorage.to_response_grup_data_code(result)
 
@@ -92,7 +125,7 @@ class StorageServices(InterfaceStorageService):
         if data.zone:
             return self.filter_by_zone(filial_id, data)
         if data.device:
-            return self.filter_by_device(filial_id, data)
+            return self.filter_by_camera(filial_id, data)
         return self.filter_by_date(filial_id, data)
 
     def filter_by_zone(self, filial_id, data: RequestVisitor) -> ResponseGrupData:
@@ -114,7 +147,7 @@ class StorageServices(InterfaceStorageService):
             return MapperStorage.merge_data(result, today_result, data.grup)
         return MapperStorage.to_response_grup_date(result, data.grup)
 
-    def filter_by_device(
+    def filter_by_camera(
         self, filial_id: int, data: RequestVisitor
     ) -> ResponseGrupData:
         result = self.rep_storage.get_count_by_filial_camera_grup_date(

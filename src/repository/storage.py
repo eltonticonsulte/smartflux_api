@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List, Tuple, Any
-from datetime import date, datetime, timedelta
+from datetime import date
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
 from src.dto import ResponseTotalCountGrupZone
@@ -26,11 +26,8 @@ class StorageRepository:
                 raise error
 
     def get_count_by_filial_grup_zone(
-        self, filial_id: int, current_date: date
+        self, filial_id: int, start_date: date, end_date: date
     ) -> List[Row[Tuple[int, int, int, str]]]:
-
-        start_date = datetime.combine(current_date, datetime.min.time())
-        end_date = start_date + timedelta(days=1)
 
         with DBConnectionHandler() as session:
             counts = (
@@ -41,7 +38,25 @@ class StorageRepository:
                 )
                 .filter(EventCount.filial_id == filial_id)
                 .filter(EventCount.date.between(start_date, end_date))
-                .group_by(Camera.filial_id, Camera.tag)
+                .group_by(Camera.tag)
+                .all()
+            )
+            return counts
+
+    def get_count_by_filial_grup_camera(
+        self, filial_id: int, start_date: date, end_date: date
+    ) -> List[Row[Tuple[int, int, int, str]]]:
+
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCount.total_count_in).label("total_count_in"),
+                    func.sum(EventCount.total_count_out).label("total_count_out"),
+                    Camera.name.label("label"),
+                )
+                .filter(EventCount.filial_id == filial_id)
+                .filter(EventCount.date.between(start_date, end_date))
+                .group_by(Camera.name)
                 .all()
             )
             return counts
