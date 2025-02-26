@@ -8,10 +8,11 @@ from src.interfaces import InterfaceStorageService
 from src.dto import (
     UserPermissionAccessDTO,
     ResponseGrupData,
-    ResponseGrupDataCode,
+    ResponseGrupDataLabel,
     RequestVisitor,
+    RequestVisitorLabel,
 )
-from src.enums import UserRule, DataFilterTimer
+from src.enums import UserRule, DataFilterTimer, DataGrupLabel
 from .core import get_service_storage, rule_require
 
 
@@ -48,13 +49,11 @@ async def get_visitor(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/date", status_code=200, response_model=ResponseGrupData)
+@router.get("/label", status_code=200, response_model=ResponseGrupDataLabel)
 async def get_visitor(
     start_date: datetime.date = Query(...),
     end_date: Optional[datetime.date] = None,
-    grup: Optional[DataFilterTimer] = Query(DataFilterTimer.AUTO_SELECT),
-    zone: Optional[str] = Query(None),
-    device: Optional[str] = Query(None),
+    grup: Optional[DataGrupLabel] = Query(DataGrupLabel.ZONE),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):
@@ -64,14 +63,12 @@ async def get_visitor(
     end_day: 2025-01-31
     """
     try:
-        data = RequestVisitor(
+        data = RequestVisitorLabel(
             start_data=start_date,
             end_data=end_date,
             grup=grup,
-            zone=zone,
-            device=device,
         )
-        return storage.get_count_visitor(user.filial_id, data)
+        return storage.get_count_visitor_label(user.filial_id, data)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

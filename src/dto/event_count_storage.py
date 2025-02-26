@@ -2,7 +2,7 @@
 from typing import List, Optional
 from datetime import date
 from pydantic import BaseModel
-from src.enums import DataFilterTimer
+from src.enums import DataFilterTimer, DataGrupLabel
 
 
 class CountGrupData(BaseModel):
@@ -23,7 +23,7 @@ class LineGraph(BaseModel):
     people_out: List[int]
 
 
-class ResponseGrupDataCode(BaseModel):
+class ResponseGrupDataLabel(BaseModel):
     table: List[CountGrupCode]
     linegraph: LineGraph
 
@@ -39,6 +39,12 @@ class RequestVisitor(BaseModel):
     grup: Optional[DataFilterTimer] = DataFilterTimer.AUTO_SELECT
     zone: Optional[str] = None
     device: Optional[str] = None
+
+
+class RequestVisitorLabel(BaseModel):
+    start_data: date
+    end_data: Optional[date] = None
+    grup: Optional[DataGrupLabel] = DataGrupLabel.ZONE
 
 
 class ResponseTotalCountGrupZone(BaseModel):

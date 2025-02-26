@@ -6,3 +6,8 @@ class DataFilterTimer(Enum):
     HOUR = "HOUR"
     DAY = "DAY"
     AUTO_SELECT = "AUTO_SELECT"
+
+
+class DataGrupLabel(Enum):
+    ZONE = "ZONA"
+    CAMERA = "CAMERA"

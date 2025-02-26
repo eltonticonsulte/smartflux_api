@@ -6,7 +6,7 @@ from src.dto import (
     ResponseGrupData,
     CountGrupData,
     LineGraph,
-    ResponseGrupDataCode,
+    ResponseGrupDataLabel,
     CountGrupCode,
 )
 
@@ -144,4 +144,4 @@ class MapperStorage:
                 )
             )
         line = LineGraph(label=label, people_in=count_in, people_out=count_out)
-        return ResponseGrupDataCode(table=lis_gup_code, linegraph=line)
+        return ResponseGrupDataLabel(table=lis_gup_code, linegraph=line)

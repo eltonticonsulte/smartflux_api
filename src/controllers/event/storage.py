@@ -7,7 +7,7 @@ from src.interfaces import InterfaceStorageService
 from src.dto import (
     UserPermissionAccessDTO,
     ResponseGrupData,
-    ResponseGrupDataCode,
+    ResponseGrupDataLabel,
     RequestVisitor,
 )
 from src.enums import UserRule, DataFilterTimer
@@ -19,13 +19,13 @@ log = getLogger("controller_count_event")
 
 
 @router.get(
-    "/zone", status_code=200, response_model=ResponseGrupDataCode, deprecated=True
+    "/zone", status_code=200, response_model=ResponseGrupDataLabel, deprecated=True
 )
 async def get_data_filial_grup_zone(
     current_date: datetime.date,
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
-) -> ResponseGrupDataCode:
+) -> ResponseGrupDataLabel:
     """
     busca dados de uma filial agrupados port zona formato 2024-01-29
     """

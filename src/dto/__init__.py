@@ -38,8 +38,9 @@ from .event_count_storage import (
     LineGraph,
     ResponseGrupData,
     CountGrupCode,
-    ResponseGrupDataCode,
+    ResponseGrupDataLabel,
     RequestVisitor,
+    RequestVisitorLabel,
 )
 from .permission import RequestCreatePermission, ResponsePermission
 from .aws_websocket import EventCountSendWebsocket
