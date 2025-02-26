@@ -53,7 +53,7 @@ class CameraServices(InterfaceCameraService):
 
     def get_list_tag_by_filial(self, filial_id: int) -> List[str]:
         datas = self.repository.get_by_filial(filial_id)
-        result = [camera.tag for camera in datas]
+        result = list(set(camera.tag for camera in datas))
         result.sort(key=str.lower)
         return result
 

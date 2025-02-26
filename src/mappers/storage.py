@@ -80,11 +80,7 @@ class MapperStorage:
     def merge_data_label(
         counts: List[Row[Tuple[int, int, Any]]],
         counts2: List[Row[Tuple[int, int, Any]]],
-        flag_time: DataFilterTimer,
     ) -> ResponseGrupData:
-        str_format_time = (
-            "%Y-%m-%d %H:%M" if flag_time == DataFilterTimer.HOUR else "%Y-%m-%d"
-        )
 
         labels = []
         count_in = []

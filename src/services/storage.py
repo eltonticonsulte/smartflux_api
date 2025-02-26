@@ -181,8 +181,9 @@ class StorageServices(InterfaceStorageService):
 
     def compute_grup(self, data: RequestVisitor):
         if data.grup == DataFilterTimer.AUTO_SELECT:
-            self.log.warning(f"agrupamento não encontrado")
-            if (data.start_data - data.end_data).days < 1:
+            period = data.end_data - data.start_data
+            self.log.warning(f"agrupamento não encontrado periodo {period.days} day")
+            if period.days < 1:
                 self.log.warning(
                     f"agrupando por hora {data.start_data} {data.end_data}"
                 )
