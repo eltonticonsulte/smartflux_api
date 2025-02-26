@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
 import websocket
-import requests
-import json
-
-server = "btm4q4irvg.us-east-1.awsapprunner.com"
-# server = "localhost:8002"
 
 
 def connect_to_websocket():
@@ -20,17 +15,13 @@ def connect_to_websocket():
         print("Conexão encerrada")
 
     def on_open(ws):
-        print(f"Conectado ao WebSocket")
-        payload = {
-            "action": "sendMessage",
-            "token": "0c66a137-ff7d-44c4-9813-b7f720fdbb87",
-            "message": "Hello, WebSocket!",
-        }
-        ws.send(json.dumps(payload))
-
-    # password = "filial123"
-    # user = login(name_filial, password)
-    # print(user)
+        print(f"Conectado ao WebSocke")
+        # payload = {
+        #    "action": "sendMessage",
+        #    "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
+        #    "message": "Hello, WebSocket!",
+        # }
+        # ws.send(json.dumps(payload))
 
     headers = {
         "action": "sendMessage",
@@ -46,4 +37,3 @@ def connect_to_websocket():
 
 if __name__ == "__main__":
     connect_to_websocket()
-# request.body.action
