@@ -1,6 +1,27 @@
 # -*- coding: utf-8 -*-
 import websocket
 import json
+import requests
+
+
+def login():
+    endpoint = "https://pes5ppazy2.us-east-1.awsapprunner.com"
+    data = {"username": "BelaVista", "password": "B123"}
+    response = requests.post(f"{endpoint}/v1/user/login", data=data)
+    if response.status_code != 200:
+        raise Exception(response.json())
+    return response.json()
+
+
+def get_token(berrer_token: str):
+    endpoint = "https://pes5ppazy2.us-east-1.awsapprunner.com"
+    data = {"username": "BelaVista", "password": "B123"}
+    response = requests.get(
+        f"{endpoint}/v1/filial/me", headers={"Authorization": f"Bearer {berrer_token}"}
+    )
+    if response.status_code != 200:
+        raise Exception(response.json())
+    return response.json()
 
 
 def connect_to_websocket():
@@ -17,9 +38,15 @@ def connect_to_websocket():
 
     def on_open(ws):
         print(f"Conectado ao WebSocke")
+        data = login()
+        access_token = data["access_token"]
+
+        result = get_token(access_token)
+        print(result)
+
         payload = {
             "action": "sendMessage",
-            "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
+            "token": result["token"],
             "message": "Hello, WebSocket!",
         }
         ws.send(json.dumps(payload))
@@ -29,7 +56,7 @@ def connect_to_websocket():
         "Authorization": f"Bearer ",
     }
     ws = websocket.WebSocketApp(
-        uri, on_message=on_message, on_error=on_error, on_close=on_close, header=headers
+        uri, on_message=on_message, on_error=on_error, on_close=on_close
     )
     ws.on_open = on_open
 
