@@ -1,3 +1,11 @@
+## 0.0.26 (2025-02-26)
+
+### Fix
+
+- auto select
+- add get data for grup device and zone
+- add grup label
+
 ## 0.0.25 (2025-02-26)
 
 ### Fix
