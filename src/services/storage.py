@@ -24,6 +24,12 @@ class StorageServices(InterfaceStorageService):
         self.rep_storage = rep_storage
         self.rep_storage_today = rep_today
 
+    def process_data_day(self):
+        result = self.rep_storage_today.select_all_data_last_day()
+        entitys, grup = MapperStorage.storage_today_to_storage(result)
+        self.rep_storage.create_all(entitys)
+        self.rep_storage_today.delete_by_event_ids(grup)
+
     def get_count_visitor_label(
         self, filial_id: int, data: RequestVisitorLabel
     ) -> ResponseGrupDataLabel:

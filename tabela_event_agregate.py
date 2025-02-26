@@ -30,7 +30,7 @@ def aggregate_events():
             )
             .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
             .join(Filial, Camera.filial_id == Filial.filial_id)
-            .filter(EventCountTemp.event_time.between(start_date, end_date))
+            .filter(EventCountTemp.event_time < start_date)
             .group_by(
                 Camera.channel_id,
                 func.date_trunc("hour", EventCountTemp.event_time),
@@ -56,16 +56,14 @@ def aggregate_events():
                 filial_id=data.filial_id,
             )
 
-            session.add(new_event_count)
+        #    session.add(new_event_count)
 
-        # Commit das mudanças
-        session.commit()
+        # session.commit()
 
-        # Remover dados processados de EventCountTemp
-        session.query(EventCountTemp).filter(
-            EventCountTemp.event_time.between(start_date, end_date)
-        ).delete()
-        session.commit()
+        # session.query(EventCountTemp).filter(
+        #    EventCountTemp.event_time < start_date)
+        # ).delete()
+        # session.commit()
 
         print("Dados agregados e removidos com sucesso!")
 

@@ -4,8 +4,12 @@ from uuid import UUID
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, Header
 from src.enums import UserRule
-from src.interfaces import InterfaceEventService, InterfaceFilialService
-from src.services import WebSocketNotifierService
+from src.interfaces import (
+    InterfaceEventService,
+    InterfaceFilialService,
+    InterfaceStorageService,
+)
+
 
 from src.dto import (
     RequestEventCount,
@@ -17,6 +21,7 @@ from ..core import (
     get_service_count_event,
     rule_require,
     get_service_filial,
+    get_service_storage,
 )
 
 router = APIRouter()
@@ -65,4 +70,17 @@ async def insert_event(
         return result
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/process", status_code=200)
+async def process_all_event(
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+) -> None:
+    try:
+        storage.process_data_day()
+        return HTTPException(status_code=200)
+    except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
