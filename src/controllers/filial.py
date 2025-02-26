@@ -31,6 +31,20 @@ async def create(
         raise HTTPException(500, detail=str(error))
 
 
+@router.get("/me", status_code=200, response_model=ResponseFilial)
+async def get_me(
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    service: InterfaceFilialService = Depends(get_service_filial),
+) -> ResponseFilial:
+    try:
+        if not user.filial_id:
+            raise HTTPException(400, detail="User not filial perimssion")
+        return service.get_by_id(user.filial_id)
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
 @router.get("/all", status_code=200, response_model=List[ResponseFilial])
 async def get_all(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.EMPRESA)),
