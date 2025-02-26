@@ -137,7 +137,7 @@ async def get_lista_tag_camera(
         if user.filial_id:
             result: List[str] = service.get_list_tag_by_filial(user.filial_id)
             total = len(result)
-            items = [DataComboZone(id=tag, label=tag, total=total) for tag in result]
+            items = [DataComboZone(id=tag, name=tag) for tag in result]
             return ResponseCamerasZone(items=items, total=total)
     except Exception as error:
         log.error("error", exc_info=error)
