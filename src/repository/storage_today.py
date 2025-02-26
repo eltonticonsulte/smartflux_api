@@ -5,8 +5,6 @@ from datetime import datetime, date, timedelta
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
 from src.dto import (
-    ResponseTotalCountGrupZone,
-    ResponseTotalCountGrupHour,
     ResponseTotalCountGrupCamera,
 )
 from src.enums.storage import DataFilterTimer
@@ -109,35 +107,6 @@ class StorageTodayRepository:
                 .all()
             )
             return counts
-
-    def get_count_by_camera_grup_hour(
-        self, filial_id: int
-    ) -> List[ResponseTotalCountGrupCamera]:
-        with DBConnectionHandler() as session:
-            try:
-                counts = (
-                    session.query(
-                        func.sum(EventCountTemp.count_in).label("total_count_in"),
-                        func.sum(EventCountTemp.count_out).label("total_count_out"),
-                        Camera.name.label("camera"),
-                    )
-                    .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                    .join(Filial, Camera.filial_id == Filial.filial_id)
-                    .filter(Filial.filial_id == filial_id)
-                    .group_by(Camera.channel_id, Camera.name)
-                    .all()
-                )
-                return [
-                    ResponseTotalCountGrupCamera(
-                        camera=count.camera,
-                        total_count_in=count.total_count_in,
-                        total_count_out=count.total_count_out,
-                    )
-                    for count in counts
-                ]
-            except Exception as error:
-                session.rollback()
-                raise error
 
     def count_by_filial_grup_hour(
         self, filial_id: int, date: date = date.today()

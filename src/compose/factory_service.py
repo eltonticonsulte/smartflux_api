@@ -9,7 +9,6 @@ from src.repository import (
     TaskUpdateViewRepository,
     PermissionRepository,
     CountEventRepository,
-    WebSocketRepository,
 )
 from src.services import (
     CameraServices,
@@ -21,7 +20,6 @@ from src.services import (
     TaskUpdateViewService,
     PermissionService,
     EventService,
-    WebSocketNotifierService,
 )
 
 from src.interfaces import (
@@ -35,8 +33,6 @@ from src.interfaces import (
     InterfacePermissionService,
     InterfaceEventService,
 )
-
-from src.external import DataEventWebSocketNotifier
 
 
 class FactoryService:

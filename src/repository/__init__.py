@@ -9,4 +9,3 @@ from .storage import StorageRepository
 from .task_update_view import TaskUpdateViewRepository
 from .count_event import CountEventRepository
 from .permission import PermissionRepository
-from .websocket_notify import WebSocketRepository

@@ -1,12 +1,7 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 from src.dto import (
-    RequestEventCount,
-    ResponseEventCount,
     ResponseTotalCount,
-    ResponseTotalCountGrupZone,
-    ResponseTotalCountGrupHour,
-    ResponseTotalCountGrupCamera,
     ResponseGrupData,
 )
 
