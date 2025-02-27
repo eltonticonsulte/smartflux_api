@@ -279,6 +279,34 @@ class StorageTodayRepository:
 
             return counts
 
+    def nnget_count_by_filial_grup_camera_date(
+        self, filial_id: int, start_date: date, end_date: date
+    ):
+        min_time = datetime.combine(start_date, datetime.min.time())
+        max_time = datetime.combine(end_date, datetime.max.time())
+        with DBConnectionHandler() as session:
+            counts = (
+                session.query(
+                    func.sum(EventCountTemp.count_in).label("total_count_in"),
+                    func.sum(EventCountTemp.count_out).label("total_count_out"),
+                    Camera.name.label("label"),
+                    func.date_trunc("hour", EventCountTemp.event_time).label(
+                        "hour_timestamp"
+                    ),
+                )
+                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
+                .join(Filial, Camera.filial_id == Filial.filial_id)
+                .filter(Filial.filial_id == filial_id)
+                .filter(EventCountTemp.event_time.between(min_time, max_time))
+                .group_by(
+                    func.date_trunc("hour", EventCountTemp.event_time), Camera.name
+                )
+                .order_by("hour_timestamp")
+                .all()
+            )
+
+            return counts
+
     def nnget_count_by_filial_grup_zone_date(
         self, filial_id: int, start_date: date, end_date: date
     ):
@@ -289,7 +317,7 @@ class StorageTodayRepository:
                 session.query(
                     func.sum(EventCountTemp.count_in).label("total_count_in"),
                     func.sum(EventCountTemp.count_out).label("total_count_out"),
-                    Camera.tag,
+                    Camera.tag.label("label"),
                     func.date_trunc("hour", EventCountTemp.event_time).label(
                         "hour_timestamp"
                     ),

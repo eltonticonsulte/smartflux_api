@@ -37,20 +37,53 @@ class StorageServices(InterfaceStorageService):
     ) -> str:
 
         if data.grup == FlagGrupLabel.ZONE:
-            result = self.get_count_by_filial_grup_zone_date(filial_id, data)
-            return result
+            return self.get_count_by_filial_grup_zone_date(filial_id, data)
         elif data.grup == FlagGrupLabel.CAMERA:
-            pass
+            return self.get_count_by_filial_grup_camera_date(filial_id, data)
 
         raise Exception("grup invalido")
 
-    def get_count_by_filial_grup_zone_date(
-        self, filial_id: int, data: RequestVisitorDate
-    ) -> ResponseGrupReport:
-        reult = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+    def get_count_by_filial_grup_camera_date(
+        self, filial_id: int, data: RequestVisitorLabel
+    ) -> str:
+        if data.start_data == date.today() and data.end_data == date.today():
+            return self.rep_storage_today.nnget_count_by_filial_grup_camera_date(
+                filial_id, data.start_data, data.end_data
+            )
+
+        result = self.rep_storage.get_count_by_filial_grup_camera_date(
             filial_id, data.start_data, data.end_data
         )
-        return MapperStorage.merge_report_data(reult)
+
+        if data.start_data == date.today() or data.end_data == date.today():
+            result_today = (
+                self.rep_storage_today.nnget_count_by_filial_grup_camera_date(
+                    filial_id, data.start_data, data.end_data
+                )
+            )
+            result.extend(result_today)
+
+        return MapperStorage.merge_report_data(result)
+
+    def get_count_by_filial_grup_zone_date(
+        self, filial_id: int, data: RequestVisitorDate
+    ) -> str:
+        if data.start_data == date.today() and data.end_data == date.today():
+            return self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+                filial_id, data.start_data, data.end_data
+            )
+
+        result = self.rep_storage.get_count_by_filial_grup_zone_date(
+            filial_id, data.start_data, data.end_data
+        )
+
+        if data.start_data == date.today() or data.end_data == date.today():
+            result_today = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+                filial_id, data.start_data, data.end_data
+            )
+            result.extend(result_today)
+
+        return MapperStorage.merge_report_data(result)
 
     def get_count_by_filial_date(
         self, filial_id: int, date: date

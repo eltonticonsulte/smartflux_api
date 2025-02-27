@@ -20,7 +20,7 @@ class MapperStorage:
         header = "Zona,Data,Entrada,Saída\n"
         text_result = header
         for item in counts:
-            line = f"{item.tag},{item.hour_timestamp.strftime('%Y-%m-%d %H:%M')},{item.total_count_in},{item.total_count_out}\n"
+            line = f"{item.label},{item.hour_timestamp.strftime('%Y-%m-%d %H:%M')},{item.total_count_in},{item.total_count_out}\n"
             text_result += line
         return text_result
 
