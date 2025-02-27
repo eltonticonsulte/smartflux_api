@@ -1,3 +1,19 @@
+## 0.0.30 (2025-02-27)
+
+### Fix
+
+- add suport grup data
+- return tex plain
+- add total in visitor
+- udpate
+- remove websoket
+- update
+- update websocket
+
+### Refactor
+
+- rename enum visitor
+
 ## 0.0.29 (2025-02-26)
 
 ### Fix
