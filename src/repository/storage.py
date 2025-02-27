@@ -38,46 +38,25 @@ class StorageRepository:
             )
             return count
 
-    def get_count_by_filial_grup_camera_date(
-        self, filial_id: int, start_date: date, end_date: date
-    ) -> List[Row[Tuple[int, int, int, str]]]:
-        min_time = datetime.combine(start_date, datetime.min.time())
-        max_time = datetime.combine(end_date, datetime.max.time())
-        with DBConnectionHandler() as session:
-            counts = (
-                session.query(
-                    func.sum(EventCount.total_count_in).label("total_count_in"),
-                    func.sum(EventCount.total_count_out).label("total_count_out"),
-                    Camera.tag.label("label"),
-                    func.date_trunc("hour", EventCount.timestamp).label(
-                        "hour_timestamp"
-                    ),
-                )
-                .filter(EventCount.filial_id == filial_id)
-                .filter(EventCount.timestamp.between(min_time, max_time))
-                .group_by(Camera.tag, func.date_trunc("hour", EventCount.timestamp))
-                .all()
-            )
-            return counts
-
     def get_count_by_filial_grup_zone_date(
-        self, filial_id: int, start_date: date, end_date: date
+        self, filial_id: int, start_date: date, end_date: date, flag_time: FlagGrupDate
     ) -> List[Row[Tuple[int, int, int, str]]]:
         min_time = datetime.combine(start_date, datetime.min.time())
         max_time = datetime.combine(end_date, datetime.max.time())
+        str_time = flag_time.value.lower()
         with DBConnectionHandler() as session:
             counts = (
                 session.query(
                     func.sum(EventCount.total_count_in).label("total_count_in"),
                     func.sum(EventCount.total_count_out).label("total_count_out"),
                     Camera.tag.label("label"),
-                    func.date_trunc("hour", EventCount.timestamp).label(
+                    func.date_trunc(str_time, EventCount.timestamp).label(
                         "hour_timestamp"
                     ),
                 )
                 .filter(EventCount.filial_id == filial_id)
                 .filter(EventCount.timestamp.between(min_time, max_time))
-                .group_by(Camera.tag, func.date_trunc("hour", EventCount.timestamp))
+                .group_by(Camera.tag, func.date_trunc(str_time, EventCount.timestamp))
                 .all()
             )
             return counts

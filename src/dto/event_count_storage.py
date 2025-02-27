@@ -37,6 +37,21 @@ class ResponseGrupReport(BaseModel):
     data: str
 
 
+class RequestVisitorGrupZone(BaseModel):
+    start_data: date
+    end_data: Optional[date] = None
+    grup: Optional[FlagGrupDate] = FlagGrupDate.AUTO_SELECT
+
+    @field_validator("end_data")
+    def check_dates(cls, end_data, info):
+        start_data = info.data.get("start_data")
+        if end_data is None:
+            end_data = start_data
+        if end_data < start_data:
+            raise ValueError("data final menor que data inicial")
+        return end_data
+
+
 class RequestVisitorDate(BaseModel):
     start_data: date
     end_data: Optional[date] = None

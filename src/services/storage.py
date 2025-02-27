@@ -12,6 +12,7 @@ from src.dto import (
     RequestVisitorLabel,
     ResponseTotalCount,
     ResponseGrupReport,
+    RequestVisitorGrupZone,
 )
 from src.enums import FlagGrupDate, FlagGrupLabel
 from src.repository import StorageRepository, StorageTodayRepository
@@ -33,57 +34,31 @@ class StorageServices(InterfaceStorageService):
         self.rep_storage_today.delete_by_event_ids(grup)
 
     def get_count_visitor_report(
-        self, filial_id: int, data: RequestVisitorLabel
+        self, filial_id: int, data: RequestVisitorGrupZone
     ) -> str:
-
-        if data.grup == FlagGrupLabel.ZONE:
-            return self.get_count_by_filial_grup_zone_date(filial_id, data)
-        elif data.grup == FlagGrupLabel.CAMERA:
-            return self.get_count_by_filial_grup_camera_date(filial_id, data)
-
-        raise Exception("grup invalido")
-
-    def get_count_by_filial_grup_camera_date(
-        self, filial_id: int, data: RequestVisitorLabel
-    ) -> str:
-        if data.start_data == date.today() and data.end_data == date.today():
-            return self.rep_storage_today.nnget_count_by_filial_grup_camera_date(
-                filial_id, data.start_data, data.end_data
-            )
-
-        result = self.rep_storage.get_count_by_filial_grup_camera_date(
-            filial_id, data.start_data, data.end_data
-        )
-
-        if data.start_data == date.today() or data.end_data == date.today():
-            result_today = (
-                self.rep_storage_today.nnget_count_by_filial_grup_camera_date(
-                    filial_id, data.start_data, data.end_data
-                )
-            )
-            result.extend(result_today)
-
-        return MapperStorage.merge_report_data(result)
+        data = self.compute_grup_zone(data)
+        return self.get_count_by_filial_grup_zone_date(filial_id, data)
 
     def get_count_by_filial_grup_zone_date(
         self, filial_id: int, data: RequestVisitorDate
     ) -> str:
         if data.start_data == date.today() and data.end_data == date.today():
-            return self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
-                filial_id, data.start_data, data.end_data
+            result = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+                filial_id, data.start_data, data.end_data, data.grup
             )
+            return MapperStorage.merge_report_data(result, data.grup)
 
         result = self.rep_storage.get_count_by_filial_grup_zone_date(
-            filial_id, data.start_data, data.end_data
+            filial_id, data.start_data, data.end_data, data.grup
         )
 
         if data.start_data == date.today() or data.end_data == date.today():
             result_today = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
-                filial_id, data.start_data, data.end_data
+                filial_id, data.start_data, data.end_data, data.grup
             )
             result.extend(result_today)
 
-        return MapperStorage.merge_report_data(result)
+        return MapperStorage.merge_report_data(result, data.grup)
 
     def get_count_by_filial_date(
         self, filial_id: int, date: date
@@ -253,6 +228,20 @@ class StorageServices(InterfaceStorageService):
         return MapperStorage.to_response_grup_date(result, data.grup)
 
     def compute_grup(self, data: RequestVisitorDate):
+        if data.grup == FlagGrupDate.AUTO_SELECT:
+            period = data.end_data - data.start_data
+            self.log.warning(f"agrupamento não encontrado periodo {period.days} day")
+            if period.days < 1:
+                self.log.warning(
+                    f"agrupando por hora {data.start_data} {data.end_data}"
+                )
+                data.grup = FlagGrupDate.HOUR
+            else:
+                self.log.warning(f"agrupando por dia {data.start_data} {data.end_data}")
+                data.grup = FlagGrupDate.DAY
+        return data
+
+    def compute_grup_zone(self, data: RequestVisitorGrupZone):
         if data.grup == FlagGrupDate.AUTO_SELECT:
             period = data.end_data - data.start_data
             self.log.warning(f"agrupamento não encontrado periodo {period.days} day")

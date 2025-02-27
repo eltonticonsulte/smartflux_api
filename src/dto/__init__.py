@@ -45,6 +45,7 @@ from .event_count_storage import (
     RequestVisitorDate,
     RequestVisitorLabel,
     ResponseGrupReport,
+    RequestVisitorGrupZone,
 )
 from .permission import RequestCreatePermission, ResponsePermission
 from .aws_websocket import EventCountSendWebsocket

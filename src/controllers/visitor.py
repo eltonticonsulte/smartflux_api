@@ -13,6 +13,7 @@ from src.dto import (
     RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
+    RequestVisitorGrupZone,
 )
 from src.enums import UserRule, FlagGrupDate, FlagGrupLabel
 from .core import get_service_storage, rule_require
@@ -78,14 +79,14 @@ async def get_visitor_grup_label(
 
 @router.get("/report/grup", status_code=200, response_class=PlainTextResponse)
 async def get_report_zone_grup(
-    start_date: datetime.date = Query(...),
+    start_date: datetime.date = Query(datetime.date.today()),
     end_date: Optional[datetime.date] = None,
-    grup: Optional[FlagGrupLabel] = Query(FlagGrupLabel.ZONE),
+    grup: Optional[FlagGrupDate] = Query(FlagGrupDate.AUTO_SELECT),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):
     try:
-        data = RequestVisitorLabel(
+        data = RequestVisitorGrupZone(
             start_data=start_date,
             end_data=end_date,
             grup=grup,

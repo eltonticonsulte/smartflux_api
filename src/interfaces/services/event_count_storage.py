@@ -8,6 +8,7 @@ from src.dto import (
     RequestVisitorLabel,
     ResponseTotalCount,
     ResponseGrupReport,
+    RequestVisitorGrupZone,
 )
 
 
@@ -20,7 +21,7 @@ class InterfaceStorageService(ABC):
 
     @abstractmethod
     def get_count_visitor_report(
-        self, filial_id: int, data: RequestVisitorLabel
+        self, filial_id: int, data: RequestVisitorGrupZone
     ) -> str:
         raise NotImplementedError("Method not implemented")
 
