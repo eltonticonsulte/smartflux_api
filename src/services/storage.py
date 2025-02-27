@@ -35,7 +35,7 @@ class StorageServices(InterfaceStorageService):
         self, filial_id: int, data: RequestVisitorDate
     ) -> str:
         if data.start_data == date.today() and data.end_data == date.today():
-            result = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+            result = self.rep_storage_today.get_count_by_filial_grup_zone_date(
                 filial_id, data.start_data, data.end_data, data.grup
             )
             return MapperStorage.merge_report_data(result, data.grup)
@@ -45,7 +45,7 @@ class StorageServices(InterfaceStorageService):
         )
 
         if data.start_data == date.today() or data.end_data == date.today():
-            result_today = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+            result_today = self.rep_storage_today.get_count_by_filial_grup_zone_date(
                 filial_id, data.start_data, data.end_data, data.grup
             )
             result.extend(result_today)
@@ -129,7 +129,7 @@ class StorageServices(InterfaceStorageService):
             flag_time=data.grup,
         )
         if data.start_data == date.today() or data.end_data == date.today():
-            today_result = self.rep_storage_today.xget_count_by_filial_zone_grup_date(
+            today_result = self.rep_storage_today.get_count_by_filial_zone_grup_date(
                 filial_id=filial_id,
                 start_date=data.start_data,
                 end_date=data.end_data,
@@ -143,7 +143,7 @@ class StorageServices(InterfaceStorageService):
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
         if data.start_data == date.today() and data.end_data == date.today():
-            result = self.rep_storage_today.xget_count_by_filial_camera_grup_date(
+            result = self.rep_storage_today.get_count_by_filial_camera_grup_date(
                 filial_id, data.start_data, data.end_data, data.device, data.grup
             )
             return MapperStorage.count_grup_date(result, data.grup)
@@ -152,7 +152,7 @@ class StorageServices(InterfaceStorageService):
             filial_id, data.start_data, data.end_data, data.device, data.grup
         )
         if data.start_data == date.today() or data.end_data == date.today():
-            today_result = self.rep_storage_today.xget_count_by_filial_camera_grup_date(
+            today_result = self.rep_storage_today.get_count_by_filial_camera_grup_date(
                 filial_id, data.start_data, data.end_data, data.device, data.grup
             )
             result.extend(today_result)
@@ -163,7 +163,7 @@ class StorageServices(InterfaceStorageService):
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
         if data.start_data == date.today() and data.end_data == date.today():
-            result = self.rep_storage_today.xget_count_by_filial_grup_date(
+            result = self.rep_storage_today.get_count_by_filial_grup_date(
                 filial_id, data.start_data, data.end_data, data.grup
             )
             return MapperStorage.count_grup_date(result, data.grup)
@@ -173,7 +173,7 @@ class StorageServices(InterfaceStorageService):
         )
 
         if data.start_data == date.today() or data.end_data == date.today():
-            today_result = self.rep_storage_today.xget_count_by_filial_grup_date(
+            today_result = self.rep_storage_today.get_count_by_filial_grup_date(
                 filial_id, data.start_data, data.end_data, data.grup
             )
             result.extend(today_result)
