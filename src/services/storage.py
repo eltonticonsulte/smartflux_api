@@ -11,6 +11,7 @@ from src.dto import (
     RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
+    ResponseGrupReport,
 )
 from src.enums import FlagGrupDate, FlagGrupLabel
 from src.repository import StorageRepository, StorageTodayRepository
@@ -30,6 +31,26 @@ class StorageServices(InterfaceStorageService):
         entitys, grup = MapperStorage.storage_today_to_storage(result)
         self.rep_storage.create_all(entitys)
         self.rep_storage_today.delete_by_event_ids(grup)
+
+    def get_count_visitor_report(
+        self, filial_id: int, data: RequestVisitorLabel
+    ) -> str:
+
+        if data.grup == FlagGrupLabel.ZONE:
+            result = self.get_count_by_filial_grup_zone_date(filial_id, data)
+            return result
+        elif data.grup == FlagGrupLabel.CAMERA:
+            pass
+
+        raise Exception("grup invalido")
+
+    def get_count_by_filial_grup_zone_date(
+        self, filial_id: int, data: RequestVisitorDate
+    ) -> ResponseGrupReport:
+        reult = self.rep_storage_today.nnget_count_by_filial_grup_zone_date(
+            filial_id, data.start_data, data.end_data
+        )
+        return MapperStorage.merge_report_data(reult)
 
     def get_count_by_filial_date(
         self, filial_id: int, date: date
@@ -140,11 +161,8 @@ class StorageServices(InterfaceStorageService):
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
 
-        if data.end_data is None:
-            data.end_data = data.start_data
         data = self.compute_grup(data)
-        if data.end_data < data.start_data:
-            raise Exception("data final menor que data inicial")
+
         if data.zone and data.device:
             raise Exception("zona e device nao podem ser informados ao mesmo tempo")
 

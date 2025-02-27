@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from typing import List, Optional
 from datetime import date
-from pydantic import BaseModel
+from pydantic import BaseModel, field_validator
 from src.enums import FlagGrupDate, FlagGrupLabel
 
 
@@ -33,6 +33,10 @@ class ResponseGrupData(BaseModel):
     linegraph: LineGraph
 
 
+class ResponseGrupReport(BaseModel):
+    data: str
+
+
 class RequestVisitorDate(BaseModel):
     start_data: date
     end_data: Optional[date] = None
@@ -40,11 +44,29 @@ class RequestVisitorDate(BaseModel):
     zone: Optional[str] = None
     device: Optional[str] = None
 
+    @field_validator("end_data")
+    def check_dates(cls, end_data, info):
+        start_data = info.data.get("start_data")
+        if end_data is None:
+            end_data = start_data
+        if end_data < start_data:
+            raise ValueError("data final menor que data inicial")
+        return end_data
+
 
 class RequestVisitorLabel(BaseModel):
     start_data: date
     end_data: Optional[date] = None
     grup: Optional[FlagGrupLabel] = FlagGrupLabel.ZONE
+
+    @field_validator("end_data")
+    def check_dates(cls, end_data, info):
+        start_data = info.data.get("start_data")
+        if end_data is None:
+            end_data = start_data
+        if end_data < start_data:
+            raise ValueError("data final menor que data inicial")
+        return end_data
 
 
 class ResponseTotalCountGrupZone(BaseModel):

@@ -3,6 +3,7 @@ from logging import getLogger
 import datetime
 from typing import Optional
 from fastapi import APIRouter, Header, Depends, HTTPException, Query
+from fastapi.responses import PlainTextResponse
 
 from src.interfaces import InterfaceStorageService
 from src.dto import (
@@ -70,6 +71,26 @@ async def get_visitor_grup_label(
             grup=grup,
         )
         return storage.get_count_visitor_label(user.filial_id, data)
+    except Exception as error:
+        log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/report/grup", status_code=200, response_class=PlainTextResponse)
+async def get_report_zone_grup(
+    start_date: datetime.date = Query(...),
+    end_date: Optional[datetime.date] = None,
+    grup: Optional[FlagGrupLabel] = Query(FlagGrupLabel.ZONE),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+):
+    try:
+        data = RequestVisitorLabel(
+            start_data=start_date,
+            end_data=end_date,
+            grup=grup,
+        )
+        return storage.get_count_visitor_report(user.filial_id, data)
     except Exception as error:
         log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))

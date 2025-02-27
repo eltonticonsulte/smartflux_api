@@ -16,6 +16,15 @@ from src.dto import (
 
 class MapperStorage:
     @staticmethod
+    def merge_report_data(counts: List[Row[Tuple[int, int, str, Any]]]):
+        header = "Zona,Data,Entrada,Saída\n"
+        text_result = header
+        for item in counts:
+            line = f"{item.tag},{item.hour_timestamp.strftime('%Y-%m-%d %H:%M')},{item.total_count_in},{item.total_count_out}\n"
+            text_result += line
+        return text_result
+
+    @staticmethod
     def storage_today_to_storage(
         datas: List[Row[Tuple[int, int, Any]]]
     ) -> List[EventCount]:
