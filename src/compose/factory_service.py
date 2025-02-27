@@ -15,7 +15,6 @@ from src.services import (
     UserServices,
     EmpresaServices,
     FilialServices,
-    StorageTodayServices,
     StorageServices,
     TaskUpdateViewService,
     PermissionService,
@@ -27,7 +26,6 @@ from src.interfaces import (
     InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageTodayService,
     InterfaceStorageService,
     InterfaceTaskUpdateViewService,
     InterfacePermissionService,
@@ -56,9 +54,6 @@ class FactoryService:
 
     def create_storage(self) -> InterfaceStorageService:
         return StorageServices(StorageRepository(), StorageTodayRepository())
-
-    def create_storage_today(self) -> InterfaceStorageTodayService:
-        return StorageTodayServices(StorageTodayRepository())
 
     def create_task_update_view(self) -> InterfaceTaskUpdateViewService:
         return TaskUpdateViewService(

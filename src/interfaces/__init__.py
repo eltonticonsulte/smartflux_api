@@ -4,7 +4,6 @@ from .services import (
     InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageTodayService,
     InterfaceStorageService,
     InterfaceTaskUpdateViewService,
     InterfaceEventService,

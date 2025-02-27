@@ -12,7 +12,6 @@ from src.interfaces import (
     InterfaceCameraService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageTodayService,
     InterfaceStorageService,
     InterfacePermissionService,
     InterfaceEventService,
@@ -47,11 +46,6 @@ def get_service_filial() -> InterfaceFilialService:
 @lru_cache()
 def get_service_count_event() -> InterfaceEventService:
     return factor_service.create_count_event()
-
-
-@lru_cache()
-def get_storage_today() -> InterfaceStorageTodayService:
-    return factor_service.create_storage_today()
 
 
 @lru_cache()
