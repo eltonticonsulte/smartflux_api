@@ -16,7 +16,6 @@ def aggregate_events():
         start_date = datetime.combine(
             date.today() - timedelta(days=1), datetime.min.time()
         )
-        end_date = start_date + timedelta(days=1)
         print("len event ", session.query(EventCountTemp).count())
         aggregated_data = (
             session.query(

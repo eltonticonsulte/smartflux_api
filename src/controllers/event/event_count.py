@@ -73,14 +73,14 @@ async def insert_event(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get("/process", status_code=200)
-async def process_all_event(
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
-) -> None:
-    try:
-        storage.process_data_day()
-        return HTTPException(status_code=200)
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(500, detail=str(error))
+# @router.get("/process", status_code=200)
+# async def process_all_event(
+#    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.ADMIN)),
+#    storage: InterfaceStorageService = Depends(get_service_storage),
+# ) -> None:
+#    try:
+#        storage.process_data_day()
+#        return HTTPException(status_code=200)
+#    except Exception as error:
+#        log.error("error", exc_info=error)
+#        raise HTTPException(500, detail=str(error))
