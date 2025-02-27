@@ -33,10 +33,7 @@ from .event_count import (
     ResponseTotalCount,
     EventCountDataValidate,
 )
-from .event_count_storage import (
-    ResponseTotalCountGrupZone,
-    ResponseTotalCountGrupHour,
-    ResponseTotalCountGrupCamera,
+from .visitor import (
     CountGrupDate,
     LineGraph,
     ResponseGrupData,
@@ -44,8 +41,7 @@ from .event_count_storage import (
     ResponseGrupDataLabel,
     RequestVisitorDate,
     RequestVisitorLabel,
-    ResponseGrupReport,
-    RequestVisitorGrupZone,
+    RequestVisitorGrupDate,
 )
 from .permission import RequestCreatePermission, ResponsePermission
 from .aws_websocket import EventCountSendWebsocket

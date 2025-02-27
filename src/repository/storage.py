@@ -2,8 +2,7 @@
 from typing import List, Tuple, Any
 from datetime import date, datetime
 from sqlalchemy import func, Row
-from src.database import DBConnectionHandler, EventCount, Camera, Filial
-from src.dto import ResponseTotalCountGrupZone
+from src.database import DBConnectionHandler, EventCount, Camera
 from src.enums import FlagGrupDate
 
 

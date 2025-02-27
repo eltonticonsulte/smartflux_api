@@ -4,9 +4,7 @@ from uuid import UUID
 from datetime import date, datetime
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
-from src.dto import (
-    ResponseTotalCountGrupCamera,
-)
+
 from src.enums.storage import FlagGrupDate
 
 

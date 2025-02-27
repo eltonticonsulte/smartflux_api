@@ -13,7 +13,7 @@ from src.dto import (
     RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
-    RequestVisitorGrupZone,
+    RequestVisitorGrupDate,
 )
 from src.enums import UserRule, FlagGrupDate, FlagGrupLabel
 from .core import get_service_storage, rule_require
@@ -48,8 +48,8 @@ async def get_visitor_grup_data(
     """
     try:
         data = RequestVisitorDate(
-            start_data=start_date,
-            end_data=end_date,
+            start_date=start_date,
+            end_date=end_date,
             grup=grup,
             zone=zone,
             device=device,
@@ -79,8 +79,8 @@ async def get_visitor_grup_label(
     """
     try:
         data = RequestVisitorLabel(
-            start_data=start_date,
-            end_data=end_date,
+            start_date=start_date,
+            end_date=end_date,
             grup=grup,
         )
         return storage.get_count_visitor_label(user.filial_id, data)
@@ -107,9 +107,9 @@ async def get_report_zone_grup(
     Grup, define a base de agrupamento.
     """
     try:
-        data = RequestVisitorGrupZone(
-            start_data=start_date,
-            end_data=end_date,
+        data = RequestVisitorGrupDate(
+            start_date=start_date,
+            end_date=end_date,
             grup=grup,
         )
         return storage.get_count_visitor_report(user.filial_id, data)
@@ -125,7 +125,7 @@ async def get_data_day(
     storage: InterfaceStorageService = Depends(get_service_storage),
 ) -> ResponseTotalCount:
     """
-    Busca somatoria de visitas em um dia.
+    Busca somatória de visitas em um dia.
     """
     try:
         return storage.get_count_by_filial_date(user.filial_id, date)
