@@ -28,27 +28,7 @@ class MapperStorage:
             text_result += line
         return text_result
 
-    @staticmethod
-    def to_response_grup_label(
-        counts: List[Row[Tuple[int, int, Any]]]
-    ) -> ResponseGrupData:
-        label = []
-        count_in = []
-        count_out = []
-        lis_gup_hour = []
-        for item in counts:
-            label.append(item.label)
-            count_in.append(item.total_count_in)
-            count_out.append(item.total_count_out)
-            lis_gup_hour.append(
-                CountGrupData(
-                    people_in=item.total_count_in,
-                    people_out=item.total_count_out,
-                    date=item.label,
-                )
-            )
-        line = LineGraph(label=label, people_in=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
+
 
     @staticmethod
     def merge_data(

@@ -32,12 +32,6 @@ class InterfaceStorageService(ABC):
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod
-    def get_count_by_filial_grup_periodo(
-        self, filial_id: int, start_day: date, end_day: date
-    ) -> ResponseGrupData:
-        raise NotImplementedError("Method not implemented")
-
-    @abstractmethod
     def get_count_visitor(
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:

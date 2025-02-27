@@ -108,55 +108,7 @@ class StorageServices(InterfaceStorageService):
     ) -> ResponseGrupDataLabel:
         result = self.rep_storage.get_count_by_filial_grup_zone(filial_id, current_date)
         return MapperStorage.to_response_grup_data_code(result)
-
-    def get_count_by_filial_grup_periodo(
-        self, filial_id: int, start_day: date, end_day: date
-    ) -> ResponseGrupData:
-        if (end_day - start_day).days < 1:
-            self.log.info(f"agrupando por hora {start_day} {end_day}")
-            result = self.rep_storage.get_count_by_filial_grup_date(
-                filial_id, start_day, end_day
-            )
-            return MapperStorage.to_response_grup_label(result)
-            label = []
-            count_in = []
-            count_out = []
-            lis_gup_hour = []
-            for item in result:
-                label.append(item.timestamp.strftime("%Y-%m-%d %H:%M"))
-                count_in.append(item.total_count_in)
-                count_out.append(item.total_count_out)
-                lis_gup_hour.append(
-                    CountGrupData(
-                        people_in=item.total_count_in,
-                        people_out=item.total_count_out,
-                        hour=item.timestamp.strftime("%Y-%m-%d %H:%M"),
-                    )
-                )
-            line = LineGraph(label=label, people_in=count_in, people_out=count_out)
-            return ResponseGrupData(table=lis_gup_hour, linegraph=line)
-
-        result = self.rep_storage.get_count_by_filial_grup_day(
-            filial_id, start_day, end_day
-        )
-        label = []
-        count_in = []
-        count_out = []
-        lis_gup_hour = []
-        for item in result:
-            label.append(item.timestamp.strftime("%Y-%m-%d %H:%M"))
-            count_in.append(item.total_count_in)
-            count_out.append(item.total_count_out)
-            lis_gup_hour.append(
-                CountGrupData(
-                    people_in=item.total_count_in,
-                    people_out=item.total_count_out,
-                    hour=item.timestamp.strftime("%Y-%m-%d %H:%M"),
-                )
-            )
-        line = LineGraph(label=label, people_in=count_in, people_out=count_out)
-        return ResponseGrupData(table=lis_gup_hour, linegraph=line)
-
+  
     def get_count_visitor(
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:

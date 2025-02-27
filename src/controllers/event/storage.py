@@ -37,20 +37,4 @@ async def get_data_filial_grup_zone(
         raise HTTPException(500, detail=str(error))
 
 
-@router.get(
-    "/period", status_code=200, response_model=ResponseGrupData, deprecated=True
-)
-async def get_periodo(
-    start_day: datetime.date,
-    end_day: datetime.date,
-    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
-):
 
-    try:
-        return storage.get_count_by_filial_grup_periodo(
-            user.filial_id, start_day, end_day
-        )
-    except Exception as error:
-        log.error("error", exc_info=error)
-        raise HTTPException(500, detail=str(error))
