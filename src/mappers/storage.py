@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import List, Tuple, Any
 from sqlalchemy import Row
-from datetime import datetime, timedelta
 from src.enums import FlagGrupDate
 from src.database import EventCount
 from src.dto import (
@@ -28,30 +27,6 @@ class MapperStorage:
             line = f"{item.label},{item.hour_timestamp.strftime(str_time_format)},{item.total_count_in},{item.total_count_out}\n"
             text_result += line
         return text_result
-
-    @staticmethod
-    def storage_today_to_storage(
-        datas: List[Row[Tuple[int, int, Any]]]
-    ) -> List[EventCount]:
-        result = []
-        grup_id_ref = []
-        for item in datas:
-            timestamp = datetime.combine(
-                item.hour_timestamp.date(), datetime.min.time()
-            ) + timedelta(hours=item.hour_timestamp.hour)
-            grup_id_ref.extend(item.event_ids)
-            result.append(
-                EventCount(
-                    channel_id=item.channel_id,
-                    date=item.hour_timestamp.date(),
-                    hour=item.hour_timestamp.hour,
-                    timestamp=timestamp,
-                    total_count_in=item.total_count_in,
-                    total_count_out=item.total_count_out,
-                    filial_id=item.filial_id,
-                )
-            )
-        return result, grup_id_ref
 
     @staticmethod
     def to_response_grup_label(

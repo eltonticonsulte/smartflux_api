@@ -3,7 +3,6 @@ import logging
 from datetime import date
 from src.interfaces import InterfaceStorageService
 from src.dto import (
-    ResponseTotalCountGrupZone,
     CountGrupData,
     LineGraph,
     ResponseGrupData,
@@ -11,7 +10,6 @@ from src.dto import (
     RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
-    ResponseGrupReport,
     RequestVisitorGrupZone,
 )
 from src.enums import FlagGrupDate, FlagGrupLabel
@@ -26,12 +24,6 @@ class StorageServices(InterfaceStorageService):
         self.log = logging.getLogger(__name__)
         self.rep_storage = rep_storage
         self.rep_storage_today = rep_today
-
-    def process_data_day(self):
-        result = self.rep_storage_today.select_all_data_last_day()
-        entitys, grup = MapperStorage.storage_today_to_storage(result)
-        self.rep_storage.create_all(entitys)
-        self.rep_storage_today.delete_by_event_ids(grup)
 
     def get_count_visitor_report(
         self, filial_id: int, data: RequestVisitorGrupZone

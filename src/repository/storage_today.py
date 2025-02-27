@@ -30,36 +30,6 @@ class StorageTodayRepository:
             )
             return counts
 
-    def select_all_data_last_day(self) -> List[Row[Tuple[UUID, Any, int, int, int]]]:
-        with DBConnectionHandler() as session:
-            start_date = datetime.combine(
-                date.today() - timedelta(days=1), datetime.max.time()
-            )
-            all_data = (
-                session.query(
-                    Camera.channel_id,
-                    func.date_trunc("hour", EventCountTemp.event_time).label(
-                        "hour_timestamp"
-                    ),
-                    func.sum(EventCountTemp.count_in).label("total_count_in"),
-                    func.sum(EventCountTemp.count_out).label("total_count_out"),
-                    Filial.filial_id,
-                    func.array_agg(EventCountTemp.count_event_id).label(
-                        "event_ids"
-                    ),  # EventCountTemp.count_event_id
-                )
-                .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
-                .join(Filial, Camera.filial_id == Filial.filial_id)
-                .filter(EventCountTemp.event_time < start_date)
-                .group_by(
-                    Camera.channel_id,
-                    func.date_trunc("hour", EventCountTemp.event_time),
-                    Filial.filial_id,
-                )
-                .all()
-            )
-            return all_data
-
     def count_by_filial_grup_zone(
         self, filial_id: int
     ) -> List[Row[Tuple[int, int, str, str]]]:
@@ -307,12 +277,6 @@ class StorageTodayRepository:
             )
 
             return counts
-
-    def delete_by_event_ids(self, ids: List[int]):
-        with DBConnectionHandler() as session:
-            session.query(EventCountTemp).filter(
-                EventCountTemp.count_event_id.in_(ids)
-            ).delete(synchronize_session="fetch")
 
     def delete_by_channel_ids(self, channel_ids: List[UUID]):
         with DBConnectionHandler() as session:
