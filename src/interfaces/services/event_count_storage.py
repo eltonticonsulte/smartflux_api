@@ -6,6 +6,7 @@ from src.dto import (
     ResponseGrupDataLabel,
     RequestVisitor,
     RequestVisitorLabel,
+    ResponseTotalCount,
 )
 
 
@@ -14,6 +15,12 @@ class InterfaceStorageService(ABC):
     def get_count_by_filial_grup_zone(
         self, filial_id: int, current_date: date
     ) -> ResponseGrupDataLabel:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def get_count_by_filial_date(
+        self, filial_id: int, date: date
+    ) -> ResponseTotalCount:
         raise NotImplementedError("Method not implemented")
 
     @abstractmethod

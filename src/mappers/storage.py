@@ -10,6 +10,7 @@ from src.dto import (
     LineGraph,
     ResponseGrupDataLabel,
     CountGrupCode,
+    ResponseTotalCount,
 )
 
 
@@ -208,3 +209,10 @@ class MapperStorage:
             )
         line = LineGraph(label=label, people_in=count_in, people_out=count_out)
         return ResponseGrupDataLabel(table=lis_gup_code, linegraph=line)
+
+    @staticmethod
+    def to_response_total_count(counts: List[Row[Tuple[int, int]]]) -> int:
+        return ResponseTotalCount(
+            total_count_in=counts.total_count_in,
+            total_count_out=counts.total_count_out,
+        )

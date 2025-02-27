@@ -11,6 +11,7 @@ from src.dto import (
     ResponseGrupDataLabel,
     RequestVisitor,
     RequestVisitorLabel,
+    ResponseTotalCount,
 )
 from src.enums import UserRule, DataFilterTimer, DataGrupLabel
 from .core import get_service_storage, rule_require
@@ -71,4 +72,17 @@ async def get_visitor_grup_label(
         return storage.get_count_visitor_label(user.filial_id, data)
     except Exception as error:
         log.error("error", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.get("/total", status_code=200, response_model=ResponseTotalCount)
+async def get_data_day(
+    date: Optional[datetime.date] = datetime.date.today(),
+    user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
+    storage: InterfaceStorageService = Depends(get_service_storage),
+) -> ResponseTotalCount:
+
+    try:
+        return storage.get_count_by_filial_date(user.filial_id, date)
+    except Exception as error:
         raise HTTPException(500, detail=str(error))

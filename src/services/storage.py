@@ -10,6 +10,7 @@ from src.dto import (
     ResponseGrupDataLabel,
     RequestVisitor,
     RequestVisitorLabel,
+    ResponseTotalCount,
 )
 from src.enums import DataFilterTimer, DataGrupLabel
 from src.repository import StorageRepository, StorageTodayRepository
@@ -29,6 +30,15 @@ class StorageServices(InterfaceStorageService):
         entitys, grup = MapperStorage.storage_today_to_storage(result)
         self.rep_storage.create_all(entitys)
         self.rep_storage_today.delete_by_event_ids(grup)
+
+    def get_count_by_filial_date(
+        self, filial_id: int, date: date
+    ) -> ResponseTotalCount:
+        if date == date.today():
+            resul_count = self.rep_storage_today.count_by_filial(filial_id)
+            return MapperStorage.to_response_total_count(resul_count)
+        reult = self.rep_storage.count_by_filial_date(filial_id, date)
+        return MapperStorage.to_response_total_count(reult)
 
     def get_count_visitor_label(
         self, filial_id: int, data: RequestVisitorLabel
