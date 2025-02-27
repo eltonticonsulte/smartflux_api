@@ -12,7 +12,7 @@ from src.dto import (
     UserPermissionAccessDTO,
 )
 from src.enums import UserRule
-from .core import auth2_admin, get_service_user, rule_require
+from .core import get_service_user, rule_require
 
 
 router = APIRouter()

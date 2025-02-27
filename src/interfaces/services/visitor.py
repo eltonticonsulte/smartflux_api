@@ -11,7 +11,7 @@ from src.dto import (
 )
 
 
-class InterfaceStorageService(ABC):
+class InterfaceVisitorService(ABC):
     @abstractmethod
     def get_count_visitor_report(
         self, filial_id: int, data: RequestVisitorGrupDate

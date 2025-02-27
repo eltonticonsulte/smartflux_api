@@ -15,7 +15,7 @@ from src.services import (
     UserServices,
     EmpresaServices,
     FilialServices,
-    StorageServices,
+    VisitorServices,
     TaskUpdateViewService,
     PermissionService,
     EventService,
@@ -26,7 +26,7 @@ from src.interfaces import (
     InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageService,
+    InterfaceVisitorService,
     InterfaceTaskUpdateViewService,
     InterfacePermissionService,
     InterfaceEventService,
@@ -52,8 +52,8 @@ class FactoryService:
     def create_count_event(self) -> InterfaceEventService:
         return EventService(CameraRepository(), CountEventRepository())
 
-    def create_storage(self) -> InterfaceStorageService:
-        return StorageServices(StorageRepository(), StorageTodayRepository())
+    def create_storage(self) -> InterfaceVisitorService:
+        return VisitorServices(StorageRepository(), StorageTodayRepository())
 
     def create_task_update_view(self) -> InterfaceTaskUpdateViewService:
         return TaskUpdateViewService(

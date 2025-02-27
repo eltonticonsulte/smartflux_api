@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
-from fastapi import APIRouter, Header, Depends, HTTPException, UploadFile, File
+from logging import getLogger
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, File
 from fastapi.responses import JSONResponse
 from src.interfaces import InterfaceUserService, InterfaceFilialService
-from .core import get_service_user, get_service_filial, verificar_api_key
 from src.dto import ResponseFindUpdate, RequestFindUpdate, ResponseFilial
+from .core import get_service_user, get_service_filial, verificar_api_key
 
 router = APIRouter()
-from logging import getLogger
+
 
 log = getLogger("controller Aplication")
 

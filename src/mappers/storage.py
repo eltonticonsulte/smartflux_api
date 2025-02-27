@@ -12,7 +12,7 @@ from src.dto import (
 )
 
 
-class MapperStorage:
+class MapperVisitor:
     @staticmethod
     def merge_report_data(
         counts: List[Row[Tuple[int, int, str, Any]]], flag_time: FlagGrupDate

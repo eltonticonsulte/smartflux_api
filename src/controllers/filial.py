@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
 from typing import List
-from fastapi import APIRouter, Header, HTTPException, Depends
+from fastapi import APIRouter, HTTPException, Depends
 from fastapi.responses import JSONResponse
-from src.interfaces import InterfaceUserService, InterfaceFilialService
+from src.interfaces import InterfaceFilialService
 from src.enums import UserRule
-from .core import auth2_admin, get_service_user, get_service_filial, rule_require
+from .core import get_service_filial, rule_require
 from ..dto import (
     RequestCreateFilial,
     ResponseFilial,

@@ -4,7 +4,7 @@ from .services import (
     InterfaceUserService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageService,
+    InterfaceVisitorService,
     InterfaceTaskUpdateViewService,
     InterfaceEventService,
     InterfacePermissionService,

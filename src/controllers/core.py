@@ -12,7 +12,7 @@ from src.interfaces import (
     InterfaceCameraService,
     InterfaceEmpresaService,
     InterfaceFilialService,
-    InterfaceStorageService,
+    InterfaceVisitorService,
     InterfacePermissionService,
     InterfaceEventService,
 )
@@ -49,7 +49,7 @@ def get_service_count_event() -> InterfaceEventService:
 
 
 @lru_cache()
-def get_service_storage() -> InterfaceStorageService:
+def get_service_storage() -> InterfaceVisitorService:
     return FactoryService().create_storage()
 
 

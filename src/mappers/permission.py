@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from src.dto import ResponsePermission, RequestCreatePermission
+from src.dto import RequestCreatePermission
 from src.database import PermissaoAcesso
 
 

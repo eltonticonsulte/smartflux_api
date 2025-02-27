@@ -2,10 +2,10 @@
 from logging import getLogger
 import datetime
 from typing import Optional
-from fastapi import APIRouter, Header, Depends, HTTPException, Query
+from fastapi import APIRouter, Depends, HTTPException, Query
 from fastapi.responses import PlainTextResponse
 
-from src.interfaces import InterfaceStorageService
+from src.interfaces import InterfaceVisitorService
 from src.dto import (
     UserPermissionAccessDTO,
     ResponseGrupData,
@@ -31,7 +31,7 @@ async def get_visitor_grup_data(
     zone: Optional[str] = Query(None),
     device: Optional[str] = Query(None),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
+    storage: InterfaceVisitorService = Depends(get_service_storage),
 ):
     """
     Busca com base em data.
@@ -66,7 +66,7 @@ async def get_visitor_grup_label(
     end_date: Optional[datetime.date] = None,
     grup: Optional[FlagGrupLabel] = Query(FlagGrupLabel.ZONE),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
+    storage: InterfaceVisitorService = Depends(get_service_storage),
 ):
     """
     Busca com base em grup.
@@ -95,7 +95,7 @@ async def get_report_zone_grup(
     end_date: Optional[datetime.date] = None,
     grup: Optional[FlagGrupDate] = Query(FlagGrupDate.AUTO_SELECT),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
+    storage: InterfaceVisitorService = Depends(get_service_storage),
 ):
     """
     Busca com base em grup, retorna no formato text csv.
@@ -122,7 +122,7 @@ async def get_report_zone_grup(
 async def get_data_day(
     date: Optional[datetime.date] = datetime.date.today(),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
-    storage: InterfaceStorageService = Depends(get_service_storage),
+    storage: InterfaceVisitorService = Depends(get_service_storage),
 ) -> ResponseTotalCount:
     """
     Busca somatória de visitas em um dia.

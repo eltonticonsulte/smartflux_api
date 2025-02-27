@@ -24,7 +24,7 @@ class StorageRepository:
                 session.rollback()
                 raise error
 
-    def count_by_filial_date(self, filial_id: int, date: date) -> int:
+    def count_by_filial_date(self, filial_id: int, date_time: date) -> int:
         with DBConnectionHandler() as session:
             count = (
                 session.query(
@@ -32,7 +32,7 @@ class StorageRepository:
                     func.sum(EventCount.total_count_out).label("total_count_out"),
                 )
                 .filter(EventCount.filial_id == filial_id)
-                .filter(EventCount.date == date)
+                .filter(EventCount.date == date_time)
                 .one()
             )
             return count

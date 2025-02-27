@@ -2,13 +2,9 @@
 import uuid
 import logging
 from typing import List
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException
 from fastapi.responses import JSONResponse
-from src.interfaces import (
-    InterfaceCameraService,
-    InterfaceUserService,
-    InterfaceFilialService,
-)
+from src.interfaces import InterfaceCameraService
 from src.exceptions import ServiceUserJwtExecption
 from src.dto import (
     RequestCreateCamera,
@@ -26,7 +22,6 @@ from src.enums import UserRule
 from .core import (
     get_service_camera,
     rule_require,
-    get_service_filial,
     verificar_api_key,
 )
 

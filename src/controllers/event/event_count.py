@@ -7,7 +7,7 @@ from src.enums import UserRule
 from src.interfaces import (
     InterfaceEventService,
     InterfaceFilialService,
-    InterfaceStorageService,
+    InterfaceVisitorService,
 )
 
 
