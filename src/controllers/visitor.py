@@ -25,7 +25,7 @@ log = getLogger("controller_count_visitor")
 
 @router.get("/date", status_code=200, response_model=ResponseGrupData)
 async def get_visitor_grup_data(
-    start_date: datetime.date = Query(...),
+    start_date: datetime.date = Query(datetime.date.today()),
     end_date: Optional[datetime.date] = None,
     grup: Optional[FlagGrupDate] = Query(FlagGrupDate.AUTO_SELECT),
     zone: Optional[str] = Query(None),
@@ -34,9 +34,17 @@ async def get_visitor_grup_data(
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):
     """
-    Busca dados dados
-    start_day: 2025-01-01
-    end_day: 2025-01-31
+    Busca com base em data.
+
+    Se apenas start_date é informado, busca o dia passado.
+
+    Se as duas datas forem informadas, busca o periodo informado.
+
+    Se grup não for informado, o agrupamento é calculado automaticamente, pro hora se o periodo for um dia.
+
+    Se zone for informado, agrupa por zone.
+
+    Se device for informado, agrupa por device.
     """
     try:
         data = RequestVisitorDate(
@@ -54,16 +62,20 @@ async def get_visitor_grup_data(
 
 @router.get("/label", status_code=200, response_model=ResponseGrupDataLabel)
 async def get_visitor_grup_label(
-    start_date: datetime.date = Query(...),
+    start_date: datetime.date = Query(datetime.date.today()),
     end_date: Optional[datetime.date] = None,
     grup: Optional[FlagGrupLabel] = Query(FlagGrupLabel.ZONE),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):
     """
-    Busca dados dados
-    start_day: 2025-01-01
-    end_day: 2025-01-31
+    Busca com base em grup.
+
+    Se apenas start_date é informado, busca o dia passado.
+
+    Se as duas datas forem informadas, busca o periodo informado.
+
+    Grup, define a base de agrupamento.
     """
     try:
         data = RequestVisitorLabel(
@@ -85,6 +97,15 @@ async def get_report_zone_grup(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):
+    """
+    Busca com base em grup, retorna no formato text csv.
+
+    Se apenas start_date é informado, busca o dia passado.
+
+    Se as duas datas forem informadas, busca o periodo informado.
+
+    Grup, define a base de agrupamento.
+    """
     try:
         data = RequestVisitorGrupZone(
             start_data=start_date,
@@ -103,7 +124,9 @@ async def get_data_day(
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ) -> ResponseTotalCount:
-
+    """
+    Busca somatoria de visitas em um dia.
+    """
     try:
         return storage.get_count_by_filial_date(user.filial_id, date)
     except Exception as error:
