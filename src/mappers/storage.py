@@ -28,8 +28,6 @@ class MapperStorage:
             text_result += line
         return text_result
 
-
-
     @staticmethod
     def merge_data(
         counts: List[Row[Tuple[int, int, Any]]],
@@ -156,28 +154,6 @@ class MapperStorage:
             )
         line = LineGraph(label=label, people_in=count_in, people_out=count_out)
         return ResponseGrupData(table=lis_gup_day, linegraph=line)
-
-    @staticmethod
-    def to_response_grup_data_code(
-        counts: List[Row[Tuple[int, int, Any]]]
-    ) -> ResponseGrupData:
-        label = []
-        count_in = []
-        count_out = []
-        lis_gup_code = []
-        for item in counts:
-            label.append(item.label)
-            count_in.append(item.total_count_in)
-            count_out.append(item.total_count_out)
-            lis_gup_code.append(
-                CountGrupCode(
-                    people_in=item.total_count_in,
-                    people_out=item.total_count_out,
-                    code=item.label,
-                )
-            )
-        line = LineGraph(label=label, people_in=count_in, people_out=count_out)
-        return ResponseGrupDataLabel(table=lis_gup_code, linegraph=line)
 
     @staticmethod
     def to_response_total_count(counts: List[Row[Tuple[int, int]]]) -> int:

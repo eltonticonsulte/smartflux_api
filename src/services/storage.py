@@ -103,12 +103,6 @@ class StorageServices(InterfaceStorageService):
             return MapperStorage.merge_data_label(result, resul_count)
         return MapperStorage.merge_data_label(result, [])
 
-    def get_count_by_filial_grup_zone(
-        self, filial_id: int, current_date: date
-    ) -> ResponseGrupDataLabel:
-        result = self.rep_storage.get_count_by_filial_grup_zone(filial_id, current_date)
-        return MapperStorage.to_response_grup_data_code(result)
-  
     def get_count_visitor(
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
