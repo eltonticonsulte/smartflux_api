@@ -5,7 +5,7 @@ from pydantic import BaseModel, field_validator
 from src.enums import FlagGrupDate, FlagGrupLabel
 
 
-class CountGrupData(BaseModel):
+class CountGrupDate(BaseModel):
     people_in: int
     people_out: int
     date: str
@@ -29,7 +29,7 @@ class ResponseGrupDataLabel(BaseModel):
 
 
 class ResponseGrupData(BaseModel):
-    table: List[CountGrupData]
+    table: List[CountGrupDate]
     linegraph: LineGraph
 
 

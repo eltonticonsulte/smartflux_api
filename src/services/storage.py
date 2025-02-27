@@ -3,7 +3,7 @@ import logging
 from datetime import date
 from src.interfaces import InterfaceStorageService
 from src.dto import (
-    CountGrupData,
+    CountGrupDate,
     LineGraph,
     ResponseGrupData,
     ResponseGrupDataLabel,
@@ -82,15 +82,16 @@ class StorageServices(InterfaceStorageService):
     ) -> ResponseGrupDataLabel:
         if data.end_data == date.today() and data.start_data == date.today():
             resul_count = self.rep_storage_today.count_by_filial_grup_zone(filial_id)
-            return MapperStorage.merge_data_label(resul_count, [])
+            return MapperStorage.count_grup_label(resul_count)
 
         result = self.rep_storage.get_count_by_filial_grup_zone(
             filial_id, data.start_data, data.end_data
         )
         if data.start_data == date.today() or data.end_data == date.today():
             resul_count = self.rep_storage_today.count_by_filial_grup_zone(filial_id)
-            return MapperStorage.merge_data_label(result, resul_count)
-        return MapperStorage.merge_data_label(result, [])
+            result.extend(resul_count)
+            return MapperStorage.count_grup_label(result)
+        return MapperStorage.count_grup_label(result)
 
     def get_count_grup_camera(
         self, filial_id: int, data: RequestVisitorLabel
@@ -100,8 +101,9 @@ class StorageServices(InterfaceStorageService):
         )
         if data.start_data == date.today() or data.end_data == date.today():
             resul_count = self.rep_storage_today.count_by_filial_grup_camera(filial_id)
-            return MapperStorage.merge_data_label(result, resul_count)
-        return MapperStorage.merge_data_label(result, [])
+            result.extend(resul_count)
+            return MapperStorage.count_grup_label(result)
+        return MapperStorage.count_grup_label(result)
 
     def get_count_visitor(
         self, filial_id: int, data: RequestVisitorDate
@@ -134,12 +136,18 @@ class StorageServices(InterfaceStorageService):
                 zone=data.zone,
                 flag_time=data.grup,
             )
-            return MapperStorage.merge_data(result, today_result, data.grup)
-        return MapperStorage.to_response_grup_date(result, data.grup)
+            result.extend(today_result)
+        return MapperStorage.count_grup_date(result, data.grup)
 
     def filter_by_camera(
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
+        if data.start_data == date.today() and data.end_data == date.today():
+            result = self.rep_storage_today.xget_count_by_filial_camera_grup_date(
+                filial_id, data.start_data, data.end_data, data.device, data.grup
+            )
+            return MapperStorage.count_grup_date(result, data.grup)
+
         result = self.rep_storage.get_count_by_filial_camera_grup_date(
             filial_id, data.start_data, data.end_data, data.device, data.grup
         )
@@ -147,12 +155,19 @@ class StorageServices(InterfaceStorageService):
             today_result = self.rep_storage_today.xget_count_by_filial_camera_grup_date(
                 filial_id, data.start_data, data.end_data, data.device, data.grup
             )
-            return MapperStorage.merge_data(result, today_result, data.grup)
-        return MapperStorage.to_response_grup_date(result, data.grup)
+            result.extend(today_result)
+
+        return MapperStorage.count_grup_date(result, data.grup)
 
     def filter_by_date(
         self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
+        if data.start_data == date.today() and data.end_data == date.today():
+            result = self.rep_storage_today.xget_count_by_filial_grup_date(
+                filial_id, data.start_data, data.end_data, data.grup
+            )
+            return MapperStorage.count_grup_date(result, data.grup)
+
         result = self.rep_storage.get_count_by_filial_grup_date(
             filial_id, data.start_data, data.end_data, data.grup
         )
@@ -161,9 +176,9 @@ class StorageServices(InterfaceStorageService):
             today_result = self.rep_storage_today.xget_count_by_filial_grup_date(
                 filial_id, data.start_data, data.end_data, data.grup
             )
-            return MapperStorage.merge_data(result, today_result, data.grup)
+            result.extend(today_result)
 
-        return MapperStorage.to_response_grup_date(result, data.grup)
+        return MapperStorage.count_grup_date(result, data.grup)
 
     def compute_grup(self, data: RequestVisitorDate):
         if data.grup == FlagGrupDate.AUTO_SELECT:
