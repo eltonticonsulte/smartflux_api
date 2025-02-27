@@ -4,7 +4,7 @@ from datetime import date
 from src.dto import (
     ResponseGrupData,
     ResponseGrupDataLabel,
-    RequestVisitor,
+    RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
 )
@@ -35,7 +35,7 @@ class InterfaceStorageService(ABC):
 
     @abstractmethod
     def get_count_visitor(
-        self, filial_id: int, data: RequestVisitor
+        self, filial_id: int, data: RequestVisitorDate
     ) -> ResponseGrupData:
         raise NotImplementedError("Method not implemented")
 

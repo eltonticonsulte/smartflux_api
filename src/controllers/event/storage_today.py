@@ -2,7 +2,7 @@
 
 from logging import getLogger
 from fastapi import APIRouter, Depends, HTTPException
-from src.enums import UserRule, DataGrupLabel
+from src.enums import UserRule, FlagGrupLabel
 from src.interfaces import InterfaceStorageTodayService, InterfaceStorageService
 from src.dto import (
     ResponseTotalCount,

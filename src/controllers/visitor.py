@@ -9,11 +9,11 @@ from src.dto import (
     UserPermissionAccessDTO,
     ResponseGrupData,
     ResponseGrupDataLabel,
-    RequestVisitor,
+    RequestVisitorDate,
     RequestVisitorLabel,
     ResponseTotalCount,
 )
-from src.enums import UserRule, DataFilterTimer, DataGrupLabel
+from src.enums import UserRule, FlagGrupDate, FlagGrupLabel
 from .core import get_service_storage, rule_require
 
 
@@ -25,7 +25,7 @@ log = getLogger("controller_count_visitor")
 async def get_visitor_grup_data(
     start_date: datetime.date = Query(...),
     end_date: Optional[datetime.date] = None,
-    grup: Optional[DataFilterTimer] = Query(DataFilterTimer.AUTO_SELECT),
+    grup: Optional[FlagGrupDate] = Query(FlagGrupDate.AUTO_SELECT),
     zone: Optional[str] = Query(None),
     device: Optional[str] = Query(None),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
@@ -37,7 +37,7 @@ async def get_visitor_grup_data(
     end_day: 2025-01-31
     """
     try:
-        data = RequestVisitor(
+        data = RequestVisitorDate(
             start_data=start_date,
             end_data=end_date,
             grup=grup,
@@ -54,7 +54,7 @@ async def get_visitor_grup_data(
 async def get_visitor_grup_label(
     start_date: datetime.date = Query(...),
     end_date: Optional[datetime.date] = None,
-    grup: Optional[DataGrupLabel] = Query(DataGrupLabel.ZONE),
+    grup: Optional[FlagGrupLabel] = Query(FlagGrupLabel.ZONE),
     user: UserPermissionAccessDTO = Depends(rule_require(UserRule.FILIAL)),
     storage: InterfaceStorageService = Depends(get_service_storage),
 ):

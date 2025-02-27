@@ -42,7 +42,7 @@ from .event_count_storage import (
     ResponseGrupData,
     CountGrupCode,
     ResponseGrupDataLabel,
-    RequestVisitor,
+    RequestVisitorDate,
     RequestVisitorLabel,
 )
 from .permission import RequestCreatePermission, ResponsePermission

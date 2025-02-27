@@ -4,7 +4,7 @@ from datetime import date
 from sqlalchemy import func, Row
 from src.database import DBConnectionHandler, EventCount, Camera, Filial
 from src.dto import ResponseTotalCountGrupZone
-from src.enums import DataFilterTimer
+from src.enums import FlagGrupDate
 
 
 class RepositoryCountEventStorageException(Exception):
@@ -80,7 +80,7 @@ class StorageRepository:
         start_date: date,
         end_date: date,
         zone: str,
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> List[Row[Tuple[int, int, int, str]]]:
 
         flag_time_value = flag_time.value.lower()
@@ -113,7 +113,7 @@ class StorageRepository:
         start_date: date,
         end_date: date,
         name_camera: str,
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> List[Row[Tuple[int, int, int, str]]]:
         flag_time_value = flag_time.value.lower()
 
@@ -140,7 +140,7 @@ class StorageRepository:
             return counts
 
     def get_count_by_filial_grup_date(
-        self, filial_id: int, start_day: date, end_day: date, flag_time: DataFilterTimer
+        self, filial_id: int, start_day: date, end_day: date, flag_time: FlagGrupDate
     ) -> List[Row[Tuple[int, int, Any]]]:
         str_timer = flag_time.value.lower()
         print(str_timer, start_day, end_day, filial_id)

@@ -2,12 +2,12 @@
 from enum import Enum
 
 
-class DataFilterTimer(Enum):
+class FlagGrupDate(Enum):
     HOUR = "HOUR"
     DAY = "DAY"
     AUTO_SELECT = "AUTO_SELECT"
 
 
-class DataGrupLabel(Enum):
+class FlagGrupLabel(Enum):
     ZONE = "ZONA"
     CAMERA = "CAMERA"

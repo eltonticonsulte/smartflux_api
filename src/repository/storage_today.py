@@ -7,7 +7,7 @@ from src.database import DBConnectionHandler, EventCountTemp, Camera, Filial
 from src.dto import (
     ResponseTotalCountGrupCamera,
 )
-from src.enums.storage import DataFilterTimer
+from src.enums.storage import FlagGrupDate
 
 
 class RepositoryCountEventException(Exception):
@@ -185,7 +185,7 @@ class StorageTodayRepository:
         start_date: date,
         end_date: date,
         name_camera: str,
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> List[Row[Tuple[int, int, Any]]]:
 
         with DBConnectionHandler() as session:
@@ -219,7 +219,7 @@ class StorageTodayRepository:
         start_date: date,
         end_date: date,
         zone: str,
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> List[Row[Tuple[int, int, Any]]]:
 
         with DBConnectionHandler() as session:
@@ -252,7 +252,7 @@ class StorageTodayRepository:
         filial_id: int,
         start_date: date,
         end_date: date,
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> List[Row[Tuple[int, int, Any]]]:
 
         with DBConnectionHandler() as session:

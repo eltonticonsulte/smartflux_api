@@ -2,7 +2,7 @@
 from typing import List, Tuple, Any
 from sqlalchemy import Row
 from datetime import datetime, timedelta
-from src.enums import DataFilterTimer
+from src.enums import FlagGrupDate
 from src.database import EventCount
 from src.dto import (
     ResponseGrupData,
@@ -65,10 +65,10 @@ class MapperStorage:
     def merge_data(
         counts: List[Row[Tuple[int, int, Any]]],
         counts2: List[Row[Tuple[int, int, Any]]],
-        flag_time: DataFilterTimer,
+        flag_time: FlagGrupDate,
     ) -> ResponseGrupData:
         str_format_time = (
-            "%Y-%m-%d %H:%M" if flag_time == DataFilterTimer.HOUR else "%Y-%m-%d"
+            "%Y-%m-%d %H:%M" if flag_time == FlagGrupDate.HOUR else "%Y-%m-%d"
         )
 
         labels = []
@@ -142,10 +142,10 @@ class MapperStorage:
 
     @staticmethod
     def to_response_grup_date(
-        counts: List[Row[Tuple[int, int, Any]]], flag_time: DataFilterTimer
+        counts: List[Row[Tuple[int, int, Any]]], flag_time: FlagGrupDate
     ) -> ResponseGrupData:
         str_format_time = (
-            "%Y-%m-%d %H:%M" if flag_time == DataFilterTimer.HOUR else "%Y-%m-%d"
+            "%Y-%m-%d %H:%M" if flag_time == FlagGrupDate.HOUR else "%Y-%m-%d"
         )
 
         label = []
