@@ -9,3 +9,4 @@ from .services import (
     InterfaceEventService,
     InterfacePermissionService,
 )
+from .task import IAdapterTask

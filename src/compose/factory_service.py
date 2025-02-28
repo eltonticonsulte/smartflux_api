@@ -9,6 +9,7 @@ from src.repository import (
     TaskUpdateViewRepository,
     PermissionRepository,
     CountEventRepository,
+    CapacityRepository,
 )
 from src.services import (
     CameraServices,
@@ -31,6 +32,9 @@ from src.interfaces import (
     InterfacePermissionService,
     InterfaceEventService,
 )
+from src.interfaces import IAdapterTask
+
+from src.tasks import TaskCapacity
 
 
 class FactoryService:
@@ -60,6 +64,12 @@ class FactoryService:
             TaskUpdateViewRepository(),
             StorageRepository(),
             StorageTodayRepository(),
+        )
+
+    def create_task_compute_max_ocupation(self) -> IAdapterTask:
+        print("tkas ")
+        return TaskCapacity(
+            CapacityRepository(), StorageTodayRepository(), FilialRepository()
         )
 
     def create_permission(self) -> InterfacePermissionService:

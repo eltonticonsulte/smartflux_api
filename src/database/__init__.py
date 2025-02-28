@@ -10,5 +10,6 @@ from .schema import (
     UserRule,
     Usuario,
     PermissaoAcesso,
+    CountMaximunCapacity,
     WebsocketNotification,
 )

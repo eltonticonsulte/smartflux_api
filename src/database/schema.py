@@ -143,6 +143,15 @@ class EventCount(Base):
     __table_args__ = (Index("idx_camera_date", "channel_id", "date"),)
 
 
+class CountMaximunCapacity(Base):
+    __tablename__ = "count_maximun_capacity"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
+    count_maximun = Column(Integer, default=0, nullable=False)
+    time_update = Column(DateTime, default=func.now(), onupdate=func.now())
+    filial = relationship("Filial", backref="count_maximun_capacity")
+
+
 class WebsocketNotification(Base):
     __tablename__ = "websocket_notification"
 
