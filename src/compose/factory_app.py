@@ -55,7 +55,7 @@ def create_app(log, version):
     app.include_router(base_ruter, prefix=get_settings().API_V1_STR)
     permsion(app)
     trigger = CronTrigger(
-        minute="*/1",
+        minute="*/10",
     )
     scheduler.add_job(event_process_max_ocupation, trigger, max_instances=1)
 

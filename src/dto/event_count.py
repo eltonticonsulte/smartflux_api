@@ -54,3 +54,4 @@ class RequestEventCount(BaseModel):
 class ResponseTotalCount(BaseModel):
     total_count_in: int
     total_count_out: int
+    max_count_day: int

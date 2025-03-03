@@ -56,8 +56,10 @@ class FactoryService:
     def create_count_event(self) -> InterfaceEventService:
         return EventService(CameraRepository(), CountEventRepository())
 
-    def create_storage(self) -> InterfaceVisitorService:
-        return VisitorServices(StorageRepository(), StorageTodayRepository())
+    def create_visitor(self) -> InterfaceVisitorService:
+        return VisitorServices(
+            StorageRepository(), StorageTodayRepository(), CameraRepository()
+        )
 
     def create_task_update_view(self) -> InterfaceTaskUpdateViewService:
         return TaskUpdateViewService(

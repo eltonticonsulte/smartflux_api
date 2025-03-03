@@ -78,8 +78,11 @@ class MapperVisitor:
         return ResponseGrupData(table=lis_gup_hour, linegraph=line)
 
     @staticmethod
-    def to_response_total_count(counts: List[Row[Tuple[int, int]]]) -> int:
+    def to_response_total_count(
+        counts: List[Row[Tuple[int, int]]], capacity: int
+    ) -> int:
         return ResponseTotalCount(
             total_count_in=counts.total_count_in,
             total_count_out=counts.total_count_out,
+            max_count_day=capacity,
         )

@@ -11,17 +11,21 @@ from src.dto import (
     RequestVisitorGrupDate,
 )
 from src.enums import FlagGrupDate, FlagGrupLabel
-from src.repository import StorageRepository, StorageTodayRepository
+from src.repository import StorageRepository, StorageTodayRepository, CapacityRepository
 from src.mappers import MapperVisitor
 
 
 class VisitorServices(InterfaceVisitorService):
     def __init__(
-        self, rep_storage: StorageRepository, rep_today: StorageTodayRepository
+        self,
+        rep_storage: StorageRepository,
+        rep_today: StorageTodayRepository,
+        rep_capacity: CapacityRepository,
     ):
         self.log = logging.getLogger(__name__)
         self.rep_storage = rep_storage
         self.rep_storage_today = rep_today
+        self.rep_capacity = rep_capacity
 
     def get_count_visitor_report(
         self, filial_id: int, data: RequestVisitorGrupDate
@@ -57,7 +61,8 @@ class VisitorServices(InterfaceVisitorService):
             resul_count = self.rep_storage_today.count_by_filial(filial_id)
             return MapperVisitor.to_response_total_count(resul_count)
         reult = self.rep_storage.count_by_filial_date(filial_id, date_time)
-        return MapperVisitor.to_response_total_count(reult)
+        capacity = self.rep_capacity.get_count_by_filial_id(filial_id, date_time)
+        return MapperVisitor.to_response_total_count(reult, capacity)
 
     def get_count_visitor_label(
         self, filial_id: int, data: RequestVisitorLabel

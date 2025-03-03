@@ -50,7 +50,7 @@ def get_service_count_event() -> InterfaceEventService:
 
 @lru_cache()
 def get_service_storage() -> InterfaceVisitorService:
-    return FactoryService().create_storage()
+    return FactoryService().create_visitor()
 
 
 @lru_cache()
