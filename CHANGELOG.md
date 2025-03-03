@@ -1,3 +1,23 @@
+## 0.0.32 (2025-03-03)
+
+### Fix
+
+- add compute capcity
+- add scheduler compute max counte
+- udpate
+- update refactor dto
+- refactor mapper
+- remove scheduler
+- remove enpoint storage
+- remove periodo
+
+### Refactor
+
+- refactor repositoy
+- refactor storage repository
+- remove process meia noite
+- remove today
+
 ## 0.0.31 (2025-02-27)
 
 ### Fix
