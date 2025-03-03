@@ -12,7 +12,10 @@ class CapacityRepository:
         with DBConnectionHandler() as session:
             existing_capacity = (
                 session.query(CountMaximunCapacity)
-                .filter(CountMaximunCapacity.filial_id == capacity.filial_id)
+                .filter(
+                    CountMaximunCapacity.filial_id == capacity.filial_id,
+                    CountMaximunCapacity.date == date.today(),
+                )
                 .first()
             )
             if not existing_capacity:
@@ -21,6 +24,7 @@ class CapacityRepository:
                 return
 
             if capacity.count_maximun > existing_capacity.count_maximun:
+                capacity.id = existing_capacity.id
                 session.merge(capacity)
                 session.commit()
 
@@ -28,7 +32,10 @@ class CapacityRepository:
         with DBConnectionHandler() as session:
             result = (
                 session.query(CountMaximunCapacity.count_maximun)
-                .filter(CountMaximunCapacity.filial_id == filial_id)
+                .filter(
+                    CountMaximunCapacity.filial_id == filial_id
+                    and CountMaximunCapacity.date == date_time
+                )
                 .first()
             )
             if result is None:

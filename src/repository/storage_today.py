@@ -16,6 +16,7 @@ class RepositoryCountEventException(Exception):
 class StorageTodayRepository:
     def count_by_filial(self, filial_id: int) -> List[Row[Tuple[int, int]]]:
         with DBConnectionHandler() as session:
+
             counts = (
                 session.query(
                     func.sum(EventCountTemp.count_in).label("total_count_in"),
@@ -24,8 +25,9 @@ class StorageTodayRepository:
                 .join(Camera, EventCountTemp.channel_id == Camera.channel_id)
                 .join(Filial, Camera.filial_id == Filial.filial_id)
                 .filter(Filial.filial_id == filial_id)
-                .one()
+                .one_or_none()
             )
+            print(counts, filial_id)
             return counts
 
     def count_by_filial_grup_zone(
@@ -44,7 +46,7 @@ class StorageTodayRepository:
                 .join(Filial, Camera.filial_id == Filial.filial_id)
                 .filter(Filial.filial_id == filial_id)
                 .group_by(Camera.tag)
-                .all()
+                .one_or_none()
             )
             return counts
 

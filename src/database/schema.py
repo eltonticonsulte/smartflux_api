@@ -148,6 +148,7 @@ class CountMaximunCapacity(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     filial_id = Column(Integer, ForeignKey("filiais.filial_id"), nullable=False)
     count_maximun = Column(Integer, default=0, nullable=False)
+    date = Column(Date, default=func.now())
     time_update = Column(DateTime, default=func.now(), onupdate=func.now())
     filial = relationship("Filial", backref="count_maximun_capacity")
 

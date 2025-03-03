@@ -31,12 +31,12 @@ class TaskCapacity(IAdapterTask):
     def compute_capacity(self, filial_id: int) -> int:
         counts = self.rep_today.count_by_filial(filial_id)
         if not isinstance(counts.total_count_in, int):
-            self.log.warning("total_count_in is not int")
+            self.log.warning(f"total_count_in is not int {counts.total_count_in}")
             return 0
         if not isinstance(counts.total_count_out, int):
-            self.log.warning("total_count_out is not int")
+            self.log.warning(f"total_count_out is not int {counts.total_count_out}")
             return 0
-        total = counts.total_count_in - counts.total_count_out
+        total = abs(counts.total_count_in - counts.total_count_out)
         self.log.info(f"Capacity Filial {filial_id} {total}")
 
         return total if total > 0 else 0
