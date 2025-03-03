@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from logging import getLogger
+from datetime import date
 from src.database import DBConnectionHandler, CountMaximunCapacity
 
 
@@ -23,10 +24,13 @@ class CapacityRepository:
                 session.merge(capacity)
                 session.commit()
 
-    def get_count_by_filial_id(self, filial_id: int):
+    def get_count_by_filial_id(self, filial_id: int, date_time: date):
         with DBConnectionHandler() as session:
-            return (
+            result = (
                 session.query(CountMaximunCapacity.count_maximun)
                 .filter(CountMaximunCapacity.filial_id == filial_id)
                 .first()
             )
+            if result is None:
+                return 0
+            return result[0]

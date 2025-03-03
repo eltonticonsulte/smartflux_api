@@ -58,7 +58,7 @@ class FactoryService:
 
     def create_visitor(self) -> InterfaceVisitorService:
         return VisitorServices(
-            StorageRepository(), StorageTodayRepository(), CameraRepository()
+            StorageRepository(), StorageTodayRepository(), CapacityRepository()
         )
 
     def create_task_update_view(self) -> InterfaceTaskUpdateViewService:

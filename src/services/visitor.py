@@ -59,7 +59,8 @@ class VisitorServices(InterfaceVisitorService):
     ) -> ResponseTotalCount:
         if date_time == date_time.today():
             resul_count = self.rep_storage_today.count_by_filial(filial_id)
-            return MapperVisitor.to_response_total_count(resul_count)
+            capacity = self.rep_capacity.get_count_by_filial_id(filial_id, date_time)
+            return MapperVisitor.to_response_total_count(resul_count, capacity)
         reult = self.rep_storage.count_by_filial_date(filial_id, date_time)
         capacity = self.rep_capacity.get_count_by_filial_id(filial_id, date_time)
         return MapperVisitor.to_response_total_count(reult, capacity)

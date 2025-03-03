@@ -130,4 +130,5 @@ async def get_data_day(
     try:
         return storage.get_count_by_filial_date(user.filial_id, date)
     except Exception as error:
+        log.error("error", exc_info=error)
         raise HTTPException(500, detail=str(error))
