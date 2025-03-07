@@ -65,3 +65,13 @@ def connect_to_websocket():
 
 if __name__ == "__main__":
     connect_to_websocket()
+{
+    "action": "sendMessage",
+    "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
+    "message": "Hello, WebSocket!",
+}
+{
+    "action": "SendMessage",
+    "token": "0a6d7f1b-99d7-413e-af97-8fcbf6a9cedf",
+    "message": "Hello, WebSocket!",
+}
