@@ -1,7 +1,12 @@
 # -*- coding: utf-8 -*-
 from abc import ABC, abstractmethod
 from typing import List
-from src.dto import RequestEventCount, UserPermissionAccessDTO, ResponseEventCount
+from src.dto import (
+    RequestEventCount,
+    UserPermissionAccessDTO,
+    ResponseEventCount,
+    RequestRegisterWebsocket,
+)
 
 
 class InterfaceEventService(ABC):
@@ -13,4 +18,8 @@ class InterfaceEventService(ABC):
 
     @abstractmethod
     def create_event(self, event: RequestEventCount) -> ResponseEventCount:
+        raise NotImplementedError("Method not implemented")
+
+    @abstractmethod
+    def register_websocket(self, event: RequestRegisterWebsocket) -> None:
         raise NotImplementedError("Method not implemented")

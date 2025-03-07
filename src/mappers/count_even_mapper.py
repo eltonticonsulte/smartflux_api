@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
-from src.dto import RequestEventCount, EventCountDataValidate, EventCountSendWebsocket
-from src.database import EventCountTemp
+from typing import Any, List, Tuple
+
+from sqlalchemy import Row
+from src.dto import RequestEventCount, EventCountDataValidate, RequestRegisterWebsocket
+from src.database import EventCountTemp, WebsocketNotification
 
 
 class CountEventMapper:
@@ -53,14 +56,29 @@ class CountEventMapper:
         )
 
     @staticmethod
-    def create_event_validate_to_websocket(
-        validate: EventCountDataValidate,
-    ) -> EventCountSendWebsocket:
-        return EventCountSendWebsocket(
-            camera_name=validate.camera_name,
-            zone_name=validate.zone_name,
-            count_in=validate.count_in,
-            count_out=validate.count_out,
-            event_time=validate.event_time,
-            description=validate.description,
+    def create_event_to_websocket(
+        counts: List[Row[Tuple[int, int, Any]]],
+        data: RequestRegisterWebsocket,
+        capacity: int,
+    ) -> WebsocketNotification:
+        label = []
+        count_in = []
+        count_out = []
+        total_in = 0
+        total_out = 0
+        for item in counts:
+            label.append(item.label)
+            count_in.append(item.total_count_in)
+            count_out.append(item.total_count_out)
+            total_in += item.total_count_in
+            total_out += item.total_count_out
+        return WebsocketNotification(
+            connect_id=data.connect_id,
+            token_filial=data.token_filial,
+            total_in=total_in,
+            total_out=total_out,
+            count_max_capacity=capacity,
+            label=label,
+            count_in=count_in,
+            count_out=count_out,
         )

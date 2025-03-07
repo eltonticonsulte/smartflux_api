@@ -32,6 +32,7 @@ from .event_count import (
     ResponseEventCount,
     ResponseTotalCount,
     EventCountDataValidate,
+    RequestRegisterWebsocket,
 )
 from .visitor import (
     CountGrupDate,

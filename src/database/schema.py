@@ -10,6 +10,7 @@ from sqlalchemy import (
     JSON,
     ForeignKey,
     Index,
+    ARRAY,
 )
 
 from sqlalchemy import Enum
@@ -158,4 +159,10 @@ class WebsocketNotification(Base):
 
     connect_id = Column(String, nullable=False, primary_key=True)
     token_filial = Column(String, nullable=False)
+    total_in = Column(Integer, default=0)
+    total_out = Column(Integer, default=0)
+    count_max_capacity = Column(Integer, default=0)
+    label = Column(ARRAY(String), nullable=False)
+    count_in = Column(ARRAY(Integer), default=0)
+    count_out = Column(ARRAY(Integer), default=0)
     create_time = Column(DateTime, default=func.now())

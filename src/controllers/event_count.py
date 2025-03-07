@@ -16,12 +16,12 @@ from src.dto import (
     ResponseEventCount,
     UserPermissionAccessDTO,
     EventCountDataValidate,
+    RequestRegisterWebsocket,
 )
-from ..core import (
+from .core import (
     get_service_count_event,
     rule_require,
     get_service_filial,
-    get_service_storage,
 )
 
 router = APIRouter()
@@ -68,6 +68,26 @@ async def insert_event(
             request, user
         )
         return result
+    except Exception as error:
+        log.error(f"error: request {request}", exc_info=error)
+        raise HTTPException(500, detail=str(error))
+
+
+@router.post("/register-websoket", status_code=200)
+async def register_event(
+    request: RequestRegisterWebsocket,
+    token: UUID = Header(...),
+    filial_service: InterfaceFilialService = Depends(get_service_filial),
+    event_service: InterfaceEventService = Depends(get_service_count_event),
+):
+    try:
+        filial_service.check_token(token)
+    except Exception as error:
+        log.error(f"error: request {request}", exc_info=error)
+        raise HTTPException(401, detail=str(error))
+    try:
+        event_service.register_websocket(request)
+        return HTTPException(status_code=200)
     except Exception as error:
         log.error(f"error: request {request}", exc_info=error)
         raise HTTPException(500, detail=str(error))

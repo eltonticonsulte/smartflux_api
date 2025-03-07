@@ -9,6 +9,7 @@ from src.dto import (
     UserPermissionAccessDTO,
     ResponseEventCount,
     EventCountDataValidate,
+    RequestRegisterWebsocket,
 )
 from src.mappers import CountEventMapper
 
@@ -32,6 +33,16 @@ class EventService(InterfaceEventService):
         return ResponseEventCount(
             event_id=event.event_id, status=True, description="create"
         )
+
+    def register_websocket(self, event: RequestRegisterWebsocket):
+        self.log.critical(f"register_websocket {event.token_filial}")
+        filial_id = self.event_repository.get_by_token(event.token_filial).filial_id
+        data = self.event_repository.count_by_filial_grup_zone(filial_id)
+        max_capacity = self.event_repository.get_max_capacity(filial_id)
+        event = CountEventMapper.create_event_to_websocket(
+            data, event, max_capacity.count_maximun
+        )
+        self.event_repository.register_websocket(event)
 
     async def process_events(
         self, events: List[RequestEventCount], user: UserPermissionAccessDTO

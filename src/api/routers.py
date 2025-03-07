@@ -6,7 +6,7 @@ from src.controllers.empresa import router as empresa_route
 from src.controllers.filial import router as filial_route
 from src.controllers.camera import router as camera_route
 from src.controllers.visitor import router as visitor_route
-from src.controllers.event import router_event_count
+from src.controllers.event_count import router as router_event_count
 from src.controllers.aplication import router as router_aplication
 from src.controllers.permission import router as router_permission
 
