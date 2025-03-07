@@ -46,7 +46,7 @@ class StorageTodayRepository:
                 .join(Filial, Camera.filial_id == Filial.filial_id)
                 .filter(Filial.filial_id == filial_id)
                 .group_by(Camera.tag)
-                .one_or_none()
+                .all()
             )
             return counts
 
