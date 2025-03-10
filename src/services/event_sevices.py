@@ -20,7 +20,7 @@ class EventService(InterfaceEventService):
         camera_repository: CameraRepository,
         event_repository: CountEventRepository,
     ):
-        self.log = logging.getLogger(__name__)
+        self.log = logging.getLogger("services")
         self.camera_repository = camera_repository
         self.event_repository = event_repository
 
@@ -35,12 +35,16 @@ class EventService(InterfaceEventService):
         )
 
     def register_websocket(self, event: RequestRegisterWebsocket):
+
         self.log.critical(f"register_websocket {event.token_filial}")
         filial_id = self.event_repository.get_by_token(event.token_filial).filial_id
         data = self.event_repository.count_by_filial_grup_zone(filial_id)
+        print(f"register_websocket {data}")
+        cameras = self.camera_repository.get_by_filial(filial_id)
+
         max_capacity = self.event_repository.get_max_capacity(filial_id)
         event = CountEventMapper.create_event_to_websocket(
-            data, event, max_capacity.count_maximun
+            data, event, max_capacity.count_maximun, cameras
         )
         self.event_repository.register_websocket(event)
 

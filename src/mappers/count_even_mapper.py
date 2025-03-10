@@ -3,7 +3,7 @@ from typing import Any, List, Tuple
 
 from sqlalchemy import Row
 from src.dto import RequestEventCount, EventCountDataValidate, RequestRegisterWebsocket
-from src.database import EventCountTemp, WebsocketNotification
+from src.database import EventCountTemp, WebsocketNotification, Camera
 
 
 class CountEventMapper:
@@ -60,25 +60,30 @@ class CountEventMapper:
         counts: List[Row[Tuple[int, int, Any]]],
         data: RequestRegisterWebsocket,
         capacity: int,
+        cameras: List[Camera],
     ) -> WebsocketNotification:
         label = []
-        count_in = []
-        count_out = []
-        total_in = 0
-        total_out = 0
+        meta_data = {}
+
+        for camera in cameras:
+            if not meta_data.get(camera.tag):
+                meta_data[camera.tag] = {"in": 0, "out": 0, "channel_id": []}
+                meta_data[camera.tag]["channel_id"].append(str(camera.channel_id))
+            else:
+                meta_data[camera.tag]["channel_id"].append(str(camera.channel_id))
+
         for item in counts:
-            label.append(item.label)
-            count_in.append(item.total_count_in)
-            count_out.append(item.total_count_out)
-            total_in += item.total_count_in
-            total_out += item.total_count_out
+            label = item.label
+            meta_data[label] = {
+                "name": label,
+                "in": item.total_count_in,
+                "out": item.total_count_out,
+                "channel_id": meta_data[label]["channel_id"],
+            }
+
         return WebsocketNotification(
             connect_id=data.connect_id,
             token_filial=data.token_filial,
-            total_in=total_in,
-            total_out=total_out,
+            meta_data=meta_data,
             count_max_capacity=capacity,
-            label=label,
-            count_in=count_in,
-            count_out=count_out,
         )
